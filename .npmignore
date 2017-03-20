@@ -1,0 +1,13 @@
+*.log
+help
+node_modules
+.idea
+compliance
+test
+webpack.config.js
+karma.conf.js
+.babelrc
+.eslintrc
+.esdoc.json
+.gitattributes
+CONTRIBUTING.md

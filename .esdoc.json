@@ -1,0 +1,17 @@
+{
+  "source": "./src",
+  "destination": "./help",
+  "title": "GSF JavaScript Client SDK",
+  "styles": ["./doc/styles/main.css"],
+  "includeSource": false,
+  "index": "./doc/index.md",
+  "manual": {
+    "asset": "./doc/asset",
+    "installation": ["./doc/manual/installation.md"],
+    "tutorial": [
+      "./doc/manual/tutorial/getting-started.md",
+      "./doc/manual/tutorial/examples.md"
+    ],
+    "changelog": ["./CHANGELOG.md"]
+  }
+}

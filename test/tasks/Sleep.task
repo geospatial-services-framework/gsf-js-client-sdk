@@ -1,0 +1,36 @@
+{
+  "taskName": "Sleep",
+  "description": "Sleeps, returns input as output, and optionally.",
+  "inputParameters": {
+    "SLEEP_TIME": {
+      "type": "INTEGER",
+      "required": true
+    },
+    "INPUT_INTEGER": {
+      "type": "INTEGER",
+      "required": true
+    },
+    "FAIL": {
+      "type": "BOOLEAN",
+      "required": true
+    },
+    "ERROR_MESSAGE": {
+      "type": "STRING",
+      "required": false
+    },
+    "N_PROGRESS": {
+      "type": "INTEGER",
+      "required": false
+    },
+    "PROGRESS_MESSAGE": {
+      "type": "STRING",
+      "required": false
+    }
+  },
+  "outputParameters": {
+    "OUTPUT": {
+      "type": "INTEGER",
+      "required": true
+    }
+  }
+}

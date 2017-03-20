@@ -1,0 +1,291 @@
+# Examples
+Below are several examples of using the SDK.
+
+## List Available Services
+The GSF [**Server**] object provides the ability to list the available services on the server.
+
+```javascript
+// GSF Server
+const server = GSF.server({
+    address: 'MyServer',
+    port: '9191'
+  });
+
+// Get an array of available services.
+server.services().then((services) => {
+  services.forEach((service) => {
+    // Print each service name.
+    console.log(service.name);
+  });
+}).catch((err) => {
+  // There was an error.
+});
+```
+
+## List Available Tasks
+The [**Service**] object provides the ability to list the available tasks on the service.  The example below lists all tasks associated with the ENVI service.
+
+```javascript
+// GSF Server
+const server = GSF.server({
+    address: 'MyServer',
+    port: '9191'
+  });
+
+// Get the ENVI service.
+const service = server.service('ENVI');
+
+// Get an array of available tasks.
+service.tasks().then((tasks) => {
+  tasks.forEach((task) => {
+    // Print each task name.
+    console.log(task.name);
+  });
+}).catch((err) => {
+  // There was an error.
+});
+```
+
+## Get Task Information
+The [**Task**] object allows you to query the task and its parameters.  This may be useful when dynamically constructing UI elements representing task input parameters.
+
+```javascript
+// GSF Server
+const server = GSF.server({
+    address: 'MyServer',
+    port: '9191'
+  });
+
+// Get the ENVI service.
+const service = server.service('ENVI');
+
+// Get a task.
+const task = service.task('SpectralIndex');
+
+task.info().then((info) => {
+  // Print the task info.
+  console.log(info);
+}).catch((err) => {
+  // There was an error.
+});
+```
+
+## Run a Task
+There are many ways to run tasks and retrieve results using the GSF JavaScript SDK.  The following examples assume you have completed the steps below to create a task object.
+
+```javascript
+// Get a task.  
+const task = GSF.server({address:'MyServer',port:'9191'}).service('ENVI').task('SpectralIndex');
+
+const taskParameters = {
+  parameters: {
+    INPUT_RASTER: {
+      FACTORY: 'URLRaster',
+      URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
+    },
+    INDEX: 'Normalized Difference Vegetation Index'
+  }
+};
+```
+
+### Using Promises
+The SDK provides a [**Promise**]-based interface for submitting tasks.  If the task succeeds, the promise will be fulfilled.  If the job fails, the job will be rejected.  There are two ways to use promises for job resolution.
+
+##### 1. Use [**.wait()**]
+This function returns a [**Promise**] to the job results.  The [**.submit()**] function will return a Promise to a [**Job**] object.  You may use this object to query for job information such as ID and status.
+
+```javascript
+// Submit a job.
+task.submit(taskParameters)
+.then(job => job.wait()) // Waits for job to complete.
+.then((results) => {
+  // Do something with results.
+  // This function is an example and is not provided by the SDK.
+  AddToMap(results.OUTPUT_RASTER);
+}).catch((jobErrorMessage) => {
+  // Display error.
+});
+```
+
+##### 2. Use [**.submitAndWait()**]
+This function simply combines the [**.submit()**] and [**.wait()**] functions.  This is perhaps the simplest way to submit a job and retrieve the results.  Use this if you are only intereseted in results and do not wish to interact with the [**Job**] object.
+
+```javascript
+// Submit a job.
+task.submitAndWait(taskParameters).then((results) => {
+    // Do something with results.
+    // This function is an example and is not provided by the SDK.
+    AddToMap(results.OUTPUT_RASTER);
+  }).catch((jobErrorMessage) => {
+    // Display error.
+  });
+```
+
+### Using Server Events
+The [**Server**] and [**Job**] objects emits all job events related to that server.  These classes inheret from Node's [**EventEmitter**] and support methods such as .on(), .once(), .removeAllListeners(), etc.  The following example shows how to listen for job events.
+
+```javascript
+// GSF Server
+const server = GSF.server({
+    address: 'MyServer',
+    port: '9191'
+  });
+
+// Set up an event listeners.
+server.once('JobSucceeded', (data) => {
+  console.log('Job Succeeded: ', data.jobId);
+});  
+
+server.once('JobFailed', (data) => {
+  console.log('Job Failed: ', data.jobId);
+});
+
+// Create a service object.
+const service = server.service('ENVI');
+
+// Create a task object.
+const task = service.task('SpectralIndex');
+
+const NDVIParameters = {
+  parameters: {
+    INPUT_RASTER: {
+      FACTORY: 'URLRaster',
+      URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
+    },
+    INDEX: 'Normalized Difference Vegetation Index'
+  }
+};
+
+// Submit a job.
+task.submit(NDVIParameters);
+```
+
+For a complete list of available events, please see the [**Server**] class documentation.
+
+## Tracking Job Progress
+There are two ways to track the progress of a single job.
+
+### Progress Callbacks
+The [**.submit()**] and [**.submitAndWait()**] functions support the inclusion of a progress callback for reporting job progress.
+
+```javascript
+const progressCallback = function (data) {
+  console.log('Job progress percent: ', data.progress);
+  console.log('Job progress message: ', data.message);
+};
+
+// Submit a job.
+task.submitAndWait(parameters, progressCallback).then((results) => {
+    // Do something with results.
+    // This function is an example and is not provided by the SDK.
+    AddToMap(results.OUTPUT_RASTER);
+  }).catch((jobErrorMessage) => {
+    // Display error.
+  });
+```
+
+### Progress Events
+Job progress events are emitted by the [**Server**] and [**Job**] objects.
+
+#### Server Progress Events
+It is possible to listen to all job progress events using the [**Server**] object.
+
+```javascript
+// GSF Server
+const server = GSF.server({
+    address: 'MyServer',
+    port: '9191'
+  });
+
+// Set up an event listeners.
+server.on('JobProgress', (data) => {
+  console.log('Job ', data.jobId, ' progress percent: ', data.progress);
+  console.log('Job ', data.jobId, ' progress message: ', data.message);
+});  
+
+// Create a service object.
+const service = server.service('ENVI');
+
+// Create a task object.
+const task = service.task('SpectralIndex');
+
+const NDVIParameters = {
+  parameters: {
+    INPUT_RASTER: {
+      FACTORY: 'URLRaster',
+      URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
+    },
+    INDEX: 'Normalized Difference Vegetation Index'
+  }
+};
+
+// Submit a job.
+task.submit(NDVIParameters);
+```
+
+#### Job Progress Events
+A [**Job**] object emits progress events for the particular job which it represents.
+
+```javascript
+// GSF Server
+const server = GSF.server({
+    address: 'MyServer',
+    port: '9191'
+  });
+
+// Create a service object.
+const service = server.service('ENVI');
+
+// Create a task object.
+const task = service.task('SpectralIndex');
+
+const NDVIParameters = {
+  parameters: {
+    INPUT_RASTER: {
+      FACTORY: 'URLRaster',
+      URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
+    },
+    INDEX: 'Normalized Difference Vegetation Index'
+  }
+};
+
+// Submit a job.
+task.submit(NDVIParameters).then((job) => {
+  // Set up an event listeners.
+  job.on('Progress', (data) => {
+    console.log('Job ', data.jobId, ' progress percent: ', data.progress);
+    console.log('Job ', data.jobId, ' progress message: ', data.message);
+  });  
+}).catch((jobErrorMessage) => {
+  // Display error.
+});
+```
+
+## Cancelling Jobs
+Below is an example of cancelling a job based on its job ID.
+
+```javascript
+const myJobId = 1;
+const job = new server.job(myJobId);
+const force = false; // Do not force cancel.
+
+// Cancel Job
+job.cancel(force).then(() => {
+  console.log('Cancel has been successfully requested.');
+}).catch((err) => {
+  // Display error.
+});
+```
+
+[**.wait()**]:../class/src/Job.js~Job.html#instance-method-wait
+[**.submitAndWait()**]:../class/src/Task.js~Task.html#instance-method-submitAndWait
+[**.submit()**]:../class/src/Task.js~Task.html#instance-method-submit
+
+[**Server**]:../class/src/Server.js~Server.html
+[**Service**]:../class/src/Service.js~Service.html
+[**Task**]:../class/src/Task.js~Task.html
+[**Job**]:../class/src/Job.js~Job.html
+
+[**EventEmitter**]:https://nodejs.org/api/events.html
+
+[**Promise**]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise

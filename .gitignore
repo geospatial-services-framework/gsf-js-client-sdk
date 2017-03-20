@@ -1,0 +1,6 @@
+*.log
+help
+node_modules
+.idea
+compliance
+.gitattributes

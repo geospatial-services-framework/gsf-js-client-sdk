@@ -1,25 +1,21 @@
+# Getting Started
 # GSF JavaScript Client SDK
 
 ## About the SDK
-The GSF JavaScript Client SDK provides a client-side JavaScript library for interacting with GSF.  For detailed information please visit our [full developer documentation] page.
+The GSF JavaScript Client SDK provides a client-side JavaScript library for interacting with GSF.
 
 1. This repository contains pre-built distributable files located in the `/dist/` directory.
-    - `/dist/GSF.js` - The non-minified bundle.
-    - `/dist/GSF.map.js` - The non-minified bundle source map file.
-    - `/dist/GSF.min.js` - The minified bundle.
-    - `/dist/GSF.min.js.map` - The minified bundle source map file.
-
-## Installation
-The SDK can be installed using [npm].
-
-    $ npm install gsf-js-client-sdk
+  - `/dist/GSF.js` - The non-minified bundle.
+  - `/dist/GSF.map.js` - The non-minified bundle source map file.
+  - `/dist/GSF.min.js` - The minified bundle.
+  - `/dist/GSF.min.js.map` - The minified bundle source map file.
 
 ## Basic Usage
-1. Include the GSF JavaScript Client SDK file in your project.  The example below assumes the SDK file is located next to your html file.
+1. Include the GSF JavaScript Client SDK in your project.  The example below assumes the SDK file is located next to your html file.
 
     `<script src="GSF.min.js"></script>`
 
-2. Access the SDK using the global GSF object.
+2. Access the SDK using the global [**GSF**] object.
 
     `<script>console.log(GSF);</script>`
 
@@ -57,8 +53,6 @@ task.submitAndWait(NDVIParameters).then((results) => {
   });
 ```
 
-This is just a sample of what can be done with the SDK.  Please see our [full developer documentation] to learn more.
-
 ## Requirements
 The GSF JavaScript Client SDK relies on [server-sent events] for communication with the server.  Developers who wish to build apps that run on browsers lacking EventSource support may want to use a polyfill.
 
@@ -76,7 +70,7 @@ The GSF JavaScript Client SDK relies on [server-sent events] for communication w
   $ npm run build
 
 ## Testing the SDK
-#### Using the Test Server
+#### Using a Test Server
 We have provided a simple mock server implementation that can be used for very basic testing of the SDK.
 
   $ npm run unit-test
@@ -95,10 +89,5 @@ It is also possible to run the tests against a running GSF server.
 
   $ start help/index.html
 
-## Developer Documentation
-Please visit our [full developer documentation] page for more information.
-
-
-[full developer documentation]: https://github.io/geospatial-services-framework
-[npm]:http://npmjs.com
-[server-sent events]:https://www.w3schools.com/html/html5_serversentevents.asp
+[**GSF**]:../class/src/GSF.js~GSF.html  
+[server-sent events]:https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events

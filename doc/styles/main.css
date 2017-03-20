@@ -1,0 +1,18 @@
+.layout-container > header:before {
+  content: '';
+  background-image: url('../../manual/asset/gsf-4.png');
+  width: 150px;
+  height: 40px;
+  color: #EC0C8E;
+  font-size: 20px;
+  background-size: auto 25px;
+  background-repeat: no-repeat;
+  padding-left: 30px;
+  padding-right: 5px;
+}
+.gsf-title > img {
+  box-shadow: none !important;
+  max-height: 1.3em;
+  margin-bottom: -0.25em;
+  margin-right: 0.3em;
+}
