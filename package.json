@@ -14,7 +14,7 @@
     "build-dev": "./node_modules/.bin/webpack --progress --colors --env dev",
     "build-all": "npm run build && npm run build-dev",
     "watch": "./node_modules/.bin/webpack --progress --colors --watch",
-    "test": "npm run test-phantom",
+    "test": "npm run unit-test-phantom",
     "test-phantom": "./node_modules/.bin/karma start --browsers PhantomJS",
     "test-chrome": "./node_modules/.bin/karma start --browsers Chrome",
     "test-firefox": "./node_modules/.bin/karma start --browsers Firefox",
