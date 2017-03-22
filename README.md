@@ -1,5 +1,5 @@
 # GSF JavaScript Client SDK
-
+[![Build Status](https://travis-ci.org/geospatial-services-framework/gsf-js-client-sdk.svg?branch=master)](https://travis-ci.org/geospatial-services-framework/gsf-js-client-sdk)
 ## About the SDK
 The GSF JavaScript Client SDK provides a client-side JavaScript library for interacting with GSF.  For detailed information please visit our [full developer documentation] page.
 
