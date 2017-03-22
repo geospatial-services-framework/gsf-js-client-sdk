@@ -27,8 +27,7 @@
     "help": "./node_modules/.bin/esdoc"
   },
   "dependencies": {
-    "babel-runtime": "^6.22.0",
-    "superagent-no-cache": "^0.1.0"
+    "babel-runtime": "^6.22.0"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -61,6 +60,7 @@
     "mocha": "^3.2.0",
     "sse-channel": "^2.0.5",
     "superagent": "^3.3.2",
+    "superagent-no-cache": "^0.1.0",
     "webpack": "^2.2.1"
   }
 }
