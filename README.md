@@ -99,6 +99,6 @@ It is also possible to run the tests against a running GSF server.
 Please visit our [full developer documentation] page for more information.
 
 
-[full developer documentation]: https://geospatial-services-framework.github.io/gsf-js-client-sdk/
+[full developer documentation]: https://geospatial-services-framework.github.io/sdk-docs/
 [npm]:http://npmjs.com
 [server-sent events]:https://www.w3schools.com/html/html5_serversentevents.asp
