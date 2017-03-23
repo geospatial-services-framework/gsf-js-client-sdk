@@ -1,6 +1,16 @@
 {
   "source": "./src",
   "destination": "./help",
+  "plugins": [
+    {
+      "name": "esdoc-importpath-plugin",
+      "option": {
+        "replaces": [
+          {"from": "^src/", "to": "dist/"}
+        ]
+      }
+    }
+  ],
   "title": "GSF JavaScript Client SDK",
   "styles": ["./doc/styles/main.css"],
   "includeSource": false,

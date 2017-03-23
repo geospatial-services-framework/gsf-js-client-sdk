@@ -43,6 +43,7 @@
     "concurrently": "^3.4.0",
     "cors": "^2.8.1",
     "esdoc": "^0.5.2",
+    "esdoc-importpath-plugin": "^0.1.1",
     "eslint": "^3.17.1",
     "eslint-loader": "^1.6.3",
     "express": "^4.15.2",
