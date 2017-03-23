@@ -15,6 +15,12 @@ The SDK can be installed using [npm].
     $ npm install gsf-js-client-sdk
 
 ## Basic Usage
+#### Module Import
+1. After installing with npm, import the sdk into your file:
+
+`import * as GSF from 'gsf-js-client-sdk`
+
+#### Script Tag
 1. Include the GSF JavaScript Client SDK file in your project.  The example below assumes the SDK file is located next to your html file.
 
     `<script src="GSF.min.js"></script>`
@@ -23,7 +29,9 @@ The SDK can be installed using [npm].
 
     `<script>console.log(GSF);</script>`
 
-3. Below is a simple example of running a job and retrieving the results.  You will need to update the server address and port below to reflect the server that you are using.
+#### Basic Example
+
+1. Below is a simple example of running a job and retrieving the results.  You will need to update the server address and port below to reflect the server that you are using.
 
 ```javascript
 // GSF Server
