@@ -70,39 +70,6 @@ This is just a sample of what can be done with the SDK.  Please see our [full de
 ## Requirements
 The GSF JavaScript Client SDK relies on [server-sent events] for communication with the server.  Developers who wish to build apps that run on browsers lacking EventSource support may want to use a polyfill.
 
-## Building the SDK
-1. Clone the repository.
-
-  $ git clone https://github.com/geospatial-services-framework/gsf-js-client-sdk
-
-2. From the root directory of the project install the dependencies.
-
-  $ npm install
-
-3. Run the build script.
-
-  $ npm run build
-
-## Testing the SDK
-#### Using the Test Server
-We have provided a simple mock server implementation that can be used for very basic testing of the SDK.
-
-  $ npm run unit-test
-
-#### Using an Existing GSF Server
-It is also possible to run the tests against a running GSF server.
-
-  $ npm run test
-
-## Building the Documentation
-1. Build the documentation.
-
-  $ npm run help
-
-2. View the generated help files located in the `/help` directory (on Windows).
-
-  $ start help/index.html
-
 ## Developer Documentation
 Please visit our [full developer documentation] page for more information.
 

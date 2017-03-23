@@ -73,11 +73,6 @@ The GSF JavaScript Client SDK relies on [server-sent events] for communication w
 #### Using a Test Server
 We have provided a simple mock server implementation that can be used for very basic testing of the SDK.
 
-  $ npm run unit-test
-
-#### Using an Existing GSF Server
-It is also possible to run the tests against a running GSF server.
-
   $ npm run test
 
 ## Building the Documentation
