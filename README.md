@@ -12,13 +12,13 @@ The GSF JavaScript Client SDK provides a client-side JavaScript library for inte
 ## Installation
 The SDK can be installed using [npm].
 
-    $ npm install gsf-js-client-sdk
+    $ npm install gsf-js-client-sdk --save
 
 ## Basic Usage
 #### Module Import
 1. After installing with npm, import the sdk into your file:
 
-`import * as GSF from 'gsf-js-client-sdk`
+`import * as GSF from 'gsf-js-client-sdk';`
 
 #### Script Tag
 1. Include the GSF JavaScript Client SDK file in your project.  The example below assumes the SDK file is located next to your html file.
