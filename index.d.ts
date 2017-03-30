@@ -1,17 +1,32 @@
 
 declare namespace GSF {
-    export interface ServerArgs {
-        address: string;
-        port: string;
-    }
+
     export interface API {
         server(serverArgs: ServerArgs): Server;
     }
+    export interface ServerArgs {
+        address: string;
+        port?: string;
+        APIRoot?: string;
+        protocol?: string;
+    }
     export interface Server {
+        APIRoot: string;
+        URL: string;
+        address: string;
+        port: number;
+        protocol: string;
+        rootURL: string;
         service(serviceName: string): Service;
         services(): Promise<Array<Service>>;
+        job(jobId: number, 
+            progressCallback?: ProgressCallback, 
+            startedCallback?: StartedCallback): Job;
+        jobs(jobListOptions: JobListOptions): Promise<Array<Job>>
     }
     export interface Service {
+        name: string;
+        info(): Promise<ServiceInfo>;
         task(taskName: string): Task;
         tasks(): Promise<Array<Task>>;
     }
@@ -25,6 +40,13 @@ declare namespace GSF {
             progressCallback?: ProgressCallback, 
             startedCallback?: StartedCallback): Promise<any>;
     }
+    export interface Job {
+        jobId: number;
+        cancel(force: boolean): Promise<true>;
+        info(): Promise<JobInfo>;
+        wait(): Promise<JobResults>;
+    }
+
     export interface SubmitOptions {
         parameters: object;
         route?: string;
@@ -32,22 +54,51 @@ declare namespace GSF {
     interface ProgressCallback {
         (info: JobProgressInfo) : void;
     }
-    interface JobProgressInfo {
-        
+    export interface JobProgressInfo {
+        jobId: number;
+        progress: number;
+        message: string;
     }
     interface StartedCallback {
         (info: JobStartedInfo) : Promise<Job>;
     }
-    interface JobStartedInfo {
-        
+    export interface JobStartedInfo {
+        jobId: number;
     }
-    interface TaskInfo {
+    export interface JobListOptions {
+        offset?: number;
+        limit?: number;
+        reverse?: boolean;
+        status?: string;
+    }
+    export interface JobInfo {
+        jobId: string;
+        jobStatus: string;
+        jobStatusURL: string;
+        jobProgress: number;
+        jobProgressMessage: string;
+        jobRoute: string;
+        taskName: string;
+        serviceName: string;
+        jobErrorMessage: string;
+        inputs: object;
+        messages: Array<object>;
+    }
+    export interface JobResults {
+
+    }
+    export interface ServiceInfo {
         name: string;
-        displayName: string;
         description: string;
+        tasks: Array<string>;
     }
-    interface Job {
+    export interface TaskInfo {
+        name: string;
+        displayName?: string;
+        description?: string;
+        parameters: object;
     }
+
 }
     
 declare var GSF: GSF.API;
