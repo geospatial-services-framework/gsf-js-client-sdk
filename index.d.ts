@@ -18,7 +18,7 @@ declare namespace GSF {
     export interface Task {
         name: string;
         info(): Promise<TaskInfo>;
-        submit(options?: SubmitOptions, 
+        submit(options: SubmitOptions, 
             progressCallback?: ProgressCallback, 
             startedCallback?: StartedCallback): Promise<Job>;
         submitAndWait(options: SubmitOptions, 
