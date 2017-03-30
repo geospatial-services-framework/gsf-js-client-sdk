@@ -2,5 +2,7 @@
 help
 node_modules
 .idea
+.vscode
+.npmrc
 compliance
 .gitattributes
