@@ -142,15 +142,15 @@ export default Task;
  * @property {string} [displayName] - A readable name for the task. This is only used for display
  *   purposes.
  * @property {string} [description] - A description of the task.
- * @property {string} [parameters.<taskName>.displayName] - A display name for the parameter.
- * @property {string} [parameters.<taskName>.description] - A description of the parameter.
- * @property {string} parameters.<taskName>.parameterType - A string set to either "required" or
+ * @property {string} [parameters.<parameterName>.displayName] - A display name for the parameter.
+ * @property {string} [parameters.<parameterName>.description] - A description of the parameter.
+ * @property {string} parameters.<parameterName>.parameterType - A string set to either "required" or
  *  "optional".
- * @property {string} parameters.<taskName>.direction - A string set to either "INPUT" or "OUTPUT".
- * @property {string} parameters.<taskName>.dataType - A type for the parameter.
- * @property {string[]} [parameters.<taskName>.choiceList] - A list of values that will be accepted as input
+ * @property {string} parameters.<parameterName>.direction - A string set to either "INPUT" or "OUTPUT".
+ * @property {string} parameters.<parameterName>.dataType - A type for the parameter.
+ * @property {string[]} [parameters.<parameterName>.choiceList] - A list of values that will be accepted as input
  *   for the parameter.
- * @property {any} [parameters.<taskName>.default] - A default value for the parameter.
+ * @property {any} [parameters.<parameterName>.default] - A default value for the parameter.
  */
 
 /**
