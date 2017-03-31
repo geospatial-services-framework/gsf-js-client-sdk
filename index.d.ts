@@ -47,6 +47,7 @@ declare namespace GSF {
         description: string;
     }
     interface Job {
+        jobId: number;
     }
 }
     
