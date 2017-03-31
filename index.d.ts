@@ -45,6 +45,7 @@ declare namespace GSF {
         name: string;
         displayName: string;
         description: string;
+        parameters: object;
     }
     interface Job {
         jobId: number;
