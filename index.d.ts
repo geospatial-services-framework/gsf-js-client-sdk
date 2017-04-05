@@ -90,12 +90,6 @@ declare namespace GSF {
     export interface ServiceInfo {
         name: string;
         description: string;
-<<<<<<< HEAD
-        parameters: object;
-    }
-    interface Job {
-        jobId: number;
-=======
         tasks: Array<string>;
     }
     export interface TaskInfo {
@@ -103,7 +97,6 @@ declare namespace GSF {
         displayName?: string;
         description?: string;
         parameters: object;
->>>>>>> 8f81f94393d2796b1b16d2151b6403ccdf7d26e6
     }
 
 }
