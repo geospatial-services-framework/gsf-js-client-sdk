@@ -6,6 +6,7 @@ import { expect } from 'chai';
 import { verifyProperties } from './utils/testUtils.js';
 
 import Task from 'Task';
+import Service from 'Service';
 import GSF from 'GSF';
 
 import * as testTasks from './utils/testTasks.js';
@@ -33,6 +34,11 @@ describe('Testing Task class', function() {
     it('returns a valid task object', function(done) {
       expect(task).to.be.an('object');
       expect(task.name).to.equal(testTasks.sleepTask.name);
+      done();
+    });
+    it('has a valid service property', function(done) {
+      expect(task).to.be.an('object');
+      expect(task.service).to.be.an.instanceof(Service);
       done();
     });
   });
