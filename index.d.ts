@@ -32,6 +32,7 @@ declare namespace GSF {
     }
     export interface Task {
         name: string;
+        service: Service;
         info(): Promise<TaskInfo>;
         submit(options: SubmitOptions, 
             progressCallback?: ProgressCallback, 

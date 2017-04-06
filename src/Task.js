@@ -2,6 +2,7 @@ import * as request from 'superagent';
 import nocache from 'superagent-no-cache';
 
 import Job from 'Job';
+import Service from 'Service';
 
 import * as SERVER_API from 'ESE_API';
 
@@ -20,6 +21,12 @@ class Task {
      * @type {string}
      */
     this.name = taskName;
+
+    /**
+     * The parent service.
+     * @type {Service}
+     */
+    this.service = new Service(server, serviceName);
 
     // Server object.
     this._server = server;
