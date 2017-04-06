@@ -96,7 +96,17 @@ declare namespace GSF {
         name: string;
         displayName?: string;
         description?: string;
-        parameters: object;
+        parameters: TaskParameters;
+    }
+    export interface TaskParameters {
+        [key: string]: TaskParameter;
+    }
+    export interface TaskParameter {
+        displayName?: string;
+        description?: string;
+        choiceList?: string[];
+        direction: string; 
+        default?: any;
     }
 
 }
