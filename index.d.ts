@@ -107,6 +107,7 @@ declare namespace GSF {
         description?: string;
         choiceList?: string[];
         direction: string; 
+        dataType: string;
         default?: any;
     }
 
