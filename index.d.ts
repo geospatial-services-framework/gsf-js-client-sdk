@@ -88,7 +88,7 @@ declare namespace GSF {
         messages: Array<object>;
     }
     export interface JobResults {
-
+        [key: string]: any;
     }
     export interface ServiceInfo {
         name: string;
