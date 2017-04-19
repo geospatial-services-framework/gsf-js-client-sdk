@@ -11,6 +11,16 @@ The GSF JavaScript Client SDK provides a client-side JavaScript library for inte
   - `/dist/GSF.min.js.map` - The minified bundle source map file.
 
 ## Basic Usage
+### Importing the SDK
+- Import everything with GSF namespace:
+
+  `import * as GSF from 'gsf-js-client-sdk';`
+
+- Import specific classes:
+
+  `import { Job, Task } from 'gsf-js-client-sdk';`
+
+### Including the SDK with a Script Tag
 1. Include the GSF JavaScript Client SDK in your project.  The example below assumes the SDK file is located next to your html file.
 
     `<script src="GSF.min.js"></script>`

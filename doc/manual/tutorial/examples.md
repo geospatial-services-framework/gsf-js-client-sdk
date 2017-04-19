@@ -1,5 +1,5 @@
 # Examples
-Below are several examples of using the SDK.
+Below are several examples of using the SDK with JavaScript.  For TypeScript specific examples please see the [TypeScript example](#typescript).  Before using the SDK, it is also recommended that you read the [best practices](#bestPractices) section.
 
 ## List Available Services
 The GSF [**Server**] object provides the ability to list the available services on the server.
@@ -276,6 +276,43 @@ job.cancel(force).then(() => {
   // Display error.
 });
 ```
+
+## <a name="typescript"></a> Typescript Example
+Below is an example of submitting a job using typescript.
+
+```typescript
+import * as GSF from 'gsf-js-client-sdk';
+
+// Get a task.
+const serverArgs: GSF.ServerArgs = {address: 'MyServer', port: '9191'};
+const myServer: GSF.Server = GSF.server(serverArgs);
+const ENVIService: GSF.Service = myServer.service('ENVI');
+const myTask: GSF.Task = ENVIService.task('SpectralIndex');
+
+const taskParameters: GSF.SubmitOptions = {
+    parameters: {
+        INPUT_RASTER: {
+            FACTORY: 'URLRaster',
+            URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
+        },
+        INDEX: 'Normalized Difference Vegetation Index'
+    }
+};
+
+// Submit a job.
+task.submitAndWait(taskParameters)
+    .then((results: GSF.JobResults) => {
+        // Do something with results.
+        // This function is an example and is not provided by the SDK.
+        AddToMap(results.OUTPUT_RASTER);
+    }).catch((jobErrorMessage) => {
+        // Display error.
+    });
+```
+
+## <a name="bestPractices"></a> Best Practices
+### Connecting to Servers
+The examples throughout this documentation explain various concepts within the SDK using complete examples.  Most of the examples create a new 'GSF.server' object for every example.  This is to ensure a fully functional and self-contained example but is not a good practice when developing web apps.  It is recommended that you limit the number of Server (GSF.Server()) objects that you create.  Ideally, your app will create only one instance of this class and pass the reference around where needed.  This helps ensure consistency and prevent the possibility of exceeding the browser's per-domain connection limit.
 
 [**.wait()**]:../class/src/Job.js~Job.html#instance-method-wait
 [**.submitAndWait()**]:../class/src/Task.js~Task.html#instance-method-submitAndWait
