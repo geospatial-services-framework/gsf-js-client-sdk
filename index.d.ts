@@ -46,13 +46,15 @@ declare namespace GSF {
         cancel(force: boolean): Promise<true>;
         info(): Promise<JobInfo>;
         wait(): Promise<JobResults>;
+        on(event: string, callback: Function): Function;
+        removeAllListeners(): Function;
     }
 
     export interface SubmitOptions {
         parameters: object;
         route?: string;
     }
-    interface ProgressCallback {
+    export interface ProgressCallback {
         (info: JobProgressInfo) : void;
     }
     export interface JobProgressInfo {
