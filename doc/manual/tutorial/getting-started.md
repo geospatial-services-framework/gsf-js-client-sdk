@@ -64,7 +64,12 @@ task.submitAndWait(NDVIParameters).then((results) => {
 ```
 
 ## Requirements
-The GSF JavaScript Client SDK relies on [server-sent events] for communication with the server.  Developers who wish to build apps that run on browsers lacking EventSource support may want to use a polyfill.
+### Server Sent Events
+The GSF JavaScript Client SDK relies on [server-sent events] for communication with the server.  Developers who wish to build apps that run on browsers lacking EventSource support will want to use a polyfill.
+
+To view a list of the browsers that support EventSource please go here: https://caniuse.com/#search=eventsource
+
+There are several polyfills available that provide implementations of the EventSource API.  One such polyfill that is available from the npm and Bower package managers is called 'eventsource-polyfill'.  For information on installation and usage, see https://github.com/amvtek/EventSource.
 
 ## Building the SDK
 1. Clone the repository.
