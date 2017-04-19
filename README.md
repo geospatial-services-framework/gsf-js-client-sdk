@@ -65,6 +65,39 @@ task.submitAndWait(NDVIParameters).then((results) => {
   });
 ```
 
+#### Typescript Example
+Below is an example of submitting a job using typescript.
+
+```typescript
+import * as GSF from 'gsf-js-client-sdk';
+
+// Get a task.
+const serverArgs: GSF.ServerArgs = {address: 'MyServer', port: '9191'};
+const myServer: GSF.Server = GSF.server(serverArgs);
+const ENVIService: GSF.Service = myServer.service('ENVI');
+const myTask: GSF.Task = ENVIService.task('SpectralIndex');
+
+const taskParameters: GSF.SubmitOptions = {
+    parameters: {
+        INPUT_RASTER: {
+            FACTORY: 'URLRaster',
+            URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
+        },
+        INDEX: 'Normalized Difference Vegetation Index'
+    }
+};
+
+// Submit a job.
+task.submitAndWait(taskParameters)
+    .then((results: GSF.JobResults) => {
+        // Do something with results.
+        // This function is an example and is not provided by the SDK.
+        AddToMap(results.OUTPUT_RASTER);
+    }).catch((jobErrorMessage) => {
+        // Display error.
+    });
+```
+
 This is just a sample of what can be done with the SDK.  Please see our [full developer documentation] to learn more.
 
 ## Requirements
