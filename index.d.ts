@@ -86,6 +86,7 @@ declare namespace GSF {
         jobErrorMessage: string;
         inputs: object;
         messages: Array<object>;
+        results: object;
     }
     export interface JobResults {
         [key: string]: any;
