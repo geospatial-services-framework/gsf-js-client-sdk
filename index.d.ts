@@ -62,8 +62,8 @@ declare namespace GSF {
         progress: number;
         message: string;
     }
-    interface StartedCallback {
-        (info: JobStartedInfo) : Promise<Job>;
+    export interface StartedCallback {
+        (info: JobStartedInfo) : void;
     }
     export interface JobStartedInfo {
         jobId: number;
