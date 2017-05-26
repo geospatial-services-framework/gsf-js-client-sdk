@@ -47,6 +47,7 @@ declare namespace GSF {
         info(): Promise<JobInfo>;
         wait(): Promise<JobResults>;
         on(event: string, callback: Function): Function;
+        removeListener(eventName: any, listener: Function): Function;
         removeAllListeners(): Function;
     }
 
