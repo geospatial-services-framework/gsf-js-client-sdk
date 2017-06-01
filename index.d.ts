@@ -46,9 +46,9 @@ declare namespace GSF {
         cancel(force: boolean): Promise<true>;
         info(): Promise<JobInfo>;
         wait(): Promise<JobResults>;
-        on(event: string, callback: Function): Function;
-        removeListener(eventName: any, listener: Function): Function;
-        removeAllListeners(): Function;
+        on(event: string, callback: (p: any) => void ): void;
+        removeListener(eventName: any, listener: () => void): void;
+        removeAllListeners(): void;
     }
 
     export interface SubmitOptions {
