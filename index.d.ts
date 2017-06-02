@@ -46,8 +46,8 @@ declare namespace GSF {
         cancel(force: boolean): Promise<true>;
         info(): Promise<JobInfo>;
         wait(): Promise<JobResults>;
-        on(event: string, callback: (p: any) => void ): void;
-        removeListener(eventName: any, listener: () => void): void;
+        on(event: string, callback: (p?: any) => void ): void;
+        removeListener(eventName: any, listener: (p?: any) => void): void;
         removeAllListeners(): void;
     }
 
