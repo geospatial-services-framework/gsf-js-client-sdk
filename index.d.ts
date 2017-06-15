@@ -43,7 +43,7 @@ declare namespace GSF {
     }
     export interface Job {
         jobId: number;
-        cancel(force: boolean): Promise<true>;
+        cancel(force: boolean): Promise<boolean>;
         info(): Promise<JobInfo>;
         wait(): Promise<JobResults>;
         on(event: string, callback: (p?: any) => void ): void;
