@@ -67,7 +67,7 @@ task.submitAndWait(NDVIParameters).then((results) => {
   });
 ```
 
-#### Typescript Example
+#### TypeScript Example
 Below is an example of submitting a job using typescript.
 
 ```typescript
