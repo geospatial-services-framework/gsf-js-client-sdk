@@ -75,6 +75,47 @@ class Service {
   }
 
   /**
+   * Retrieves the array of task info objects available on the service.
+   * @return {Promise<TaskInfo[], error>} Returns a Promise to an array of TaskInfo objects.
+   */
+  taskInfoList() {
+    return new Promise((resolve, reject) => {
+      // Build service info url.
+      const url = [this._server.rootURL, SERVER_API.SERVICES_PATH, this.name].join('/');
+
+      // Get service info so we can pull off the tasks array.
+      request
+        .get(url)
+        .query({ taskInfo: true })
+        .use(nocache) // Prevents caching of *only* this request
+        .end((err, res) => {
+          if (res && res.ok) {
+            const tasks = [];
+            res.body.tasks.forEach((task) => {
+              if (typeof task === 'string') {
+                reject('Unable to get task info list.');
+              } else {
+                const newTask = Object.assign({}, task);
+                newTask.parameters = {};
+                task.parameters.forEach((param) => {
+                  newTask.parameters[param.name] = Object.assign({}, param);
+                  delete newTask.parameters[param.name].name;
+                });
+                tasks.push(newTask);
+              }
+            });
+            resolve(tasks);
+          } else {
+            const status = ((err && err.status) ? ': ' + err.status : '');
+            const text = ((err && err.response && err.response.text) ? ': ' +
+             err.response.text : '');
+            reject('Error requesting task info objects' + status + text);
+          }
+        });
+    });
+  }
+
+  /**
    * Retrieves the array of task objects available on the service.
    * @return {Promise<Task[], error>} Returns a Promise to an array of Task objects.
    */

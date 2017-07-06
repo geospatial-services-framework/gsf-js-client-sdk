@@ -63,13 +63,51 @@ describe('Testing Service class', function() {
         done();
       });
     });
-
   });
 
   describe('.task()', function() {
     it('returns a task object', function(done) {
       expect(service.task(testTasks.taskPass.name)).to.be.an('object');
       done();
+    });
+  });
+
+  describe('.taskInfoList()', function() {
+    it('returns a list of task info objects', function(done) {
+      this.timeout(config.testTimeout2);
+
+      service.taskInfoList().then((taskInfoList) => {
+        expect(taskInfoList).to.be.an.array; 
+        expect(taskInfoList.length).to.be.above(2);
+        taskInfoList.forEach((info) => {
+          verifyProperties(info, interfaces.taskInfo);
+          expect(info.parameters).to.be.an.object;
+          expect(info.parameters).to.not.be.an.array;
+          const keys = Object.keys(info.parameters);
+          expect(keys.length).to.be.greaterThan(2);
+          keys.forEach((param) => {
+            verifyProperties(info.parameters[param], interfaces.taskParameters);
+          });
+        });
+        done();
+      }).catch((err) => {
+        done(err);
+      });
+    });
+
+    it('rejects promise if error from request', function(done) {
+      this.timeout(config.testTimeout2);
+
+      const badServer = GSF.server(config.fakeServer);
+      const badService = new Service(badServer, testTasks.ENVIService);
+
+      badService.taskInfoList().then(() => {
+        done('Expected promise to be rejected.');
+      }).catch((err) => {
+        expect(err).to.exist;
+        expect(err).to.be.a('string');
+        done();
+      });
     });
   });
 

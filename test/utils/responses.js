@@ -9,10 +9,105 @@ module.exports = {
         {
           name: 'ENVI',
           tasks: [
-            'ThisTask',
-            'ThatTask',
-            'SomeTask',
-            'Sleep'
+            {
+              name: 'ThisTask',
+              displayname: 'This Task',
+              description: 'A task.',
+              parameters: [
+                {
+                  name: 'PARAM1',
+                  displayName: 'Param 1',
+                  description: 'The first input parameter',
+                  dataType: 'String',
+                  default: 'foo',
+                  direction: 'INPUT',
+                  parameterType: 'required'
+                },
+                {
+                  name: 'PARAM2',
+                  displayName: 'Param 2',
+                  description: 'The second input parameter',
+                  dataType: 'String',
+                  default: 'bar',
+                  direction: 'INPUT',
+                  parameterType: 'required'
+                },
+                {
+                  name: 'PARAM3',
+                  displayName: 'Param 3',
+                  description: 'The output parameter',
+                  dataType: 'String',
+                  direction: 'OUTPUT',
+                  parameterType: 'required'
+                }
+              ]
+            },
+            {
+              name: 'ThatTask',
+              displayname: 'This Task',
+              description: 'A task.',
+              parameters: [
+                {
+                  name: 'PARAM1',
+                  displayName: 'Param 1',
+                  description: 'The first input parameter',
+                  dataType: 'String',
+                  default: 'foo',
+                  direction: 'INPUT',
+                  parameterType: 'required'
+                },
+                {
+                  name: 'PARAM2',
+                  displayName: 'Param 2',
+                  description: 'The second input parameter',
+                  dataType: 'String',
+                  default: 'bar',
+                  direction: 'INPUT',
+                  parameterType: 'required'
+                },
+                {
+                  name: 'PARAM3',
+                  displayName: 'Param 3',
+                  description: 'The output parameter',
+                  dataType: 'String',
+                  direction: 'OUTPUT',
+                  parameterType: 'required'
+                }
+              ]
+            },
+            {
+              name: 'SomeTask',
+              displayname: 'This Task',
+              description: 'A task.',
+              parameters: [
+                {
+                  name: 'PARAM1',
+                  displayName: 'Param 1',
+                  description: 'The first input parameter',
+                  dataType: 'String',
+                  default: 'foo',
+                  direction: 'INPUT',
+                  parameterType: 'required'
+                },
+                {
+                  name: 'PARAM2',
+                  displayName: 'Param 2',
+                  description: 'The second input parameter',
+                  dataType: 'String',
+                  default: 'bar',
+                  direction: 'INPUT',
+                  parameterType: 'required'
+                },
+                {
+                  name: 'PARAM3',
+                  displayName: 'Param 3',
+                  description: 'The output parameter',
+                  dataType: 'String',
+                  direction: 'OUTPUT',
+                  parameterType: 'required'
+                }
+              ]
+            }
           ]
         }
       ]
