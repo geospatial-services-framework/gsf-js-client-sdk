@@ -92,9 +92,7 @@ class Service {
           if (res && res.ok) {
             const tasks = [];
             res.body.tasks.forEach((task) => {
-              if (typeof task === 'string') {
-                reject('Unable to get task info list.');
-              } else {
+              if (typeof task === 'object') {
                 const newTask = Object.assign({}, task);
                 newTask.parameters = {};
                 task.parameters.forEach((param) => {
@@ -102,6 +100,9 @@ class Service {
                   delete newTask.parameters[param.name].name;
                 });
                 tasks.push(newTask);
+              } else {
+                reject('Unable to get task info list.');
+                return;
               }
             });
             resolve(tasks);
