@@ -10,7 +10,6 @@ function Sleep(API, inputs, scratch, jobResults) {
   setTimeout(function() {
     if (inputs.N_PROGRESS) {
       for (var i = 0; i < inputs.N_PROGRESS; i++) {
-        // .warn('*calling progrss fxn: ', i * (100 / inputs.N_PROGRESS));
         jobResults.progress(i * (100 / inputs.N_PROGRESS), (inputs.PROGRESS_MESSAGE || 'Progress Message'));
       }
     }

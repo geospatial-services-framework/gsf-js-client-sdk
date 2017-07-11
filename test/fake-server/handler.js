@@ -23,13 +23,17 @@ const serviceInfo = function(req, res) {
 // Called by services endpoint.
 const listTasks = function(req, res) {
   // Send requested task list to client
+  var taskList = [];
+  responses.services.response.services[1].tasks.forEach(function(task) {
+    taskList.push(req.query.taskInfo ? task : task.name);
+  });
   res.setHeader('Content-Type', contentType.json);
   res.send(JSON.stringify({
     name: req.params.service,
     executionType: 'asynchronous',
     description: req.params.service + ' processing routines',
     readOnly: 'true',
-    tasks: responses.services.response.services[1].tasks
+    tasks: taskList
   }, null, 2));
 };
 

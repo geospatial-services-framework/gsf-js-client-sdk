@@ -29,6 +29,7 @@ declare namespace GSF {
         info(): Promise<ServiceInfo>;
         task(taskName: string): Task;
         tasks(): Promise<Array<Task>>;
+        taskInfoList(): Promise<Array<TaskInfo>>;
     }
     export interface Task {
         name: string;
