@@ -1,12 +1,10 @@
 /**
  * Tests for the Server class.
  */
-import { expect } from 'chai';
-
-import * as testTasks from './utils/testTasks.js';
-import config from './config/config.js';
-
-import GSF from 'GSF';
+const expect = require('chai').expect;
+const testTasks = require('./utils/testTasks.js');
+const config = require('./config/config.js');
+const GSF = require('../src/GSF');
 
 let server;
 

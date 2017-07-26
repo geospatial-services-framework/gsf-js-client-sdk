@@ -1,4 +1,4 @@
-import Server from 'Server';
+const Server = require('./Server');
 
 /**
  * The GSF object provides an entry point to the SDK.
@@ -8,7 +8,7 @@ import Server from 'Server';
  * @typedef {Object} GSF
  * @property {function(serverArgs: ServerArgs): Server} server - The function for creating a new Server object.
  */
-export default {
+module.exports = {
   server(serverArgs) {
     return new Server(serverArgs);
   }

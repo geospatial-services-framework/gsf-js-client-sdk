@@ -51,19 +51,7 @@ module.exports = {
     modules: [
       path.resolve(__dirname, 'src'),
       'node_modules'
-    ],
-    alias: {
-      // API
-      GSF: path.resolve(__dirname, 'src/GSF.js'),
-      Server: path.resolve(__dirname, 'src/Server.js'),
-      Service: path.resolve(__dirname, 'src/Service.js'),
-      Task: path.resolve(__dirname, 'src/Task.js'),
-      Job: path.resolve(__dirname, 'src/Job.js'),
-      // Utils
-      ESE_API: path.resolve(__dirname, 'src/utils/ESE_API.js'),
-      STATUS_MAP: path.resolve(__dirname, 'src/utils/ESE_STATUS_MAP.js'),
-      EVENTS: path.resolve(__dirname, 'src/utils/EVENTS.js')
-    }
+    ]
   },
   plugins: plugins
 };

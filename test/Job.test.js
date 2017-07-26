@@ -1,16 +1,14 @@
 /**
  * Tests for the Job class.
  */
-import { expect } from 'chai';
-
-import { verifyProperties } from './utils/testUtils.js';
-import * as testTasks from './utils/testTasks.js';
-import interfaces from './utils/interfaces.js';
-import config from './config/config.js';
-
-import GSF from 'GSF';
-import Task from 'Task';
-import Job from 'Job';
+const expect = require('chai').expect;
+const verifyProperties = require('./utils/testUtils.js').verifyProperties;
+const testTasks = require('./utils/testTasks.js');
+const interfaces = require('./utils/interfaces.js');
+const config = require('./config/config.js');
+const GSF = require('../src/GSF');
+const Task = require('../src/Task');
+const Job = require('../src/Job');
 
 let server;
 
@@ -44,7 +42,7 @@ describe('Testing Job class', function() {
 
   describe('.jobInfo()', function() {
     it('retrieves the job information', function(done) {
-      const task = new Task(server, testTasks.sleepTask.service,
+      const task = new Task(server.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
       task.submit({parameters: testTasks.sleepTask.parameters})
         .then((job) => {
@@ -87,7 +85,7 @@ describe('Testing Job class', function() {
 
   describe('.wait()', function() {
     it('waits for job completion', function(done) {
-      const task = new Task(server, testTasks.sleepTask.service, testTasks.sleepTask.name);
+      const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
       task.submit({parameters: testTasks.sleepTask.parameters})
         .then(job => job.wait())
         .then((results) => {
@@ -103,7 +101,7 @@ describe('Testing Job class', function() {
     it('rejects promise if job fails', function(done) {
       this.timeout(config.testTimeout2);
 
-      const task = new Task(server, testTasks.sleepTask.service, testTasks.sleepTask.name);
+      const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
       task.submit({parameters: testTasks.sleepTaskFail.parameters})
         .then(job => job.wait())
         .then((result) => {
@@ -124,7 +122,7 @@ describe('Testing Job class', function() {
 
       let params = Object.assign({}, testTasks.sleepTask.parameters);
       params.SLEEP_TIME = 150;
-      const task = new Task(server, testTasks.sleepTask.service, testTasks.sleepTask.name);
+      const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
       task.submit({parameters: params})
         .then((job) => {
           const force = false;
@@ -147,7 +145,7 @@ describe('Testing Job class', function() {
     it('cancels job with kill=true', function(done) {
       this.timeout(config.testTimeout2);
 
-      const task = new Task(server, testTasks.sleepTask.service,
+      const task = new Task(server.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
       let params = Object.assign({}, testTasks.sleepTask.parameters);
       params.SLEEP_TIME = 150;
@@ -188,7 +186,7 @@ describe('Testing Job class', function() {
       it('fires when job starts', function(done) {
         let jobStartedFired = true;
 
-        const task = new Task(server, testTasks.sleepTask.service, testTasks.sleepTask.name);
+        const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
         task.submit({parameters: testTasks.sleepTask.parameters});
 
         let params = Object.assign({}, testTasks.sleepTask.parameters);
@@ -230,7 +228,7 @@ describe('Testing Job class', function() {
 
     describe('\'Completed\' event', function() {
       it('fires when job completes', function(done) {
-        const task = new Task(server, testTasks.sleepTask.service, testTasks.sleepTask.name);
+        const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
         task.submit({parameters: testTasks.sleepTask.parameters})
         .then((job) => {
           job.once('Completed', function(data) {
@@ -251,7 +249,7 @@ describe('Testing Job class', function() {
     describe('\'Succeeded\' event', function() {
       it('fires when job succeeds', function(done) {
         let failedEventCalled = false;
-        const task = new Task(server, testTasks.sleepTask.service,
+        const task = new Task(server.service(testTasks.sleepTask.service),
           testTasks.sleepTask.name);
         task.submit({parameters: testTasks.sleepTask.parameters})
         .then((job) => {
@@ -276,7 +274,7 @@ describe('Testing Job class', function() {
     describe('\'Failed\' event', function() {
       it('fires when job fails', function(done) {
         let succeededEventCalled = false;
-        const task = new Task(server, testTasks.sleepTaskFail.service,
+        const task = new Task(server.service(testTasks.sleepTask.service),
           testTasks.sleepTaskFail.name);
         task.submit({parameters: testTasks.sleepTaskFail.parameters})
         .then((job) => {
@@ -311,7 +309,7 @@ describe('Testing Job class', function() {
         testData.sleepTask.parameters.N_PROGRESS = nProgress;
         testData.sleepTask.parameters.PROGRESS_MESSAGE = progressMessage;
 
-        const task = new Task(server, testTasks.sleepTask.service,
+        const task = new Task(server.service(testTasks.sleepTask.service),
           testTasks.sleepTask.name);
         task.submit({parameters: testTasks.sleepTask.parameters})
         .then((job2) => {

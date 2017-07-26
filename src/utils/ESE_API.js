@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   ROOT_PATH: 'ese',
   SERVICES_PATH: 'services',
   TASKS_PATH: 'tasks',

@@ -1,12 +1,12 @@
-import * as request from 'superagent';
-import nocache from 'superagent-no-cache';
-import EventEmitter from 'events';
-
-import Service from 'Service';
-import Job from 'Job';
-
-import * as SERVER_API from 'ESE_API';
-import EVENTS from 'EVENTS';
+const request = require('superagent');
+const EventEmitter = require('events');
+const saNoCache = require('superagent-no-cache');
+const sdkUtils = require('./utils/utils.js');
+const nocache = sdkUtils.isIE() ? saNoCache : saNoCache.withQueryStrings;
+const Service = require('./Service');
+const Job = require('./Job');
+const SERVER_API = require('./utils/ESE_API');
+const EVENTS = require('./utils/EVENTS');
 
 /**
  * The Server class is used to connect to the server and retrieve information
@@ -77,6 +77,14 @@ class Server extends EventEmitter {
 
     // Allow infinite listeners.
     this.setMaxListeners(0);
+
+    // Use global EventSource for browsers and the node package for node.
+    let EventSource;
+    if (sdkUtils.isNode()) {
+      EventSource = require('eventsource');
+    } else {
+      EventSource = window.EventSource;
+    }
 
     // Attach to server sent events and re broadcast.
     this._events = new EventSource([this.URL,
@@ -226,7 +234,7 @@ class Server extends EventEmitter {
 
 }
 
-export default Server;
+module.exports = Server;
 
 /**
  * Emitted when a job completes.

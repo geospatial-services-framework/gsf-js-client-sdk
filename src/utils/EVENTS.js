@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   job: {
     accepted: 'Accepted',
     started: 'Started',

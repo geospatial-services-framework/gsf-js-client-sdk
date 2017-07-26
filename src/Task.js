@@ -1,21 +1,19 @@
-import * as request from 'superagent';
-import nocache from 'superagent-no-cache';
-
-import Job from 'Job';
-import Service from 'Service';
-
-import * as SERVER_API from 'ESE_API';
+const request = require('superagent');
+const saNoCache = require('superagent-no-cache');
+const sdkUtils = require('./utils/utils.js');
+const nocache = sdkUtils.isIE() ? saNoCache : saNoCache.withQueryStrings;
+const Job = require('./Job');
+const SERVER_API = require('./utils/ESE_API');
 
 /**
  * The Task class is used to submit and inspect tasks.
  */
 class Task {
   /**
-   * @param {GSF} server - The server object.
-   * @param {string} serviceName - The name of the service.
+   * @param {Service} service - The service object.
    * @param {string} taskName - The name of the task.
    */
-  constructor(server, serviceName, taskName) {
+  constructor(service, taskName) {
     /**
      * The task name.
      * @type {string}
@@ -26,14 +24,14 @@ class Task {
      * The parent service.
      * @type {Service}
      */
-    this.service = new Service(server, serviceName);
+    this.service = service;
 
     // Server object.
-    this._server = server;
+    this._server = service._server;
 
     // Task endpoint for this task.
-    this._taskURL = [server.rootURL, SERVER_API.SERVICES_PATH,
-      serviceName, taskName].join('/');
+    this._taskURL = [this._server.rootURL, SERVER_API.SERVICES_PATH,
+      this.service.name, this.name].join('/');
   }
 
   /**
@@ -57,7 +55,6 @@ class Task {
 
             taskInfo.parameters.forEach((param) => {
               parameters[param.name] = param;
-              delete parameters[param.name].name;
             });
 
             taskInfo.parameters = parameters;
@@ -140,7 +137,7 @@ class Task {
   }
 }
 
-export default Task;
+module.exports = Task;
 
 /**
  * The TaskInfo object contains information about a task.
@@ -149,6 +146,7 @@ export default Task;
  * @property {string} [displayName] - A readable name for the task. This is only used for display
  *   purposes.
  * @property {string} [description] - A description of the task.
+ * @property {string} [parameters.<parameterName>.name] - The parameter name.
  * @property {string} [parameters.<parameterName>.displayName] - A display name for the parameter.
  * @property {string} [parameters.<parameterName>.description] - A description of the parameter.
  * @property {string} parameters.<parameterName>.parameterType - A string set to either "required" or

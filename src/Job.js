@@ -1,10 +1,11 @@
-import * as request from 'superagent';
-import nocache from 'superagent-no-cache';
-import EventEmitter from 'events';
-
-import * as SERVER_API from 'ESE_API';
-import * as STATUS_MAP from 'STATUS_MAP';
-import EVENTS from 'EVENTS';
+const request = require('superagent');
+const EventEmitter = require('events');
+const saNoCache = require('superagent-no-cache');
+const sdkUtils = require('./utils/utils.js');
+const nocache = sdkUtils.isIE() ? saNoCache : saNoCache.withQueryStrings;
+const SERVER_API = require('./utils/ESE_API');
+const EVENTS = require('./utils/EVENTS');
+const STATUS_MAP = require('./utils/ESE_STATUS_MAP');
 
 /**
  * The Job class is used for job operations.
@@ -201,7 +202,7 @@ class Job extends EventEmitter {
   }
 }
 
-export default Job;
+module.exports = Job;
 
 /**
  * Emitted when a job fails.

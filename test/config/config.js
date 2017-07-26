@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   localHTTPServer: {
     protocol: 'http',
     address: 'localhost',

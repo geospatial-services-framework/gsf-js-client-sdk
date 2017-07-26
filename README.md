@@ -3,7 +3,7 @@
 [![npm Version](https://img.shields.io/npm/v/gsf-js-client-sdk.svg)](https://www.npmjs.com/package/gsf-js-client-sdk)
 
 ## About the SDK
-The GSF JavaScript Client SDK provides a client-side JavaScript library for interacting with GSF.  For detailed information please visit our [full developer documentation] page.
+The GSF JavaScript Client SDK provides a client-side JavaScript library for interacting with GSF.  The SDK may be used in the browser as well as Node.js.  For detailed information please visit our [full developer documentation] page.
 
 1. This repository contains pre-built distributable files located in the `/dist/` directory.
     - `/dist/GSF.js` - The non-minified bundle.
@@ -16,11 +16,20 @@ The SDK can be installed using [npm].
 
     $ npm install gsf-js-client-sdk --save
 
-## Basic Usage
-#### Module Import
-1. After installing with npm, import the sdk into your file:
+### Importing the SDK 
+#### Using ECMAScript 2015 
+- Import everything with GSF namespace:
 
-`import * as GSF from 'gsf-js-client-sdk';`
+  `import * as GSF from 'gsf-js-client-sdk';`
+
+- Import specific classes:
+
+  `import { Job, Task } from 'gsf-js-client-sdk';`
+
+#### Using Node.js
+-Require the SDK module:
+
+  `const GSF = require('gsf-js-client-sdk');`
 
 #### Script Tag
 1. Include the GSF JavaScript Client SDK file in your project.  The example below assumes the SDK file is located next to your html file.
@@ -31,8 +40,7 @@ The SDK can be installed using [npm].
 
     `<script>console.log(GSF);</script>`
 
-#### Basic Example
-
+### Basic Example
 1. Below is a simple example of running a job and retrieving the results.  You will need to update the server address and port below to reflect the server that you are using.
 
 ```javascript
@@ -40,7 +48,7 @@ The SDK can be installed using [npm].
 const server = GSF.server({
   address: 'MyServer',
   port: '9191'
-  });
+});
 
 // Create a service object.
 const service = server.service('ENVI');
@@ -104,7 +112,7 @@ This is just a sample of what can be done with the SDK.  Please see our [full de
 
 ## Requirements
 ### Server Sent Events
-The GSF JavaScript Client SDK relies on [server-sent events] for communication with the server.  Developers who wish to build apps that run on browsers lacking EventSource support will want to use a polyfill.
+The GSF JavaScript Client SDK relies on [server-sent events] for communication with the server.  Developers who wish to build apps that run on browsers lacking EventSource support will want to use a polyfill.  This is not necessary when using the SDK in Node.js.
 
 To view a list of the browsers that support EventSource please go here: https://caniuse.com/#search=eventsource
 

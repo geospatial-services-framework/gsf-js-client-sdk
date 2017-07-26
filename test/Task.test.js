@@ -1,17 +1,14 @@
 /**
  * Tests for the Task class.
  */
-import { expect } from 'chai';
-
-import { verifyProperties } from './utils/testUtils.js';
-
-import Task from 'Task';
-import Service from 'Service';
-import GSF from 'GSF';
-
-import * as testTasks from './utils/testTasks.js';
-import interfaces from './utils/interfaces.js';
-import config from './config/config.js';
+const expect = require('chai').expect;
+const verifyProperties = require('./utils/testUtils.js').verifyProperties;
+const Task = require('../src/Task');
+const Service = require('../src/Service');
+const GSF = require('../src/GSF');
+const testTasks = require('./utils/testTasks.js');
+const interfaces = require('./utils/interfaces.js');
+const config = require('./config/config.js');
 
 let task;
 let server;
@@ -24,7 +21,7 @@ let server;
 describe('Testing Task class', function() {
   before(function(done) {
     server = GSF.server(config.localHTTPServer);
-    task = new Task(server, testTasks.sleepTask.service,
+    task = new Task(server.service(testTasks.sleepTask.service),
       testTasks.sleepTask.name);
     done();
   });
@@ -60,7 +57,7 @@ describe('Testing Task class', function() {
       this.timeout(config.testTimeout2);
 
       const badServer = GSF.server(config.fakeServer);
-      const badTask = new Task(badServer, testTasks.sleepTask.service,
+      const badTask = new Task(badServer.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
       badTask.info().then((info) => {
         done('Expected promise to be rejected.');
@@ -90,6 +87,7 @@ describe('Testing Task class', function() {
       const nProgress = 5;
       const progressMessage = 'Message';
       let params = testTasks.sleepTask.parameters;
+      // let params = Object.assign({}, testTasks.sleepTask.parameters);
       params.N_PROGRESS = nProgress;
       params.SLEEP_TIME = 500;
       params.PROGRESS_MESSAGE = progressMessage;
@@ -99,7 +97,7 @@ describe('Testing Task class', function() {
 
       const progress = (data) => {
         expect(data.progress).to.be.a('number');
-        expect(data.message).to.be.an('string');
+        expect(data.message).to.be.a('string');
         nProgressEvents++;
       };
 
@@ -126,7 +124,7 @@ describe('Testing Task class', function() {
       this.timeout(config.testTimeout2);
 
       const badServer = GSF.server(config.fakeServer);
-      const badTask = new Task(badServer, testTasks.sleepTask.service,
+      const badTask = new Task(badServer.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
       badTask.submit({parameters: testTasks.sleepTask.parameters})
         .then((job) => {
@@ -168,7 +166,7 @@ describe('Testing Task class', function() {
 
       const progress = (data) => {
         expect(data.progress).to.be.a('number');
-        expect(data.message).to.be.an('string');
+        expect(data.message).to.be.a('string');
         nProgressEvents++;
       };
 

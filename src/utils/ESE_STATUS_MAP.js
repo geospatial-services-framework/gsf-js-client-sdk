@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   esriJobSucceeded: 'Succeeded',
   esriJobFailed: 'Failed',
   esriJobSubmitted: 'Accepted',

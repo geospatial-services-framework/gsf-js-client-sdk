@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+const expect = require('chai').expect;
 
 const verifyProperties = function(isObj, expectProps) {
   Object.keys(expectProps).forEach(function(prop) {
@@ -10,6 +10,6 @@ const verifyProperties = function(isObj, expectProps) {
   });
 };
 
-export default {
+module.exports = {
   verifyProperties: verifyProperties
 };

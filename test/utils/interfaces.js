@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   serviceInfo: {
     name: {type: 'string'},
     description: {type: 'string'},
@@ -23,6 +23,7 @@ export default {
     parameters: {type: 'object'}
   },
   taskParameters: {
+    name: {type: 'string'},
     dataType: {type: 'string'},
     parameterType: {type: 'string'}
   }
