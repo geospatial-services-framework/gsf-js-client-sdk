@@ -1,7 +1,7 @@
 const request = require('superagent');
 const saNoCache = require('superagent-no-cache');
 const sdkUtils = require('./utils/utils.js');
-const nocache = sdkUtils.isIE() ? saNoCache : saNoCache.withQueryStrings;
+const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 const Job = require('./Job');
 const SERVER_API = require('./utils/ESE_API');
 

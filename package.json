@@ -4,7 +4,7 @@
   "description": "GSF JavaScript Client SDK",
   "author": "Exelis Visual Information Solutions, Inc., a subsidiary of Harris Corporation.",
   "license": "MIT",
-  "main": "src/GSF.js",
+  "main": "dist/GSF.min.js",
   "types": "./index.d.ts",
   "repository": {
     "type": "git",

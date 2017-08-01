@@ -31,7 +31,7 @@ The SDK can be installed using [npm].
 
   `const GSF = require('gsf-js-client-sdk');`
 
-#### Script Tag
+### Including the SDK with a Script Tag
 1. Include the GSF JavaScript Client SDK file in your project.  The example below assumes the SDK file is located next to your html file.
 
     `<script src="GSF.min.js"></script>`

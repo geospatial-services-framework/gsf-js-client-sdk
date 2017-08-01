@@ -87,7 +87,6 @@ describe('Testing Task class', function() {
       const nProgress = 5;
       const progressMessage = 'Message';
       let params = testTasks.sleepTask.parameters;
-      // let params = Object.assign({}, testTasks.sleepTask.parameters);
       params.N_PROGRESS = nProgress;
       params.SLEEP_TIME = 500;
       params.PROGRESS_MESSAGE = progressMessage;
