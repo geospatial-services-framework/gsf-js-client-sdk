@@ -6,10 +6,12 @@
 The GSF JavaScript Client SDK provides a client-side JavaScript library for interacting with GSF.  The SDK may be used in the browser as well as Node.js.  For detailed information please visit our [full developer documentation] page.
 
 1. This repository contains pre-built distributable files located in the `/dist/` directory.
-    - `/dist/GSF.js` - The non-minified bundle.
-    - `/dist/GSF.js.map` - The non-minified bundle source map file.
-    - `/dist/GSF.min.js` - The minified bundle.
-    - `/dist/GSF.min.js.map` - The minified bundle source map file.
+  - `/dist/GSF-node.js` - The Node.js bundle.
+  - `/dist/GSF-node.js.map` - The Node.js bundle source map.
+  - `/dist/GSF.js` - The non-minified web bundle.
+  - `/dist/GSF.js.map` - The non-minified web bundle source map file.
+  - `/dist/GSF.min.js` - The minified web bundle.
+  - `/dist/GSF.min.js.map` - The minified web bundle source map file.
 
 ## Installation
 The SDK can be installed using [npm].
