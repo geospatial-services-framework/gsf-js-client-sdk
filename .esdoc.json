@@ -9,8 +9,7 @@
           {"from": "^src/", "to": "dist/"}
         ]
       }
-    },
-    {"name": "./doc/esdocExportPlugin.js"}
+    }
   ],
   "title": "GSF JavaScript Client SDK",
   "styles": ["./doc/styles/main.css"],
