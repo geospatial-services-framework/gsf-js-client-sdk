@@ -79,15 +79,15 @@ class Server extends EventEmitter {
     this.setMaxListeners(0);
 
     // Use global EventSource for browsers and the node package for node.
-    let EventSource;
-    if (sdkUtils.isNode()) {
-      EventSource = require('eventsource');
+    let Eventsource;
+    if (NODE) { // Webpack defined global
+      Eventsource = require('eventsource');
     } else {
-      EventSource = window.EventSource;
+      Eventsource = EventSource;
     }
 
     // Attach to server sent events and re broadcast.
-    this._events = new EventSource([this.URL,
+    this._events = new Eventsource([this.URL,
       SERVER_API.EVENTS_PATH].join('/'));
 
     // Emit succeeded and failed events.

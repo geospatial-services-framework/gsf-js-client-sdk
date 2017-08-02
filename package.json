@@ -11,9 +11,10 @@
     "url": "https://github.com/geospatial-services-framework/gsf-js-client-sdk.git"
   },
   "scripts": {
-    "build": "npm run build-prod && npm run build-dev",
-    "build-prod": "./node_modules/.bin/webpack",
-    "build-dev": "./node_modules/.bin/webpack --progress --colors --env dev",
+    "clean": "shx rm -rf dist",
+    "build-node": "webpack --config=build/webpack-node.config.js",
+    "build-web": "webpack --config=build/webpack-web.config.js",
+    "build": "npm run clean && npm run build-node && npm run build-web",
     "watch": "./node_modules/.bin/webpack --progress --colors --watch",
     "test": "npm run test-phantom",
     "test-phantom": "concurrently --kill-others --success first \"node ./test/fake-server/server.js\" \"npm run prod-test-phantom\"",
@@ -65,8 +66,10 @@
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.2",
-    "mocha": "^3.2.0",
+    "mocha": "^3.5.0",
+    "mocha-webpack": "^0.7.0",
+    "shx": "^0.2.2",
     "sse-channel": "^2.0.5",
-    "webpack": "^2.2.1"
+    "webpack": "^3.4.1"
   }
 }
