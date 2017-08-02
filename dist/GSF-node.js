@@ -1562,23 +1562,17 @@ module.exports.withQueryStrings = function _queryStringCacheBuster(request) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var detectNode = __webpack_require__(190);
-
 // Detects if the current browser is IE.
 var isIE = function isIE() {
-  if (!detectNode()) {
-    var _isIE = __webpack_require__(191);
+  if (false) {
+    var _isIE = require('component-ie');
     return _isIE;
   }
   return false;
 };
 
-// Detects if the current environment is Node.js.
-var isNode = detectNode;
-
 exports.default = {
-  isIE: isIE,
-  isNode: isNode
+  isIE: isIE
 };
 module.exports = exports['default'];
 
@@ -4143,7 +4137,7 @@ var sdkUtils = __webpack_require__(34);
 var nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 var SERVER_API = __webpack_require__(35);
 var EVENTS = __webpack_require__(91);
-var STATUS_MAP = __webpack_require__(200);
+var STATUS_MAP = __webpack_require__(198);
 
 /**
  * The Job class is used for job operations.
@@ -4665,6 +4659,9 @@ exports.parse = querystring;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var Server = __webpack_require__(98);
 
 /**
@@ -4675,11 +4672,12 @@ var Server = __webpack_require__(98);
  * @typedef {Object} GSF
  * @property {function(serverArgs: ServerArgs): Server} server - The function for creating a new Server object.
  */
-module.exports = {
+exports.default = {
   server: function server(serverArgs) {
     return new Server(serverArgs);
   }
 };
+module.exports = exports['default'];
 
 /***/ }),
 /* 98 */
@@ -4727,7 +4725,7 @@ var EventEmitter = __webpack_require__(12);
 var saNoCache = __webpack_require__(33);
 var sdkUtils = __webpack_require__(34);
 var nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
-var Service = __webpack_require__(192);
+var Service = __webpack_require__(190);
 var Job = __webpack_require__(90);
 var SERVER_API = __webpack_require__(35);
 var EVENTS = __webpack_require__(91);
@@ -10924,61 +10922,6 @@ module.exports = function(res, fn){
 
 /***/ }),
 /* 190 */
-/***/ (function(module, exports) {
-
-//var isNode=new Function("try {return this===global;}catch(e){return false;}");
-var isNode =function(){
-    var windowTest;
-     try {
-        //if window is declared thorugh JS DOM then window will be defined but will not be equal to this
-        windowTest  =  this === window;
-     }catch(e) {
-       return true;
-     }
-      try {
-        return this===global && !windowTest;
-      }
-      catch(e) {
-        return false;
-      }
-}
-module.exports = isNode;
-
-
-/***/ }),
-/* 191 */
-/***/ (function(module, exports) {
-
-/**
- * Export `ie`.
- */
-
-module.exports = ie();
-
-/**
- * Initialize `ie`
- *
- * @return {Number|undefined}
- * @api public
- */
-
-function ie() {
-  for( var v = 3,
-           el = document.createElement('b'),
-           // empty array as loop breaker (and exception-avoider) for non-IE and IE10+
-           all = el.all || [];
-       // i tag not well-formed since we know that IE5-IE9 won't mind
-       el.innerHTML = '<!--[if gt IE ' + (++v) + ']><i><![endif]-->',
-       all[0];
-     );
-  // return the documentMode for IE10+ compatibility
-  // non-IE will get undefined
-  return v > 4 ? v : document.documentMode;
-}
-
-
-/***/ }),
-/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10988,7 +10931,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _assign = __webpack_require__(193);
+var _assign = __webpack_require__(191);
 
 var _assign2 = _interopRequireDefault(_assign);
 
@@ -11014,7 +10957,7 @@ var request = __webpack_require__(21);
 var saNoCache = __webpack_require__(33);
 var sdkUtils = __webpack_require__(34);
 var nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
-var Task = __webpack_require__(197);
+var Task = __webpack_require__(195);
 var SERVER_API = __webpack_require__(35);
 
 /**
@@ -11169,29 +11112,29 @@ exports.default = Service;
 module.exports = exports['default'];
 
 /***/ }),
-/* 193 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(194), __esModule: true };
+module.exports = { "default": __webpack_require__(192), __esModule: true };
 
 /***/ }),
-/* 194 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(195);
+__webpack_require__(193);
 module.exports = __webpack_require__(0).Object.assign;
 
 /***/ }),
-/* 195 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.1 Object.assign(target, source)
 var $export = __webpack_require__(4);
 
-$export($export.S + $export.F, 'Object', {assign: __webpack_require__(196)});
+$export($export.S + $export.F, 'Object', {assign: __webpack_require__(194)});
 
 /***/ }),
-/* 196 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11230,7 +11173,7 @@ module.exports = !$assign || __webpack_require__(14)(function(){
 } : $assign;
 
 /***/ }),
-/* 197 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11240,7 +11183,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _stringify = __webpack_require__(198);
+var _stringify = __webpack_require__(196);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -11450,13 +11393,13 @@ exports.default = Task;
 module.exports = exports['default'];
 
 /***/ }),
-/* 198 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(199), __esModule: true };
+module.exports = { "default": __webpack_require__(197), __esModule: true };
 
 /***/ }),
-/* 199 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var core  = __webpack_require__(0)
@@ -11466,7 +11409,7 @@ module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
 };
 
 /***/ }),
-/* 200 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

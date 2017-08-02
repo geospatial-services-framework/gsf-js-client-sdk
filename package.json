@@ -46,7 +46,6 @@
     "concurrently": "^3.4.0",
     "cors": "^2.8.1",
     "component-ie": "^1.0.0",
-    "detect-is-node": "^1.0.3",
     "esdoc": "^0.5.2",
     "esdoc-importpath-plugin": "^0.1.1",
     "eslint": "^3.17.1",

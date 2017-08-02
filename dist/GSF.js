@@ -1400,23 +1400,17 @@ module.exports.withQueryStrings = function _queryStringCacheBuster(request) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var detectNode = __webpack_require__(122);
-
 // Detects if the current browser is IE.
 var isIE = function isIE() {
-  if (!detectNode()) {
-    var _isIE = __webpack_require__(124);
+  if (true) {
+    var _isIE = __webpack_require__(122);
     return _isIE;
   }
   return false;
 };
 
-// Detects if the current environment is Node.js.
-var isNode = detectNode;
-
 exports.default = {
-  isIE: isIE,
-  isNode: isNode
+  isIE: isIE
 };
 module.exports = exports['default'];
 
@@ -2439,7 +2433,7 @@ var sdkUtils = __webpack_require__(27);
 var nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 var SERVER_API = __webpack_require__(28);
 var EVENTS = __webpack_require__(65);
-var STATUS_MAP = __webpack_require__(133);
+var STATUS_MAP = __webpack_require__(131);
 
 /**
  * The Job class is used for job operations.
@@ -2742,6 +2736,9 @@ module.exports = __webpack_require__(67);
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var Server = __webpack_require__(68);
 
 /**
@@ -2752,11 +2749,12 @@ var Server = __webpack_require__(68);
  * @typedef {Object} GSF
  * @property {function(serverArgs: ServerArgs): Server} server - The function for creating a new Server object.
  */
-module.exports = {
+exports.default = {
   server: function server(serverArgs) {
     return new Server(serverArgs);
   }
 };
+module.exports = exports['default'];
 
 /***/ }),
 /* 68 */
@@ -2804,7 +2802,7 @@ var EventEmitter = __webpack_require__(63);
 var saNoCache = __webpack_require__(26);
 var sdkUtils = __webpack_require__(27);
 var nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
-var Service = __webpack_require__(125);
+var Service = __webpack_require__(123);
 var Job = __webpack_require__(64);
 var SERVER_API = __webpack_require__(28);
 var EVENTS = __webpack_require__(65);
@@ -5393,57 +5391,6 @@ module.exports = function shouldRetry(err, res) {
 
 /***/ }),
 /* 122 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {//var isNode=new Function("try {return this===global;}catch(e){return false;}");
-var isNode =function(){
-    var windowTest;
-     try {
-        //if window is declared thorugh JS DOM then window will be defined but will not be equal to this
-        windowTest  =  this === window;
-     }catch(e) {
-       return true;
-     }
-      try {
-        return this===global && !windowTest;
-      }
-      catch(e) {
-        return false;
-      }
-}
-module.exports = isNode;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(123)))
-
-/***/ }),
-/* 123 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 124 */
 /***/ (function(module, exports) {
 
 /**
@@ -5475,7 +5422,7 @@ function ie() {
 
 
 /***/ }),
-/* 125 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5485,7 +5432,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _assign = __webpack_require__(126);
+var _assign = __webpack_require__(124);
 
 var _assign2 = _interopRequireDefault(_assign);
 
@@ -5511,7 +5458,7 @@ var request = __webpack_require__(25);
 var saNoCache = __webpack_require__(26);
 var sdkUtils = __webpack_require__(27);
 var nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
-var Task = __webpack_require__(130);
+var Task = __webpack_require__(128);
 var SERVER_API = __webpack_require__(28);
 
 /**
@@ -5666,29 +5613,29 @@ exports.default = Service;
 module.exports = exports['default'];
 
 /***/ }),
-/* 126 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(127), __esModule: true };
+module.exports = { "default": __webpack_require__(125), __esModule: true };
 
 /***/ }),
-/* 127 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(128);
+__webpack_require__(126);
 module.exports = __webpack_require__(0).Object.assign;
 
 /***/ }),
-/* 128 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.1 Object.assign(target, source)
 var $export = __webpack_require__(3);
 
-$export($export.S + $export.F, 'Object', {assign: __webpack_require__(129)});
+$export($export.S + $export.F, 'Object', {assign: __webpack_require__(127)});
 
 /***/ }),
-/* 129 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5727,7 +5674,7 @@ module.exports = !$assign || __webpack_require__(11)(function(){
 } : $assign;
 
 /***/ }),
-/* 130 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5737,7 +5684,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _stringify = __webpack_require__(131);
+var _stringify = __webpack_require__(129);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -5947,13 +5894,13 @@ exports.default = Task;
 module.exports = exports['default'];
 
 /***/ }),
-/* 131 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(132), __esModule: true };
+module.exports = { "default": __webpack_require__(130), __esModule: true };
 
 /***/ }),
-/* 132 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var core  = __webpack_require__(0)
@@ -5963,7 +5910,7 @@ module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
 };
 
 /***/ }),
-/* 133 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
