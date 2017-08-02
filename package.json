@@ -30,12 +30,7 @@
     "help": "./node_modules/.bin/esdoc"
   },
   "dependencies": {
-    "babel-runtime": "^6.22.0",
-    "component-ie": "^1.0.0",
-    "detect-is-node": "^1.0.3",
-    "eventsource": "^1.0.5",
-    "superagent": "^3.3.2",
-    "superagent-no-cache": "geospatial-services-framework/superagent-no-cache#features/node"
+    "babel-runtime": "^6.22.0"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -50,10 +45,13 @@
     "chai": "^3.5.0",
     "concurrently": "^3.4.0",
     "cors": "^2.8.1",
+    "component-ie": "^1.0.0",
+    "detect-is-node": "^1.0.3",
     "esdoc": "^0.5.2",
     "esdoc-importpath-plugin": "^0.1.1",
     "eslint": "^3.17.1",
     "eslint-loader": "^1.6.3",
+    "eventsource": "^1.0.5",
     "express": "^4.15.2",
     "istanbul": "^0.4.5",
     "karma": "^1.4.0",
@@ -70,6 +68,8 @@
     "mocha-webpack": "^0.7.0",
     "shx": "^0.2.2",
     "sse-channel": "^2.0.5",
+    "superagent": "^3.3.2",
+    "superagent-no-cache": "geospatial-services-framework/superagent-no-cache#features/node",
     "webpack": "^3.4.1",
     "webpack-merge": "^4.1.0"
   }
