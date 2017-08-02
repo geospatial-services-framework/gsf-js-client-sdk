@@ -2424,16 +2424,39 @@ var _inherits2 = __webpack_require__(62);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
+var _superagent = __webpack_require__(25);
+
+var request = _interopRequireWildcard(_superagent);
+
+var _superagentNoCache = __webpack_require__(26);
+
+var _superagentNoCache2 = _interopRequireDefault(_superagentNoCache);
+
+var _events = __webpack_require__(63);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _utils = __webpack_require__(27);
+
+var sdkUtils = _interopRequireWildcard(_utils);
+
+var _ESE_API = __webpack_require__(28);
+
+var SERVER_API = _interopRequireWildcard(_ESE_API);
+
+var _ESE_STATUS_MAP = __webpack_require__(131);
+
+var STATUS_MAP = _interopRequireWildcard(_ESE_STATUS_MAP);
+
+var _EVENTS = __webpack_require__(65);
+
+var _EVENTS2 = _interopRequireDefault(_EVENTS);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var request = __webpack_require__(25);
-var EventEmitter = __webpack_require__(63);
-var saNoCache = __webpack_require__(26);
-var sdkUtils = __webpack_require__(27);
-var nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
-var SERVER_API = __webpack_require__(28);
-var EVENTS = __webpack_require__(65);
-var STATUS_MAP = __webpack_require__(131);
+var nocache = sdkUtils.isIE() ? _superagentNoCache2.default.withQueryStrings : _superagentNoCache2.default;
 
 /**
  * The Job class is used for job operations.
@@ -2486,8 +2509,8 @@ var Job = function (_EventEmitter) {
     _this._waiting = null;
 
     // Call progress and started callbacks if supplied to constructor.
-    progressCallback && _this.on(EVENTS.job.progress, progressCallback);
-    startedCallback && _this.on(EVENTS.job.started, startedCallback);
+    progressCallback && _this.on(_EVENTS2.default.job.progress, progressCallback);
+    startedCallback && _this.on(_EVENTS2.default.job.started, startedCallback);
 
     // Function to handle events.
     _this._handler = function (eventName, data) {
@@ -2500,9 +2523,9 @@ var Job = function (_EventEmitter) {
 
     // Listen for events from our server.  Pass
     // them into the handler with job event type.
-    (0, _keys2.default)(EVENTS.server).forEach(function (key) {
-      _this._server.on(EVENTS.server[key], function (data) {
-        _this._handler(EVENTS.job[key], data);
+    (0, _keys2.default)(_EVENTS2.default.server).forEach(function (key) {
+      _this._server.on(_EVENTS2.default.server[key], function (data) {
+        _this._handler(_EVENTS2.default.job[key], data);
       });
     });
 
@@ -2526,9 +2549,9 @@ var Job = function (_EventEmitter) {
         this._waiting = new _promise2.default(function (resolve, reject) {
           // Check to make sure it hasn't already completed.
           _this2.info().then(function (info) {
-            if (info.jobStatus === EVENTS.job.succeeded) {
+            if (info.jobStatus === _EVENTS2.default.job.succeeded) {
               resolve(info.results);
-            } else if (info.jobStatus === EVENTS.job.failed) {
+            } else if (info.jobStatus === _EVENTS2.default.job.failed) {
               reject(info.jobErrorMessage);
             }
           }).catch(function (err) {
@@ -2536,12 +2559,12 @@ var Job = function (_EventEmitter) {
           });
 
           // Listen to job events.
-          _this2.once(EVENTS.job.succeeded, function (data) {
+          _this2.once(_EVENTS2.default.job.succeeded, function (data) {
             _this2.info().then(function (info) {
               resolve(info.results);
             });
           });
-          _this2.once(EVENTS.job.failed, function (data) {
+          _this2.once(_EVENTS2.default.job.failed, function (data) {
             _this2.info().then(function (info) {
               reject(info.jobErrorMessage);
             });
@@ -2643,7 +2666,7 @@ var Job = function (_EventEmitter) {
     }
   }]);
   return Job;
-}(EventEmitter);
+}(_events2.default);
 
 exports.default = Job;
 
@@ -2739,7 +2762,12 @@ module.exports = __webpack_require__(67);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var Server = __webpack_require__(68);
+
+var _Server = __webpack_require__(68);
+
+var _Server2 = _interopRequireDefault(_Server);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * The GSF object provides an entry point to the SDK.
@@ -2751,7 +2779,7 @@ var Server = __webpack_require__(68);
  */
 exports.default = {
   server: function server(serverArgs) {
-    return new Server(serverArgs);
+    return new _Server2.default(serverArgs);
   }
 };
 module.exports = exports['default'];
@@ -2795,17 +2823,43 @@ var _inherits2 = __webpack_require__(62);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
+var _superagent = __webpack_require__(25);
+
+var request = _interopRequireWildcard(_superagent);
+
+var _superagentNoCache = __webpack_require__(26);
+
+var _superagentNoCache2 = _interopRequireDefault(_superagentNoCache);
+
+var _events = __webpack_require__(63);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _utils = __webpack_require__(27);
+
+var sdkUtils = _interopRequireWildcard(_utils);
+
+var _Service = __webpack_require__(123);
+
+var _Service2 = _interopRequireDefault(_Service);
+
+var _Job = __webpack_require__(64);
+
+var _Job2 = _interopRequireDefault(_Job);
+
+var _ESE_API = __webpack_require__(28);
+
+var SERVER_API = _interopRequireWildcard(_ESE_API);
+
+var _EVENTS = __webpack_require__(65);
+
+var _EVENTS2 = _interopRequireDefault(_EVENTS);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var request = __webpack_require__(25);
-var EventEmitter = __webpack_require__(63);
-var saNoCache = __webpack_require__(26);
-var sdkUtils = __webpack_require__(27);
-var nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
-var Service = __webpack_require__(123);
-var Job = __webpack_require__(64);
-var SERVER_API = __webpack_require__(28);
-var EVENTS = __webpack_require__(65);
+var nocache = sdkUtils.isIE() ? _superagentNoCache2.default.withQueryStrings : _superagentNoCache2.default;
 
 /**
  * The Server class is used to connect to the server and retrieve information
@@ -2895,8 +2949,8 @@ var Server = function (_EventEmitter) {
     _this._events = new Eventsource([_this.URL, SERVER_API.EVENTS_PATH].join('/'));
 
     // Emit succeeded and failed events.
-    _this.on(EVENTS.server.completed, function (data) {
-      _this.emit(data.success ? EVENTS.server.succeeded : EVENTS.server.failed, data);
+    _this.on(_EVENTS2.default.server.completed, function (data) {
+      _this.emit(data.success ? _EVENTS2.default.server.succeeded : _EVENTS2.default.server.failed, data);
     });
 
     // Function to handle server sent events.
@@ -2909,12 +2963,12 @@ var Server = function (_EventEmitter) {
 
     // Listen for events from our server.  Pass
     // them into the handler with job event type.
-    (0, _keys2.default)(EVENTS.server).forEach(function (key) {
+    (0, _keys2.default)(_EVENTS2.default.server).forEach(function (key) {
       // Server doesn't emit succeeded or failed events.
-      if (EVENTS.server[key] === EVENTS.server.succeeded || EVENTS.server[key] === EVENTS.server.failed) return;
+      if (_EVENTS2.default.server[key] === _EVENTS2.default.server.succeeded || _EVENTS2.default.server[key] === _EVENTS2.default.server.failed) return;
 
       // Add a listener for each of the sse's.
-      _this._events.addEventListener(EVENTS.server[key], handler.bind(_this, EVENTS.server[key]));
+      _this._events.addEventListener(_EVENTS2.default.server[key], handler.bind(_this, _EVENTS2.default.server[key]));
     });
     return _this;
   }
@@ -2940,7 +2994,7 @@ var Server = function (_EventEmitter) {
           if (res && res.ok) {
             var services = res.body.services;
             var serviceList = services.map(function (service) {
-              return new Service(_this2, service.name);
+              return new _Service2.default(_this2, service.name);
             });
             resolve(serviceList);
           } else {
@@ -3007,7 +3061,7 @@ var Server = function (_EventEmitter) {
           if (res && res.ok) {
             var jobs = res.body;
             var jobList = jobs.map(function (job) {
-              return new Job(_this3, job.jobId);
+              return new _Job2.default(_this3, job.jobId);
             });
             resolve(jobList);
           } else {
@@ -3028,7 +3082,7 @@ var Server = function (_EventEmitter) {
   }, {
     key: 'service',
     value: function service(serviceName) {
-      return new Service(this, serviceName);
+      return new _Service2.default(this, serviceName);
     }
 
     /**
@@ -3045,11 +3099,11 @@ var Server = function (_EventEmitter) {
   }, {
     key: 'job',
     value: function job(jobId, progressCallback, startedCallback) {
-      return new Job(this, jobId, progressCallback, startedCallback);
+      return new _Job2.default(this, jobId, progressCallback, startedCallback);
     }
   }]);
   return Server;
-}(EventEmitter);
+}(_events2.default);
 
 exports.default = Server;
 
@@ -5452,14 +5506,31 @@ var _createClass2 = __webpack_require__(23);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
+var _superagent = __webpack_require__(25);
+
+var request = _interopRequireWildcard(_superagent);
+
+var _superagentNoCache = __webpack_require__(26);
+
+var _superagentNoCache2 = _interopRequireDefault(_superagentNoCache);
+
+var _utils = __webpack_require__(27);
+
+var sdkUtils = _interopRequireWildcard(_utils);
+
+var _Task = __webpack_require__(128);
+
+var _Task2 = _interopRequireDefault(_Task);
+
+var _ESE_API = __webpack_require__(28);
+
+var SERVER_API = _interopRequireWildcard(_ESE_API);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var request = __webpack_require__(25);
-var saNoCache = __webpack_require__(26);
-var sdkUtils = __webpack_require__(27);
-var nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
-var Task = __webpack_require__(128);
-var SERVER_API = __webpack_require__(28);
+var nocache = sdkUtils.isIE() ? _superagentNoCache2.default.withQueryStrings : _superagentNoCache2.default;
 
 /**
  * The Service class is used to inspect and create tasks for a service.
@@ -5536,7 +5607,7 @@ var Service = function () {
   }, {
     key: 'task',
     value: function task(taskName) {
-      return new Task(this, taskName);
+      return new _Task2.default(this, taskName);
     }
 
     /**
@@ -5595,7 +5666,7 @@ var Service = function () {
       return new _promise2.default(function (resolve, reject) {
         _this3.info().then(function (info) {
           var tasks = info.tasks.map(function (taskName) {
-            return new Task(_this3, taskName);
+            return new _Task2.default(_this3, taskName);
           });
           resolve(tasks);
         }).catch(function (err) {
@@ -5700,14 +5771,31 @@ var _createClass2 = __webpack_require__(23);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
+var _superagent = __webpack_require__(25);
+
+var request = _interopRequireWildcard(_superagent);
+
+var _superagentNoCache = __webpack_require__(26);
+
+var _superagentNoCache2 = _interopRequireDefault(_superagentNoCache);
+
+var _utils = __webpack_require__(27);
+
+var sdkUtils = _interopRequireWildcard(_utils);
+
+var _Job = __webpack_require__(64);
+
+var _Job2 = _interopRequireDefault(_Job);
+
+var _ESE_API = __webpack_require__(28);
+
+var SERVER_API = _interopRequireWildcard(_ESE_API);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var request = __webpack_require__(25);
-var saNoCache = __webpack_require__(26);
-var sdkUtils = __webpack_require__(27);
-var nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
-var Job = __webpack_require__(64);
-var SERVER_API = __webpack_require__(28);
+var nocache = sdkUtils.isIE() ? _superagentNoCache2.default.withQueryStrings : _superagentNoCache2.default;
 
 /**
  * The Task class is used to submit and inspect tasks.
@@ -5815,7 +5903,7 @@ var Task = function () {
         .end(function (err, res) {
           if (res && res.ok) {
             // Return new job object using ID.
-            resolve(new Job(_this2._server, res.body.jobId, progressCallback, startedCallback));
+            resolve(new _Job2.default(_this2._server, res.body.jobId, progressCallback, startedCallback));
           } else {
             var status = err && err.status ? ': ' + err.status : '';
             var text = err && err.response && err.response.text ? ': ' + err.response.text : '';

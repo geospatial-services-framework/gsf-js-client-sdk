@@ -1,9 +1,11 @@
-const request = require('superagent');
-const saNoCache = require('superagent-no-cache');
-const sdkUtils = require('./utils/utils.js');
+import * as request from 'superagent';
+import saNoCache from 'superagent-no-cache';
+
+import * as sdkUtils from './utils/utils.js';
+import Task from './Task';
+import * as SERVER_API from './utils/ESE_API';
+
 const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
-const Task = require('./Task');
-const SERVER_API = require('./utils/ESE_API');
 
 /**
  * The Service class is used to inspect and create tasks for a service.

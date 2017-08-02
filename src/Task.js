@@ -1,9 +1,11 @@
-const request = require('superagent');
-const saNoCache = require('superagent-no-cache');
-const sdkUtils = require('./utils/utils.js');
+import * as request from 'superagent';
+import saNoCache from 'superagent-no-cache';
+
+import * as sdkUtils from './utils/utils.js';
+import Job from './Job';
+import * as SERVER_API from './utils/ESE_API';
+
 const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
-const Job = require('./Job');
-const SERVER_API = require('./utils/ESE_API');
 
 /**
  * The Task class is used to submit and inspect tasks.

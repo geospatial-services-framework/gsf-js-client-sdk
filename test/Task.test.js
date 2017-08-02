@@ -1,14 +1,17 @@
 /**
  * Tests for the Task class.
  */
-const expect = require('chai').expect;
-const verifyProperties = require('./utils/testUtils.js').verifyProperties;
-const Task = require('../src/Task');
-const Service = require('../src/Service');
-const GSF = require('../src/GSF');
-const testTasks = require('./utils/testTasks.js');
-const interfaces = require('./utils/interfaces.js');
-const config = require('./config/config.js');
+import { expect } from 'chai';
+
+import { verifyProperties } from './utils/testUtils.js';
+
+import Task from '../src/Task';
+import Service from '../src/Service';
+import GSF from '../src/GSF';
+
+import * as testTasks from './utils/testTasks.js';
+import interfaces from './utils/interfaces.js';
+import config from './config/config.js';
 
 let task;
 let server;

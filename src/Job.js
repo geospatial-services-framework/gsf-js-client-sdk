@@ -1,11 +1,13 @@
-const request = require('superagent');
-const EventEmitter = require('events');
-const saNoCache = require('superagent-no-cache');
-const sdkUtils = require('./utils/utils.js');
+import * as request from 'superagent';
+import saNoCache from 'superagent-no-cache';
+import EventEmitter from 'events';
+
+import * as sdkUtils from './utils/utils.js';
+import * as SERVER_API from './utils/ESE_API';
+import * as STATUS_MAP from './utils/ESE_STATUS_MAP';
+import EVENTS from './utils/EVENTS';
+
 const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
-const SERVER_API = require('./utils/ESE_API');
-const EVENTS = require('./utils/EVENTS');
-const STATUS_MAP = require('./utils/ESE_STATUS_MAP');
 
 /**
  * The Job class is used for job operations.

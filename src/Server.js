@@ -1,12 +1,14 @@
-const request = require('superagent');
-const EventEmitter = require('events');
-const saNoCache = require('superagent-no-cache');
-const sdkUtils = require('./utils/utils.js');
+import * as request from 'superagent';
+import saNoCache from 'superagent-no-cache';
+import EventEmitter from 'events';
+
+import * as sdkUtils from './utils/utils.js';
+import Service from './Service';
+import Job from './Job';
+import * as SERVER_API from './utils/ESE_API';
+import EVENTS from './utils/EVENTS';
+
 const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
-const Service = require('./Service');
-const Job = require('./Job');
-const SERVER_API = require('./utils/ESE_API');
-const EVENTS = require('./utils/EVENTS');
 
 /**
  * The Server class is used to connect to the server and retrieve information

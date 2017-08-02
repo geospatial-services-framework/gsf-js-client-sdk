@@ -1,4 +1,4 @@
-const expect = require('chai').expect;
+import { expect } from 'chai';
 
 const verifyProperties = function(isObj, expectProps) {
   Object.keys(expectProps).forEach(function(prop) {

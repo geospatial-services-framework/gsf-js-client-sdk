@@ -1,8 +1,8 @@
 /**
  * Tests for the GSF object.
  */
-const expect = require('chai').expect;
-const GSF = require('../src/GSF');
+import { expect } from 'chai';
+import GSF from '../src/GSF';
 
 /**
  * Begin tests
