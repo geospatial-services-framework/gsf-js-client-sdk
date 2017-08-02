@@ -12,7 +12,7 @@ const isIE = () => {
 // Detects if the current environment is Node.js.
 const isNode = detectNode;
 
-module.exports = {
+export default {
   isIE,
   isNode
 };

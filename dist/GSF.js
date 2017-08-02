@@ -1397,6 +1397,9 @@ module.exports.withQueryStrings = function _queryStringCacheBuster(request) {
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var detectNode = __webpack_require__(122);
 
 // Detects if the current browser is IE.
@@ -1411,10 +1414,11 @@ var isIE = function isIE() {
 // Detects if the current environment is Node.js.
 var isNode = detectNode;
 
-module.exports = {
+exports.default = {
   isIE: isIE,
   isNode: isNode
 };
+module.exports = exports['default'];
 
 /***/ }),
 /* 28 */
@@ -1423,7 +1427,10 @@ module.exports = {
 "use strict";
 
 
-module.exports = {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
   ROOT_PATH: 'ese',
   SERVICES_PATH: 'services',
   TASKS_PATH: 'tasks',
@@ -1432,6 +1439,7 @@ module.exports = {
   EVENTS_PATH: 'events',
   SUBMIT_JOB_PATH: 'submitJob'
 };
+module.exports = exports['default'];
 
 /***/ }),
 /* 29 */
@@ -2390,6 +2398,10 @@ function isUndefined(arg) {
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _promise = __webpack_require__(16);
 
 var _promise2 = _interopRequireDefault(_promise);
@@ -2639,7 +2651,7 @@ var Job = function (_EventEmitter) {
   return Job;
 }(EventEmitter);
 
-module.exports = Job;
+exports.default = Job;
 
 /**
  * Emitted when a job fails.
@@ -2684,6 +2696,8 @@ module.exports = Job;
  * @property {string} [message] - The job progress message, if any.
  */
 
+module.exports = exports['default'];
+
 /***/ }),
 /* 65 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -2691,7 +2705,10 @@ module.exports = Job;
 "use strict";
 
 
-module.exports = {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
   job: {
     accepted: 'Accepted',
     started: 'Started',
@@ -2709,6 +2726,7 @@ module.exports = {
     failed: 'JobFailed'
   }
 };
+module.exports = exports['default'];
 
 /***/ }),
 /* 66 */
@@ -2746,6 +2764,10 @@ module.exports = {
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _promise = __webpack_require__(16);
 
@@ -3031,7 +3053,7 @@ var Server = function (_EventEmitter) {
   return Server;
 }(EventEmitter);
 
-module.exports = Server;
+exports.default = Server;
 
 /**
  * Emitted when a job completes.
@@ -3072,6 +3094,8 @@ module.exports = Server;
  * @typedef {Object} JobAccepted
  * @property {number} jobId - The job id.
  */
+
+module.exports = exports['default'];
 
 /***/ }),
 /* 69 */
@@ -5457,6 +5481,10 @@ function ie() {
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _assign = __webpack_require__(126);
 
 var _assign2 = _interopRequireDefault(_assign);
@@ -5634,7 +5662,8 @@ var Service = function () {
   return Service;
 }();
 
-module.exports = Service;
+exports.default = Service;
+module.exports = exports['default'];
 
 /***/ }),
 /* 126 */
@@ -5703,6 +5732,10 @@ module.exports = !$assign || __webpack_require__(11)(function(){
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _stringify = __webpack_require__(131);
 
@@ -5868,7 +5901,7 @@ var Task = function () {
   return Task;
 }();
 
-module.exports = Task;
+exports.default = Task;
 
 /**
  * The TaskInfo object contains information about a task.
@@ -5911,6 +5944,8 @@ module.exports = Task;
  * @property {number} jobId - The job id.
  */
 
+module.exports = exports['default'];
+
 /***/ }),
 /* 131 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -5934,12 +5969,16 @@ module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
 "use strict";
 
 
-module.exports = {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
   esriJobSucceeded: 'Succeeded',
   esriJobFailed: 'Failed',
   esriJobSubmitted: 'Accepted',
   esriJobExecuting: 'Started'
 };
+module.exports = exports['default'];
 
 /***/ })
 /******/ ]);

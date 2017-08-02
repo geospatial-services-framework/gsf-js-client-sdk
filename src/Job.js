@@ -202,7 +202,7 @@ class Job extends EventEmitter {
   }
 }
 
-module.exports = Job;
+export default Job;
 
 /**
  * Emitted when a job fails.

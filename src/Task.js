@@ -137,7 +137,7 @@ class Task {
   }
 }
 
-module.exports = Task;
+export default Task;
 
 /**
  * The TaskInfo object contains information about a task.

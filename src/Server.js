@@ -234,7 +234,7 @@ class Server extends EventEmitter {
 
 }
 
-module.exports = Server;
+export default Server;
 
 /**
  * Emitted when a job completes.
