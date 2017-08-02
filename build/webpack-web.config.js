@@ -1,10 +1,15 @@
 
 const webpackBase = require('./webpack-base.config');
+const merge = require('webpack-merge');
 
-const TARGET = 'web';
-// const ENTRIES = ['eventsource/example/eventsource-polyfill', './GSF.js']; // Uncomment to turn on polyfill.
-const ENTRIES = ['./GSF.js'];
+const target = 'web';
+// const entries = ['eventsource/example/eventsource-polyfill', './GSF.js']; // Uncomment to turn on polyfill.
+const entries = ['./GSF.js'];
 const addSuffix = false;
 const minify = true;
 
-module.exports = webpackBase(TARGET, ENTRIES, addSuffix, minify);
+const base = webpackBase(target, entries, addSuffix, minify);
+const webConfig = {
+};
+
+module.exports = merge(base, webConfig);

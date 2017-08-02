@@ -1,8 +1,14 @@
 const webpackBase = require('./webpack-base.config');
+const merge = require('webpack-merge');
 
-const TARGET = 'node';
-const ENTRIES = ['eventsource/lib/eventsource', './GSF.js'];
+const target = 'node';
+const entries = ['eventsource/lib/eventsource', './GSF.js'];
 const addSuffix = true;
 const minify = false;
 
-module.exports = webpackBase(TARGET, ENTRIES, addSuffix, minify);
+const base = webpackBase(target, entries, addSuffix, minify);
+
+const nodeConfig = {
+};
+
+module.exports = merge(base, nodeConfig);

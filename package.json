@@ -22,7 +22,7 @@
     "test-firefox": "concurrently --kill-others --success first \"node ./test/fake-server/server.js\" \"npm run prod-test-firefox\"",
     "test-node": "concurrently --kill-others --success first \"node ./test/fake-server/server.js\" \"npm run prod-test-node\"",
     "test-all": "concurrently --kill-others --success first \"node ./test/fake-server/server.js\" \"npm run prod-test-all\"",
-    "prod-test-node": "mocha-webpack --webpack-config build/webpack-test.config.js \"test/**/*.test.js\"",
+    "prod-test-node": "mocha-webpack --webpack-config build/webpack-node.config.js \"test/**/*.test.js\"",
     "prod-test-phantom": "./node_modules/.bin/karma start --browsers PhantomJS",
     "prod-test-chrome": "./node_modules/.bin/karma start --browsers Chrome",
     "prod-test-firefox": "./node_modules/.bin/karma start --browsers Firefox",
@@ -71,6 +71,6 @@
     "shx": "^0.2.2",
     "sse-channel": "^2.0.5",
     "webpack": "^3.4.1",
-    "webpack-node-externals": "^1.6.0"
+    "webpack-merge": "^4.1.0"
   }
 }

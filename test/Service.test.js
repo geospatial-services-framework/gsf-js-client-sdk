@@ -75,7 +75,7 @@ describe('Testing Service class', function() {
       this.timeout(config.testTimeout2);
 
       service.taskInfoList().then((taskInfoList) => {
-        expect(taskInfoList).to.be.an.array; 
+        expect(taskInfoList).to.be.an.array;
         expect(taskInfoList.length).to.be.above(2);
         taskInfoList.forEach((info) => {
           verifyProperties(info, interfaces.taskInfo);
