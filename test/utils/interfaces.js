@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   serviceInfo: {
     name: {type: 'string'},
     description: {type: 'string'},

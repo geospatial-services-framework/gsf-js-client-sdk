@@ -10,6 +10,6 @@ const verifyProperties = function(isObj, expectProps) {
   });
 };
 
-module.exports = {
+export default {
   verifyProperties: verifyProperties
 };

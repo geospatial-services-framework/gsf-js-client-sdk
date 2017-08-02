@@ -1,7 +1,7 @@
 const TEST_DATA_URL = 'http://localhost:9191';
 const TEST_DATA = TEST_DATA_URL + '/ese/data/qb_boulder_msi';
 
-module.exports = {
+export default {
   ENVIService: 'ENVI',
   sleepTask: {
     service: 'javascript',
