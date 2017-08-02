@@ -8,7 +8,7 @@ const Server = require('./Server');
  * @typedef {Object} GSF
  * @property {function(serverArgs: ServerArgs): Server} server - The function for creating a new Server object.
  */
-module.exports = {
+export default {
   server(serverArgs) {
     return new Server(serverArgs);
   }
