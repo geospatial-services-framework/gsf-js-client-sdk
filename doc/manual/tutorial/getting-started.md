@@ -6,7 +6,7 @@ The GSF JavaScript Client SDK provides a client-side JavaScript library for inte
 
 1. This repository contains pre-built distributable files located in the `/dist/` directory.
   - `/dist/GSF.js` - The non-minified bundle.
-  - `/dist/GSF.map.js` - The non-minified bundle source map file.
+  - `/dist/GSF.js.map` - The non-minified bundle source map file.
   - `/dist/GSF.min.js` - The minified bundle.
   - `/dist/GSF.min.js.map` - The minified bundle source map file.
 
@@ -24,7 +24,7 @@ The GSF JavaScript Client SDK provides a client-side JavaScript library for inte
 #### Using Node.js
 -Require the SDK module:
 
-  `const GSF = require('gsf-js-client-sdk');`
+  `const GSF = require('gsf-js-client-sdk/dist/GSF-node');`
 
 ### Including the SDK with a Script Tag
 1. Include the GSF JavaScript Client SDK in your project.  The example below assumes the SDK file is located next to your html file.
@@ -38,10 +38,13 @@ The GSF JavaScript Client SDK provides a client-side JavaScript library for inte
 3. Below is a simple example of running a job and retrieving the results.  You will need to update the server address and port below to reflect the server that you are using.
 
 ```javascript
+const myAddress = 'MyServer';
+const myPort = 9191;
+
 // GSF Server
 const server = GSF.server({
-  address: 'MyServer',
-  port: '9191'
+  address: myAddress,
+  port: myPort
   });
 
 // Create a service object.
@@ -54,7 +57,7 @@ const NDVIParameters = {
   parameters: {
     INPUT_RASTER: {
       FACTORY: 'URLRaster',
-      URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
+      URL: 'http://' + myAddress + ':' + myPort + '/ese/data/qb_boulder_msi'
     },
     INDEX: 'Normalized Difference Vegetation Index'
   }
