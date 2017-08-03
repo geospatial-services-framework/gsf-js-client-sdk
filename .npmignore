@@ -13,3 +13,5 @@ karma.conf.js
 CONTRIBUTING.md
 .tmp
 .vscode
+build
+
