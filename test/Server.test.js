@@ -6,7 +6,7 @@ import { expect } from 'chai';
 import * as testTasks from './utils/testTasks.js';
 import config from './config/config.js';
 
-import GSF from 'GSF';
+import GSF from '../src/GSF';
 
 let server;
 
