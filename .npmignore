@@ -12,3 +12,4 @@ karma.conf.js
 .gitattributes
 CONTRIBUTING.md
 .tmp
+.vscode
