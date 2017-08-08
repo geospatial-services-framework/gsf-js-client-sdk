@@ -23,6 +23,7 @@ export default {
     parameters: {type: 'object'}
   },
   taskParameters: {
+    name: {type: 'string'},
     dataType: {type: 'string'},
     parameterType: {type: 'string'}
   }

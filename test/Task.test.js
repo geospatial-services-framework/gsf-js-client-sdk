@@ -5,9 +5,9 @@ import { expect } from 'chai';
 
 import { verifyProperties } from './utils/testUtils.js';
 
-import Task from 'Task';
-import Service from 'Service';
-import GSF from 'GSF';
+import Task from '../src/Task';
+import Service from '../src/Service';
+import GSF from '../src/GSF';
 
 import * as testTasks from './utils/testTasks.js';
 import interfaces from './utils/interfaces.js';
@@ -24,7 +24,7 @@ let server;
 describe('Testing Task class', function() {
   before(function(done) {
     server = GSF.server(config.localHTTPServer);
-    task = new Task(server, testTasks.sleepTask.service,
+    task = new Task(server.service(testTasks.sleepTask.service),
       testTasks.sleepTask.name);
     done();
   });
@@ -60,7 +60,7 @@ describe('Testing Task class', function() {
       this.timeout(config.testTimeout2);
 
       const badServer = GSF.server(config.fakeServer);
-      const badTask = new Task(badServer, testTasks.sleepTask.service,
+      const badTask = new Task(badServer.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
       badTask.info().then((info) => {
         done('Expected promise to be rejected.');
@@ -99,7 +99,7 @@ describe('Testing Task class', function() {
 
       const progress = (data) => {
         expect(data.progress).to.be.a('number');
-        expect(data.message).to.be.an('string');
+        expect(data.message).to.be.a('string');
         nProgressEvents++;
       };
 
@@ -126,7 +126,7 @@ describe('Testing Task class', function() {
       this.timeout(config.testTimeout2);
 
       const badServer = GSF.server(config.fakeServer);
-      const badTask = new Task(badServer, testTasks.sleepTask.service,
+      const badTask = new Task(badServer.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
       badTask.submit({parameters: testTasks.sleepTask.parameters})
         .then((job) => {
@@ -168,7 +168,7 @@ describe('Testing Task class', function() {
 
       const progress = (data) => {
         expect(data.progress).to.be.a('number');
-        expect(data.message).to.be.an('string');
+        expect(data.message).to.be.a('string');
         nProgressEvents++;
       };
 

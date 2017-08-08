@@ -1,10 +1,13 @@
 import * as request from 'superagent';
-import nocache from 'superagent-no-cache';
+import saNoCache from 'superagent-no-cache';
 import EventEmitter from 'events';
 
-import * as SERVER_API from 'ESE_API';
-import * as STATUS_MAP from 'STATUS_MAP';
-import EVENTS from 'EVENTS';
+import * as sdkUtils from './utils/utils.js';
+import * as SERVER_API from './utils/ESE_API';
+import * as STATUS_MAP from './utils/ESE_STATUS_MAP';
+import EVENTS from './utils/EVENTS';
+
+const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 
 /**
  * The Job class is used for job operations.

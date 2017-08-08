@@ -1,9 +1,11 @@
 import * as request from 'superagent';
-import nocache from 'superagent-no-cache';
+import saNoCache from 'superagent-no-cache';
 
-import Task from 'Task';
+import * as sdkUtils from './utils/utils.js';
+import Task from './Task';
+import * as SERVER_API from './utils/ESE_API';
 
-import * as SERVER_API from 'ESE_API';
+const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 
 /**
  * The Service class is used to inspect and create tasks for a service.
@@ -71,11 +73,12 @@ class Service {
    * @return {Task} Returns the task object.
    */
   task(taskName) {
-    return new Task(this._server, this.name, taskName);
+    return new Task(this, taskName);
   }
 
   /**
    * Retrieves the array of task info objects available on the service.
+   * @version 1.1.0
    * @return {Promise<TaskInfo[], error>} Returns a Promise to an array of TaskInfo objects.
    */
   taskInfoList() {
@@ -97,7 +100,6 @@ class Service {
                 newTask.parameters = {};
                 task.parameters.forEach((param) => {
                   newTask.parameters[param.name] = Object.assign({}, param);
-                  delete newTask.parameters[param.name].name;
                 });
                 tasks.push(newTask);
               } else {
@@ -125,7 +127,7 @@ class Service {
       this.info()
         .then((info) => {
           const tasks = info.tasks.map((taskName) => {
-            return new Task(this._server, this.name, taskName);
+            return new Task(this, taskName);
           });
           resolve(tasks);
         })
@@ -140,3 +142,5 @@ class Service {
 }
 
 export default Service;
+
+

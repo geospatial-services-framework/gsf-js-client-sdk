@@ -11,3 +11,7 @@ karma.conf.js
 .esdoc.json
 .gitattributes
 CONTRIBUTING.md
+.tmp
+.vscode
+build
+

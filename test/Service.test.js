@@ -8,8 +8,8 @@ import interfaces from './utils/interfaces.js';
 import testTasks from './utils/testTasks.js';
 import config from './config/config.js';
 
-import Service from 'Service';
-import GSF from 'GSF';
+import Service from '../src/Service';
+import GSF from '../src/GSF';
 
 let service;
 
@@ -77,7 +77,7 @@ describe('Testing Service class', function() {
       this.timeout(config.testTimeout2);
 
       service.taskInfoList().then((taskInfoList) => {
-        expect(taskInfoList).to.be.an.array; 
+        expect(taskInfoList).to.be.an.array;
         expect(taskInfoList.length).to.be.above(2);
         taskInfoList.forEach((info) => {
           verifyProperties(info, interfaces.taskInfo);

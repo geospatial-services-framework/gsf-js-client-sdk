@@ -16,9 +16,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -42,9 +42,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
 /******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
@@ -73,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 130);
+/******/ 	return __webpack_require__(__webpack_require__.s = 66);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -88,7 +85,7 @@ if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 /***/ (function(module, exports, __webpack_require__) {
 
 var store      = __webpack_require__(36)('wks')
-  , uid        = __webpack_require__(25)
+  , uid        = __webpack_require__(19)
   , Symbol     = __webpack_require__(2).Symbol
   , USE_SYMBOL = typeof Symbol == 'function';
 
@@ -112,29 +109,10 @@ if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(11);
-module.exports = function(it){
-  if(!isObject(it))throw TypeError(it + ' is not an object!');
-  return it;
-};
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Thank's IE8 for his funny defineProperty
-module.exports = !__webpack_require__(10)(function(){
-  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
-});
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
 var global    = __webpack_require__(2)
   , core      = __webpack_require__(0)
-  , ctx       = __webpack_require__(14)
-  , hide      = __webpack_require__(8)
+  , ctx       = __webpack_require__(13)
+  , hide      = __webpack_require__(7)
   , PROTOTYPE = 'prototype';
 
 var $export = function(type, name, source){
@@ -194,15 +172,15 @@ $export.R = 128; // real proto method for `library`
 module.exports = $export;
 
 /***/ }),
-/* 6 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var anObject       = __webpack_require__(3)
-  , IE8_DOM_DEFINE = __webpack_require__(51)
-  , toPrimitive    = __webpack_require__(38)
+var anObject       = __webpack_require__(5)
+  , IE8_DOM_DEFINE = __webpack_require__(46)
+  , toPrimitive    = __webpack_require__(33)
   , dP             = Object.defineProperty;
 
-exports.f = __webpack_require__(4) ? Object.defineProperty : function defineProperty(O, P, Attributes){
+exports.f = __webpack_require__(6) ? Object.defineProperty : function defineProperty(O, P, Attributes){
   anObject(O);
   P = toPrimitive(P, true);
   anObject(Attributes);
@@ -215,7 +193,39 @@ exports.f = __webpack_require__(4) ? Object.defineProperty : function defineProp
 };
 
 /***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(10);
+module.exports = function(it){
+  if(!isObject(it))throw TypeError(it + ' is not an object!');
+  return it;
+};
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Thank's IE8 for his funny defineProperty
+module.exports = !__webpack_require__(11)(function(){
+  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+});
+
+/***/ }),
 /* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP         = __webpack_require__(4)
+  , createDesc = __webpack_require__(18);
+module.exports = __webpack_require__(6) ? function(object, key, value){
+  return dP.f(object, key, createDesc(1, value));
+} : function(object, key, value){
+  object[key] = value;
+  return object;
+};
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports) {
 
 var hasOwnProperty = {}.hasOwnProperty;
@@ -224,24 +234,11 @@ module.exports = function(it, key){
 };
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var dP         = __webpack_require__(6)
-  , createDesc = __webpack_require__(22);
-module.exports = __webpack_require__(4) ? function(object, key, value){
-  return dP.f(object, key, createDesc(1, value));
-} : function(object, key, value){
-  object[key] = value;
-  return object;
-};
-
-/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = __webpack_require__(52)
+var IObject = __webpack_require__(49)
   , defined = __webpack_require__(30);
 module.exports = function(it){
   return IObject(defined(it));
@@ -249,6 +246,14 @@ module.exports = function(it){
 
 /***/ }),
 /* 10 */
+/***/ (function(module, exports) {
+
+module.exports = function(it){
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = function(exec){
@@ -260,20 +265,12 @@ module.exports = function(exec){
 };
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-module.exports = function(it){
-  return typeof it === 'object' ? it !== null : typeof it === 'function';
-};
-
-/***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys       = __webpack_require__(57)
-  , enumBugKeys = __webpack_require__(32);
+var $keys       = __webpack_require__(48)
+  , enumBugKeys = __webpack_require__(37);
 
 module.exports = Object.keys || function keys(O){
   return $keys(O, enumBugKeys);
@@ -281,20 +278,10 @@ module.exports = Object.keys || function keys(O){
 
 /***/ }),
 /* 13 */
-/***/ (function(module, exports) {
-
-var toString = {}.toString;
-
-module.exports = function(it){
-  return toString.call(it).slice(8, -1);
-};
-
-/***/ }),
-/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // optional / simple context binding
-var aFunction = __webpack_require__(29);
+var aFunction = __webpack_require__(31);
 module.exports = function(fn, that, length){
   aFunction(fn);
   if(that === undefined)return fn;
@@ -315,40 +302,80 @@ module.exports = function(fn, that, length){
 };
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = {};
 
 /***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+var toString = {}.toString;
+
+module.exports = function(it){
+  return toString.call(it).slice(8, -1);
+};
+
+/***/ }),
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  ROOT_PATH: 'ese',
-  SERVICES_PATH: 'services',
-  TASKS_PATH: 'tasks',
-  JOBS_PATH: 'jobs',
-  STATUS_PATH: 'status',
-  EVENTS_PATH: 'events',
-  SUBMIT_JOB_PATH: 'submitJob'
-};
-module.exports = exports['default'];
+module.exports = { "default": __webpack_require__(69), __esModule: true };
 
 /***/ }),
 /* 17 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = { "default": __webpack_require__(85), __esModule: true };
+module.exports = true;
 
 /***/ }),
 /* 18 */
+/***/ (function(module, exports) {
+
+module.exports = function(bitmap, value){
+  return {
+    enumerable  : !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable    : !(bitmap & 4),
+    value       : value
+  };
+};
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+var id = 0
+  , px = Math.random();
+module.exports = function(key){
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var def = __webpack_require__(4).f
+  , has = __webpack_require__(8)
+  , TAG = __webpack_require__(1)('toStringTag');
+
+module.exports = function(it, tag, stat){
+  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
+};
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.13 ToObject(argument)
+var defined = __webpack_require__(30);
+module.exports = function(it){
+  return Object(defined(it));
+};
+
+/***/ }),
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -363,7 +390,7 @@ exports.default = function (instance, Constructor) {
 };
 
 /***/ }),
-/* 19 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -371,7 +398,7 @@ exports.default = function (instance, Constructor) {
 
 exports.__esModule = true;
 
-var _defineProperty = __webpack_require__(73);
+var _defineProperty = __webpack_require__(94);
 
 var _defineProperty2 = _interopRequireDefault(_defineProperty);
 
@@ -396,94 +423,13 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 20 */
-/***/ (function(module, exports) {
-
-module.exports = true;
-
-/***/ }),
-/* 21 */
+/* 24 */
 /***/ (function(module, exports) {
 
 exports.f = {}.propertyIsEnumerable;
 
 /***/ }),
-/* 22 */
-/***/ (function(module, exports) {
-
-module.exports = function(bitmap, value){
-  return {
-    enumerable  : !(bitmap & 1),
-    configurable: !(bitmap & 2),
-    writable    : !(bitmap & 4),
-    value       : value
-  };
-};
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var def = __webpack_require__(6).f
-  , has = __webpack_require__(7)
-  , TAG = __webpack_require__(1)('toStringTag');
-
-module.exports = function(it, tag, stat){
-  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
-};
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 7.1.13 ToObject(argument)
-var defined = __webpack_require__(30);
-module.exports = function(it){
-  return Object(defined(it));
-};
-
-/***/ }),
 /* 25 */
-/***/ (function(module, exports) {
-
-var id = 0
-  , px = Math.random();
-module.exports = function(key){
-  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-};
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var ie = __webpack_require__(77)
-
-function with_query_strings (request) {
-  var timestamp = Date.now().toString()
-  if (request._query !== undefined && request._query[0]) {
-    request._query[0] += '&' + timestamp
-  } else {
-    request._query = [timestamp]
-  }
-
-  return request
-}
-
-module.exports = function _superagentNoCache (request, mockIE) {
-  request.set('X-Requested-With', 'XMLHttpRequest')
-  request.set('Expires', '-1')
-  request.set('Cache-Control', 'no-cache,no-store,must-revalidate,max-age=-1,private')
-
-  if (ie || mockIE) {
-    with_query_strings(request)
-  }
-
-  return request
-}
-
-
-/***/ }),
-/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -500,12 +446,12 @@ if (typeof window !== 'undefined') { // Browser window
   root = this;
 }
 
-var Emitter = __webpack_require__(129);
-var RequestBase = __webpack_require__(125);
-var isObject = __webpack_require__(41);
-var isFunction = __webpack_require__(124);
-var ResponseBase = __webpack_require__(126);
-var shouldRetry = __webpack_require__(127);
+var Emitter = __webpack_require__(116);
+var RequestBase = __webpack_require__(117);
+var isObject = __webpack_require__(42);
+var isFunction = __webpack_require__(118);
+var ResponseBase = __webpack_require__(119);
+var shouldRetry = __webpack_require__(121);
 
 /**
  * Noop.
@@ -1422,39 +1368,82 @@ request.put = function(url, data, fn){
 
 
 /***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = function _superagentNoCache (request) {
+  request.set('X-Requested-With', 'XMLHttpRequest')
+  request.set('Expires', '-1')
+  request.set('Cache-Control', 'no-cache,no-store,must-revalidate,max-age=-1,private')
+
+  return request
+}
+
+module.exports.withQueryStrings = function _queryStringCacheBuster(request) {
+  var timestamp = Date.now().toString()
+  if (request._query !== undefined && request._query[0]) {
+    request._query[0] += '&' + timestamp
+  } else {
+    request._query = [timestamp]
+  }
+
+  return module.exports(request)
+}
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// Detects if the current browser is IE.
+var isIE = function isIE() {
+  if (true) {
+    var _isIE = __webpack_require__(122);
+    return _isIE;
+  }
+  return false;
+};
+
+exports.default = {
+  isIE: isIE
+};
+module.exports = exports['default'];
+
+/***/ }),
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-exports.__esModule = true;
-
-var _iterator = __webpack_require__(76);
-
-var _iterator2 = _interopRequireDefault(_iterator);
-
-var _symbol = __webpack_require__(75);
-
-var _symbol2 = _interopRequireDefault(_symbol);
-
-var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
-  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
-} : function (obj) {
-  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  ROOT_PATH: 'ese',
+  SERVICES_PATH: 'services',
+  TASKS_PATH: 'tasks',
+  JOBS_PATH: 'jobs',
+  STATUS_PATH: 'status',
+  EVENTS_PATH: 'events',
+  SUBMIT_JOB_PATH: 'submitJob'
 };
+module.exports = exports['default'];
 
 /***/ }),
 /* 29 */
 /***/ (function(module, exports) {
 
+// 7.1.4 ToInteger
+var ceil  = Math.ceil
+  , floor = Math.floor;
 module.exports = function(it){
-  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
-  return it;
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
 };
 
 /***/ }),
@@ -1469,9 +1458,18 @@ module.exports = function(it){
 
 /***/ }),
 /* 31 */
+/***/ (function(module, exports) {
+
+module.exports = function(it){
+  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+  return it;
+};
+
+/***/ }),
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(11)
+var isObject = __webpack_require__(10)
   , document = __webpack_require__(2).document
   // in old IE typeof document.createElement is 'object'
   , is = isObject(document) && isObject(document.createElement);
@@ -1480,22 +1478,30 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 32 */
-/***/ (function(module, exports) {
-
-// IE 8- don't enum bug keys
-module.exports = (
-  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
-).split(',');
-
-/***/ }),
 /* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = __webpack_require__(10);
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function(it, S){
+  if(!isObject(it))return it;
+  var fn, val;
+  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
+  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject    = __webpack_require__(3)
-  , dPs         = __webpack_require__(104)
-  , enumBugKeys = __webpack_require__(32)
+var anObject    = __webpack_require__(5)
+  , dPs         = __webpack_require__(72)
+  , enumBugKeys = __webpack_require__(37)
   , IE_PROTO    = __webpack_require__(35)('IE_PROTO')
   , Empty       = function(){ /* empty */ }
   , PROTOTYPE   = 'prototype';
@@ -1503,13 +1509,13 @@ var anObject    = __webpack_require__(3)
 // Create object with fake `null` prototype: use iframe Object with cleared prototype
 var createDict = function(){
   // Thrash, waste and sodomy: IE GC bug
-  var iframe = __webpack_require__(31)('iframe')
+  var iframe = __webpack_require__(32)('iframe')
     , i      = enumBugKeys.length
     , lt     = '<'
     , gt     = '>'
     , iframeDocument;
   iframe.style.display = 'none';
-  __webpack_require__(50).appendChild(iframe);
+  __webpack_require__(51).appendChild(iframe);
   iframe.src = 'javascript:'; // eslint-disable-line no-script-url
   // createDict = iframe.contentWindow.Object;
   // html.removeChild(iframe);
@@ -1536,17 +1542,11 @@ module.exports = Object.create || function create(O, Properties){
 
 
 /***/ }),
-/* 34 */
-/***/ (function(module, exports) {
-
-exports.f = Object.getOwnPropertySymbols;
-
-/***/ }),
 /* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var shared = __webpack_require__(36)('keys')
-  , uid    = __webpack_require__(25);
+  , uid    = __webpack_require__(19);
 module.exports = function(key){
   return shared[key] || (shared[key] = uid(key));
 };
@@ -1566,52 +1566,66 @@ module.exports = function(key){
 /* 37 */
 /***/ (function(module, exports) {
 
-// 7.1.4 ToInteger
-var ceil  = Math.ceil
-  , floor = Math.floor;
-module.exports = function(it){
-  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-};
+// IE 8- don't enum bug keys
+module.exports = (
+  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+).split(',');
 
 /***/ }),
 /* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// 7.1.1 ToPrimitive(input [, PreferredType])
-var isObject = __webpack_require__(11);
-// instead of the ES6 spec version, we didn't implement @@toPrimitive case
-// and the second argument - flag - preferred type is a string
-module.exports = function(it, S){
-  if(!isObject(it))return it;
-  var fn, val;
-  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
-  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
-  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
-  throw TypeError("Can't convert object to primitive value");
+"use strict";
+
+
+exports.__esModule = true;
+
+var _iterator = __webpack_require__(97);
+
+var _iterator2 = _interopRequireDefault(_iterator);
+
+var _symbol = __webpack_require__(99);
+
+var _symbol2 = _interopRequireDefault(_symbol);
+
+var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
+  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
+} : function (obj) {
+  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
 };
 
 /***/ }),
 /* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
+exports.f = __webpack_require__(1);
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var global         = __webpack_require__(2)
   , core           = __webpack_require__(0)
-  , LIBRARY        = __webpack_require__(20)
-  , wksExt         = __webpack_require__(40)
-  , defineProperty = __webpack_require__(6).f;
+  , LIBRARY        = __webpack_require__(17)
+  , wksExt         = __webpack_require__(39)
+  , defineProperty = __webpack_require__(4).f;
 module.exports = function(name){
   var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
   if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
 };
 
 /***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 41 */
+/***/ (function(module, exports) {
 
-exports.f = __webpack_require__(1);
+exports.f = Object.getOwnPropertySymbols;
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports) {
 
 /**
@@ -1630,528 +1644,10 @@ module.exports = isObject;
 
 
 /***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _promise = __webpack_require__(17);
-
-var _promise2 = _interopRequireDefault(_promise);
-
-var _keys = __webpack_require__(46);
-
-var _keys2 = _interopRequireDefault(_keys);
-
-var _getPrototypeOf = __webpack_require__(45);
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(18);
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(19);
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(48);
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(47);
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _superagent = __webpack_require__(27);
-
-var request = _interopRequireWildcard(_superagent);
-
-var _superagentNoCache = __webpack_require__(26);
-
-var _superagentNoCache2 = _interopRequireDefault(_superagentNoCache);
-
-var _events = __webpack_require__(65);
-
-var _events2 = _interopRequireDefault(_events);
-
-var _ESE_API = __webpack_require__(16);
-
-var SERVER_API = _interopRequireWildcard(_ESE_API);
-
-var _STATUS_MAP = __webpack_require__(69);
-
-var STATUS_MAP = _interopRequireWildcard(_STATUS_MAP);
-
-var _EVENTS = __webpack_require__(44);
-
-var _EVENTS2 = _interopRequireDefault(_EVENTS);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * The Job class is used for job operations.
- */
-var Job = function (_EventEmitter) {
-  (0, _inherits3.default)(Job, _EventEmitter);
-
-  /**
-   * @param {GSF} server - The server object.
-   * @param {number} jobId - The jobId.
-   * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
-   * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
-   *  For more reliable job started information, listen to the GSF JobStarted
-   *  events as this callback may not always get called.  In some cases the job
-   *  can start before the callback is registered.
-   * @emits {Failed}
-   * @emits {Succeeded}
-   * @emits {Completed}
-   * @emits {Started}
-   * @emits {Accepted}
-   * @emits {Progress}
-   */
-  function Job(server, jobId, progressCallback, startedCallback) {
-    (0, _classCallCheck3.default)(this, Job);
-
-    /**
-     * The job Id.
-     * @type {number}
-     */
-    var _this = (0, _possibleConstructorReturn3.default)(this, (Job.__proto__ || (0, _getPrototypeOf2.default)(Job)).call(this));
-    // Init EventEmitter superclass.
-
-
-    _this.jobId = jobId;
-
-    // Server object.
-    _this._server = server;
-
-    // Job endpoint.
-    _this._jobURL = [_this._server.rootURL, SERVER_API.JOBS_PATH, _this.jobId].join('/');
-
-    // Job status endpoint.
-    _this._jobStatusURL = [_this._jobURL, SERVER_API.STATUS_PATH].join('/');
-
-    // Allow infinite listeners.
-    _this.setMaxListeners(0);
-
-    // Store promise for wait() function if called.
-    _this._waiting = null;
-
-    // Call progress and started callbacks if supplied to constructor.
-    progressCallback && _this.on(_EVENTS2.default.job.progress, progressCallback);
-    startedCallback && _this.on(_EVENTS2.default.job.started, startedCallback);
-
-    // Function to handle events.
-    _this._handler = function (eventName, data) {
-      // Only care about events pertaining to this job.
-      if (data.jobId !== _this.jobId) return;
-
-      // Re-emit the rest of the events.
-      _this.emit(eventName, data);
-    };
-
-    // Listen for events from our server.  Pass
-    // them into the handler with job event type.
-    (0, _keys2.default)(_EVENTS2.default.server).forEach(function (key) {
-      _this._server.on(_EVENTS2.default.server[key], function (data) {
-        _this._handler(_EVENTS2.default.job[key], data);
-      });
-    });
-
-    return _this;
-  }
-
-  /**
-   * Waits for the job to complete.
-   * @return {Promise<JobResults, error>} Returns a promise that is resolved when a job is
-   *  successful, returning the job results object.
-   *  If a job fails, the promise is rejected with an error message.
-   */
-
-
-  (0, _createClass3.default)(Job, [{
-    key: 'wait',
-    value: function wait() {
-      var _this2 = this;
-
-      if (!this._waiting) {
-        this._waiting = new _promise2.default(function (resolve, reject) {
-          // Check to make sure it hasn't already completed.
-          _this2.info().then(function (info) {
-            if (info.jobStatus === _EVENTS2.default.job.succeeded) {
-              resolve(info.results);
-            } else if (info.jobStatus === _EVENTS2.default.job.failed) {
-              reject(info.jobErrorMessage);
-            }
-          }).catch(function (err) {
-            reject(err);
-          });
-
-          // Listen to job events.
-          _this2.once(_EVENTS2.default.job.succeeded, function (data) {
-            _this2.info().then(function (info) {
-              resolve(info.results);
-            });
-          });
-          _this2.once(_EVENTS2.default.job.failed, function (data) {
-            _this2.info().then(function (info) {
-              reject(info.jobErrorMessage);
-            });
-          });
-        });
-      }
-
-      return this._waiting;
-    }
-
-    /**
-     * The JobInfo object contains information about a job.
-     * @typedef {Object} JobInfo
-     * @property {string} jobId - The job id.
-     * @property {string} jobStatus - The status of the job. It can be Accepted,
-     *  Started, Succeeded, or Failed.
-     * @property {string} jobStatusURL - The job status URL.
-     * @property {number} jobProgress - The percentage of job completion.
-     * @property {string} jobProgressMessage - The job progress message.
-     * @property {string} jobRoute - The job route.
-     * @property {string} taskName - The name of the task.
-     * @property {string} serviceName - The name of the service.
-     * @property {string} jobErrorMessage - Any errors generated during job execution.
-     * @property {Object} inputs - The input parameters.
-     * @property {Object[]} messages - Status messages.
-     * @property {Object} results - The job output.
-     */
-
-    /**
-     * Retrieves the job information.
-     * @return {Promise<JobInfo, error>} Returns a promise to a JobInfo object.
-     */
-
-  }, {
-    key: 'info',
-    value: function info() {
-      var _this3 = this;
-
-      return new _promise2.default(function (resolve, reject) {
-        var jobStatusURL = _this3._jobStatusURL;
-        // Get job status.
-        request.get(jobStatusURL).use(_superagentNoCache2.default) // Prevents caching of *only* this request
-        .end(function (err, res) {
-          if (res && res.ok) {
-            // Create object from results array.
-            var jobInfo = res.body;
-            var results = {};
-            jobInfo.results.forEach(function (result) {
-              results[result.name] = result.value;
-            });
-            jobInfo.results = results;
-
-            // Remap ese statuses to our own.
-            jobInfo.jobStatus = STATUS_MAP[jobInfo.jobStatus];
-
-            resolve(jobInfo);
-          } else {
-            var status = err && err.status ? ': ' + err.status : '';
-            var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
-            reject('Error requesting job info' + status + text);
-          }
-        });
-      });
-    }
-
-    /**
-     * Cancels the job.
-     * @param {boolean} force - If true, the job will force cancel.  Please note that
-     *  setting force to true may be unsafe depending on the type of job
-     *  as it may not be able to properly shut down or clean up.
-     * @return {Promise<true, error>} Returns a promise when cancel is submitted.  If request
-     *  is successfully submitted, the promise will be resolved with a value of true.
-     *  If the request fails, the promise will be resolved with an error message.
-     *  Note that this only represents the success of the request made to the server,
-     *  not the cancellation itself.  Use the Job.Info() function (or Job events)
-     *  to retrieve the status of the job and to learn when it is actually cancelled.
-     */
-
-  }, {
-    key: 'cancel',
-    value: function cancel(force) {
-      // Job url.
-      var url = this._jobURL;
-      return new _promise2.default(function (resolve, reject) {
-        // Cancel force flag.
-        var kill = force ? '?kill=true' : '';
-        // Cancel job.
-        request.delete(url + kill).use(_superagentNoCache2.default) // Prevents caching of *only* this request
-        .end(function (err, res) {
-          if (res && res.ok) {
-            resolve(true);
-          } else {
-            var status = err && err.status ? ': ' + err.status : '';
-            var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
-            reject('Error cancelling job' + status + text);
-          }
-        });
-      });
-    }
-  }]);
-  return Job;
-}(_events2.default);
-
-exports.default = Job;
-
-/**
- * Emitted when a job fails.
- * @typedef {Object} Failed
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job succeeds.
- * @typedef {Object} Succeeded
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job completes.
- * @typedef {Object} Completed
- * @property {number} jobId - The job id.
- * @property {boolean} success - A boolean set to true if the job succeeds, false if it fails.
- */
-
-/**
- * Emitted when a job starts.  This event may never fire for a job
- *  if the Job object is created after the event fires.  In this case it
- *  is more reliable to listen to the JobStarted events on the GSF object.
- * @typedef {Object} Started
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job is accepted by the server.  This event may never fire for a job
- *  if the Job object is created after the event fires.  In this case it
- *  is more reliable to listen to the JobAccepted events on the GSF object.
- * @typedef {Object} Accepted
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job reports progress.
- * @typedef {Object} Progress
- * @property {number} jobId - The job id.
- * @property {number} progress - The job progress percent.
- * @property {string} [message] - The job progress message, if any.
- */
-
-module.exports = exports['default'];
-
-/***/ }),
 /* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _assign = __webpack_require__(71);
-
-var _assign2 = _interopRequireDefault(_assign);
-
-var _typeof2 = __webpack_require__(28);
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-var _promise = __webpack_require__(17);
-
-var _promise2 = _interopRequireDefault(_promise);
-
-var _classCallCheck2 = __webpack_require__(18);
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(19);
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _superagent = __webpack_require__(27);
-
-var request = _interopRequireWildcard(_superagent);
-
-var _superagentNoCache = __webpack_require__(26);
-
-var _superagentNoCache2 = _interopRequireDefault(_superagentNoCache);
-
-var _Task = __webpack_require__(68);
-
-var _Task2 = _interopRequireDefault(_Task);
-
-var _ESE_API = __webpack_require__(16);
-
-var SERVER_API = _interopRequireWildcard(_ESE_API);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * The Service class is used to inspect and create tasks for a service.
- */
-var Service = function () {
-  /**
-   * @param {GSF} server - The GSF server object.
-   * @param {string} serviceName - The name of the service.
-   */
-  function Service(server, serviceName) {
-    (0, _classCallCheck3.default)(this, Service);
-
-    /**
-     * The service name.
-     * @type {string}
-     */
-    this.name = serviceName;
-
-    // Server object.
-    this._server = server;
-  }
-
-  /**
-   * The ServiceInfo object contains information about a service.
-   * @typedef {Object} ServiceInfo
-   * @property {string} name - The name of the service.
-   * @property {string} description - A description of the service.
-   * @property {string[]} tasks - A list of available tasks on the service.
-   */
-
-  /**
-   * Retrieves the service information.
-   * @return {Promise<ServiceInfo, error>} Returns a Promise to the
-   *  ServiceInfo object.
-   */
-
-
-  (0, _createClass3.default)(Service, [{
-    key: 'info',
-    value: function info() {
-      var _this = this;
-
-      return new _promise2.default(function (resolve, reject) {
-        // Build service info url.
-        var url = [_this._server.rootURL, SERVER_API.SERVICES_PATH, _this.name].join('/');
-
-        // Get service info so we can pull off the tasks array.
-        request.get(url).use(_superagentNoCache2.default) // Prevents caching of *only* this request
-        .end(function (err, res) {
-          if (res && res.ok) {
-            // Build our version of server info.
-            var serviceInfo = {
-              name: res.body.name,
-              description: res.body.description,
-              tasks: res.body.tasks
-            };
-            resolve(serviceInfo);
-          } else {
-            var status = err && err.status ? ': ' + err.status : '';
-            var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
-            reject('Error requesting service info' + status + text);
-          }
-        });
-      });
-    }
-
-    /**
-     * Returns a task object.
-     * @param {string} taskName - The name of the task.
-     * @return {Task} Returns the task object.
-     */
-
-  }, {
-    key: 'task',
-    value: function task(taskName) {
-      return new _Task2.default(this._server, this.name, taskName);
-    }
-
-    /**
-     * Retrieves the array of task info objects available on the service.
-     * @return {Promise<TaskInfo[], error>} Returns a Promise to an array of TaskInfo objects.
-     */
-
-  }, {
-    key: 'taskInfoList',
-    value: function taskInfoList() {
-      var _this2 = this;
-
-      return new _promise2.default(function (resolve, reject) {
-        // Build service info url.
-        var url = [_this2._server.rootURL, SERVER_API.SERVICES_PATH, _this2.name].join('/');
-
-        // Get service info so we can pull off the tasks array.
-        request.get(url).query({ taskInfo: true }).use(_superagentNoCache2.default) // Prevents caching of *only* this request
-        .end(function (err, res) {
-          if (res && res.ok) {
-            var tasks = [];
-            res.body.tasks.forEach(function (task) {
-              if ((typeof task === 'undefined' ? 'undefined' : (0, _typeof3.default)(task)) === 'object') {
-                var newTask = (0, _assign2.default)({}, task);
-                newTask.parameters = {};
-                task.parameters.forEach(function (param) {
-                  newTask.parameters[param.name] = (0, _assign2.default)({}, param);
-                  delete newTask.parameters[param.name].name;
-                });
-                tasks.push(newTask);
-              } else {
-                reject('Unable to get task info list.');
-                return;
-              }
-            });
-            resolve(tasks);
-          } else {
-            var status = err && err.status ? ': ' + err.status : '';
-            var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
-            reject('Error requesting task info objects' + status + text);
-          }
-        });
-      });
-    }
-
-    /**
-     * Retrieves the array of task objects available on the service.
-     * @return {Promise<Task[], error>} Returns a Promise to an array of Task objects.
-     */
-
-  }, {
-    key: 'tasks',
-    value: function tasks() {
-      var _this3 = this;
-
-      return new _promise2.default(function (resolve, reject) {
-        _this3.info().then(function (info) {
-          var tasks = info.tasks.map(function (taskName) {
-            return new _Task2.default(_this3._server, _this3.name, taskName);
-          });
-          resolve(tasks);
-        }).catch(function (err) {
-          var status = err && err.status ? ': ' + err.status : '';
-          var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
-          reject('Error requesting tasks' + status + text);
-        });
-      });
-    }
-  }]);
-  return Service;
-}();
-
-exports.default = Service;
-module.exports = exports['default'];
 
 /***/ }),
 /* 44 */
@@ -2159,171 +1655,38 @@ module.exports = exports['default'];
 
 "use strict";
 
+var $at  = __webpack_require__(70)(true);
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+// 21.1.3.27 String.prototype[@@iterator]()
+__webpack_require__(45)(String, 'String', function(iterated){
+  this._t = String(iterated); // target
+  this._i = 0;                // next index
+// 21.1.5.2.1 %StringIteratorPrototype%.next()
+}, function(){
+  var O     = this._t
+    , index = this._i
+    , point;
+  if(index >= O.length)return {value: undefined, done: true};
+  point = $at(O, index);
+  this._i += point.length;
+  return {value: point, done: false};
 });
-exports.default = {
-  job: {
-    accepted: 'Accepted',
-    started: 'Started',
-    completed: 'Completed',
-    succeeded: 'Succeeded',
-    progress: 'Progress',
-    failed: 'Failed'
-  },
-  server: {
-    accepted: 'JobAccepted',
-    started: 'JobStarted',
-    completed: 'JobCompleted',
-    succeeded: 'JobSucceeded',
-    progress: 'JobProgress',
-    failed: 'JobFailed'
-  }
-};
-module.exports = exports['default'];
 
 /***/ }),
 /* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(82), __esModule: true };
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(83), __esModule: true };
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 
-
-exports.__esModule = true;
-
-var _setPrototypeOf = __webpack_require__(74);
-
-var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
-
-var _create = __webpack_require__(72);
-
-var _create2 = _interopRequireDefault(_create);
-
-var _typeof2 = __webpack_require__(28);
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : (0, _typeof3.default)(superClass)));
-  }
-
-  subClass.prototype = (0, _create2.default)(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) _setPrototypeOf2.default ? (0, _setPrototypeOf2.default)(subClass, superClass) : subClass.__proto__ = superClass;
-};
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _typeof2 = __webpack_require__(28);
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
-};
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = __webpack_require__(13)
-  , TAG = __webpack_require__(1)('toStringTag')
-  // ES3 wrong here
-  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
-
-// fallback for IE11 Script Access Denied error
-var tryGet = function(it, key){
-  try {
-    return it[key];
-  } catch(e){ /* empty */ }
-};
-
-module.exports = function(it){
-  var O, T, B;
-  return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-    // builtinTag case
-    : ARG ? cof(O)
-    // ES3 arguments fallback
-    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-};
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(2).document && document.documentElement;
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = !__webpack_require__(4) && !__webpack_require__(10)(function(){
-  return Object.defineProperty(__webpack_require__(31)('div'), 'a', {get: function(){ return 7; }}).a != 7;
-});
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// fallback for non-array-like ES3 and non-enumerable old V8 strings
-var cof = __webpack_require__(13);
-module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
-  return cof(it) == 'String' ? it.split('') : Object(it);
-};
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var LIBRARY        = __webpack_require__(20)
-  , $export        = __webpack_require__(5)
-  , redefine       = __webpack_require__(59)
-  , hide           = __webpack_require__(8)
-  , has            = __webpack_require__(7)
-  , Iterators      = __webpack_require__(15)
-  , $iterCreate    = __webpack_require__(97)
-  , setToStringTag = __webpack_require__(23)
-  , getPrototypeOf = __webpack_require__(56)
+var LIBRARY        = __webpack_require__(17)
+  , $export        = __webpack_require__(3)
+  , redefine       = __webpack_require__(47)
+  , hide           = __webpack_require__(7)
+  , has            = __webpack_require__(8)
+  , Iterators      = __webpack_require__(14)
+  , $iterCreate    = __webpack_require__(71)
+  , setToStringTag = __webpack_require__(20)
+  , getPrototypeOf = __webpack_require__(52)
   , ITERATOR       = __webpack_require__(1)('iterator')
   , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
   , FF_ITERATOR    = '@@iterator'
@@ -2386,63 +1749,26 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED
 };
 
 /***/ }),
-/* 54 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var pIE            = __webpack_require__(21)
-  , createDesc     = __webpack_require__(22)
-  , toIObject      = __webpack_require__(9)
-  , toPrimitive    = __webpack_require__(38)
-  , has            = __webpack_require__(7)
-  , IE8_DOM_DEFINE = __webpack_require__(51)
-  , gOPD           = Object.getOwnPropertyDescriptor;
-
-exports.f = __webpack_require__(4) ? gOPD : function getOwnPropertyDescriptor(O, P){
-  O = toIObject(O);
-  P = toPrimitive(P, true);
-  if(IE8_DOM_DEFINE)try {
-    return gOPD(O, P);
-  } catch(e){ /* empty */ }
-  if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
-};
+module.exports = !__webpack_require__(6) && !__webpack_require__(11)(function(){
+  return Object.defineProperty(__webpack_require__(32)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+});
 
 /***/ }),
-/* 55 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys      = __webpack_require__(57)
-  , hiddenKeys = __webpack_require__(32).concat('length', 'prototype');
-
-exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
-  return $keys(O, hiddenKeys);
-};
+module.exports = __webpack_require__(7);
 
 /***/ }),
-/* 56 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-var has         = __webpack_require__(7)
-  , toObject    = __webpack_require__(24)
-  , IE_PROTO    = __webpack_require__(35)('IE_PROTO')
-  , ObjectProto = Object.prototype;
-
-module.exports = Object.getPrototypeOf || function(O){
-  O = toObject(O);
-  if(has(O, IE_PROTO))return O[IE_PROTO];
-  if(typeof O.constructor == 'function' && O instanceof O.constructor){
-    return O.constructor.prototype;
-  } return O instanceof Object ? ObjectProto : null;
-};
-
-/***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var has          = __webpack_require__(7)
+var has          = __webpack_require__(8)
   , toIObject    = __webpack_require__(9)
-  , arrayIndexOf = __webpack_require__(90)(false)
+  , arrayIndexOf = __webpack_require__(73)(false)
   , IE_PROTO     = __webpack_require__(35)('IE_PROTO');
 
 module.exports = function(object, names){
@@ -2459,34 +1785,104 @@ module.exports = function(object, names){
 };
 
 /***/ }),
-/* 58 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// most Object methods by ES6 should accept primitives
-var $export = __webpack_require__(5)
-  , core    = __webpack_require__(0)
-  , fails   = __webpack_require__(10);
-module.exports = function(KEY, exec){
-  var fn  = (core.Object || {})[KEY] || Object[KEY]
-    , exp = {};
-  exp[KEY] = exec(fn);
-  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
+// fallback for non-array-like ES3 and non-enumerable old V8 strings
+var cof = __webpack_require__(15);
+module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+  return cof(it) == 'String' ? it.split('') : Object(it);
 };
 
 /***/ }),
-/* 59 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(8);
+// 7.1.15 ToLength
+var toInteger = __webpack_require__(29)
+  , min       = Math.min;
+module.exports = function(it){
+  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+};
 
 /***/ }),
-/* 60 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var ctx                = __webpack_require__(14)
-  , invoke             = __webpack_require__(93)
-  , html               = __webpack_require__(50)
-  , cel                = __webpack_require__(31)
+module.exports = __webpack_require__(2).document && document.documentElement;
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
+var has         = __webpack_require__(8)
+  , toObject    = __webpack_require__(21)
+  , IE_PROTO    = __webpack_require__(35)('IE_PROTO')
+  , ObjectProto = Object.prototype;
+
+module.exports = Object.getPrototypeOf || function(O){
+  O = toObject(O);
+  if(has(O, IE_PROTO))return O[IE_PROTO];
+  if(typeof O.constructor == 'function' && O instanceof O.constructor){
+    return O.constructor.prototype;
+  } return O instanceof Object ? ObjectProto : null;
+};
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(75);
+var global        = __webpack_require__(2)
+  , hide          = __webpack_require__(7)
+  , Iterators     = __webpack_require__(14)
+  , TO_STRING_TAG = __webpack_require__(1)('toStringTag');
+
+for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
+  var NAME       = collections[i]
+    , Collection = global[NAME]
+    , proto      = Collection && Collection.prototype;
+  if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
+  Iterators[NAME] = Iterators.Array;
+}
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// getting tag from 19.1.3.6 Object.prototype.toString()
+var cof = __webpack_require__(15)
+  , TAG = __webpack_require__(1)('toStringTag')
+  // ES3 wrong here
+  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
+
+// fallback for IE11 Script Access Denied error
+var tryGet = function(it, key){
+  try {
+    return it[key];
+  } catch(e){ /* empty */ }
+};
+
+module.exports = function(it){
+  var O, T, B;
+  return it === undefined ? 'Undefined' : it === null ? 'Null'
+    // @@toStringTag case
+    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+    // builtinTag case
+    : ARG ? cof(O)
+    // ES3 arguments fallback
+    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+};
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var ctx                = __webpack_require__(13)
+  , invoke             = __webpack_require__(85)
+  , html               = __webpack_require__(51)
+  , cel                = __webpack_require__(32)
   , global             = __webpack_require__(2)
   , process            = global.process
   , setTask            = global.setImmediate
@@ -2522,7 +1918,7 @@ if(!setTask || !clearTask){
     delete queue[id];
   };
   // Node.js 0.8-
-  if(__webpack_require__(13)(process) == 'process'){
+  if(__webpack_require__(15)(process) == 'process'){
     defer = function(id){
       process.nextTick(ctx(run, id, 1));
     };
@@ -2560,65 +1956,129 @@ module.exports = {
 };
 
 /***/ }),
-/* 61 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// 7.1.15 ToLength
-var toInteger = __webpack_require__(37)
-  , min       = Math.min;
-module.exports = function(it){
-  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+module.exports = { "default": __webpack_require__(90), __esModule: true };
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// most Object methods by ES6 should accept primitives
+var $export = __webpack_require__(3)
+  , core    = __webpack_require__(0)
+  , fails   = __webpack_require__(11);
+module.exports = function(KEY, exec){
+  var fn  = (core.Object || {})[KEY] || Object[KEY]
+    , exp = {};
+  exp[KEY] = exec(fn);
+  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
 };
 
 /***/ }),
-/* 62 */
-/***/ (function(module, exports) {
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
 
-
+module.exports = { "default": __webpack_require__(92), __esModule: true };
 
 /***/ }),
-/* 63 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var $at  = __webpack_require__(110)(true);
 
-// 21.1.3.27 String.prototype[@@iterator]()
-__webpack_require__(53)(String, 'String', function(iterated){
-  this._t = String(iterated); // target
-  this._i = 0;                // next index
-// 21.1.5.2.1 %StringIteratorPrototype%.next()
-}, function(){
-  var O     = this._t
-    , index = this._i
-    , point;
-  if(index >= O.length)return {value: undefined, done: true};
-  point = $at(O, index);
-  this._i += point.length;
-  return {value: point, done: false};
-});
+exports.__esModule = true;
+
+var _typeof2 = __webpack_require__(38);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
+};
 
 /***/ }),
-/* 64 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(113);
-var global        = __webpack_require__(2)
-  , hide          = __webpack_require__(8)
-  , Iterators     = __webpack_require__(15)
-  , TO_STRING_TAG = __webpack_require__(1)('toStringTag');
+// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+var $keys      = __webpack_require__(48)
+  , hiddenKeys = __webpack_require__(37).concat('length', 'prototype');
 
-for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
-  var NAME       = collections[i]
-    , Collection = global[NAME]
-    , proto      = Collection && Collection.prototype;
-  if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
-  Iterators[NAME] = Iterators.Array;
-}
+exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
+  return $keys(O, hiddenKeys);
+};
 
 /***/ }),
-/* 65 */
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var pIE            = __webpack_require__(24)
+  , createDesc     = __webpack_require__(18)
+  , toIObject      = __webpack_require__(9)
+  , toPrimitive    = __webpack_require__(33)
+  , has            = __webpack_require__(8)
+  , IE8_DOM_DEFINE = __webpack_require__(46)
+  , gOPD           = Object.getOwnPropertyDescriptor;
+
+exports.f = __webpack_require__(6) ? gOPD : function getOwnPropertyDescriptor(O, P){
+  O = toIObject(O);
+  P = toPrimitive(P, true);
+  if(IE8_DOM_DEFINE)try {
+    return gOPD(O, P);
+  } catch(e){ /* empty */ }
+  if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
+};
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _setPrototypeOf = __webpack_require__(109);
+
+var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
+
+var _create = __webpack_require__(113);
+
+var _create2 = _interopRequireDefault(_create);
+
+var _typeof2 = __webpack_require__(38);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : (0, _typeof3.default)(superClass)));
+  }
+
+  subClass.prototype = (0, _create2.default)(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf2.default ? (0, _setPrototypeOf2.default)(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+/***/ }),
+/* 63 */
 /***/ (function(module, exports) {
 
 // Copyright Joyent, Inc. and other Node contributors.
@@ -2926,7 +2386,7 @@ function isUndefined(arg) {
 
 
 /***/ }),
-/* 66 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2936,7 +2396,374 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Server = __webpack_require__(67);
+var _promise = __webpack_require__(16);
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _keys = __webpack_require__(56);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _getPrototypeOf = __webpack_require__(58);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__(22);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(23);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__(59);
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__(62);
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _superagent = __webpack_require__(25);
+
+var request = _interopRequireWildcard(_superagent);
+
+var _superagentNoCache = __webpack_require__(26);
+
+var _superagentNoCache2 = _interopRequireDefault(_superagentNoCache);
+
+var _events = __webpack_require__(63);
+
+var _events2 = _interopRequireDefault(_events);
+
+var _utils = __webpack_require__(27);
+
+var sdkUtils = _interopRequireWildcard(_utils);
+
+var _ESE_API = __webpack_require__(28);
+
+var SERVER_API = _interopRequireWildcard(_ESE_API);
+
+var _ESE_STATUS_MAP = __webpack_require__(131);
+
+var STATUS_MAP = _interopRequireWildcard(_ESE_STATUS_MAP);
+
+var _EVENTS = __webpack_require__(65);
+
+var _EVENTS2 = _interopRequireDefault(_EVENTS);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var nocache = sdkUtils.isIE() ? _superagentNoCache2.default.withQueryStrings : _superagentNoCache2.default;
+
+/**
+ * The Job class is used for job operations.
+ */
+
+var Job = function (_EventEmitter) {
+  (0, _inherits3.default)(Job, _EventEmitter);
+
+  /**
+   * @param {GSF} server - The server object.
+   * @param {number} jobId - The jobId.
+   * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
+   * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
+   *  For more reliable job started information, listen to the GSF JobStarted
+   *  events as this callback may not always get called.  In some cases the job
+   *  can start before the callback is registered.
+   * @emits {Failed}
+   * @emits {Succeeded}
+   * @emits {Completed}
+   * @emits {Started}
+   * @emits {Accepted}
+   * @emits {Progress}
+   */
+  function Job(server, jobId, progressCallback, startedCallback) {
+    (0, _classCallCheck3.default)(this, Job);
+
+    /**
+     * The job Id.
+     * @type {number}
+     */
+    var _this = (0, _possibleConstructorReturn3.default)(this, (Job.__proto__ || (0, _getPrototypeOf2.default)(Job)).call(this));
+    // Init EventEmitter superclass.
+
+
+    _this.jobId = jobId;
+
+    // Server object.
+    _this._server = server;
+
+    // Job endpoint.
+    _this._jobURL = [_this._server.rootURL, SERVER_API.JOBS_PATH, _this.jobId].join('/');
+
+    // Job status endpoint.
+    _this._jobStatusURL = [_this._jobURL, SERVER_API.STATUS_PATH].join('/');
+
+    // Allow infinite listeners.
+    _this.setMaxListeners(0);
+
+    // Store promise for wait() function if called.
+    _this._waiting = null;
+
+    // Call progress and started callbacks if supplied to constructor.
+    progressCallback && _this.on(_EVENTS2.default.job.progress, progressCallback);
+    startedCallback && _this.on(_EVENTS2.default.job.started, startedCallback);
+
+    // Function to handle events.
+    _this._handler = function (eventName, data) {
+      // Only care about events pertaining to this job.
+      if (data.jobId !== _this.jobId) return;
+
+      // Re-emit the rest of the events.
+      _this.emit(eventName, data);
+    };
+
+    // Listen for events from our server.  Pass
+    // them into the handler with job event type.
+    (0, _keys2.default)(_EVENTS2.default.server).forEach(function (key) {
+      _this._server.on(_EVENTS2.default.server[key], function (data) {
+        _this._handler(_EVENTS2.default.job[key], data);
+      });
+    });
+
+    return _this;
+  }
+
+  /**
+   * Waits for the job to complete.
+   * @return {Promise<JobResults, error>} Returns a promise that is resolved when a job is
+   *  successful, returning the job results object.
+   *  If a job fails, the promise is rejected with an error message.
+   */
+
+
+  (0, _createClass3.default)(Job, [{
+    key: 'wait',
+    value: function wait() {
+      var _this2 = this;
+
+      if (!this._waiting) {
+        this._waiting = new _promise2.default(function (resolve, reject) {
+          // Check to make sure it hasn't already completed.
+          _this2.info().then(function (info) {
+            if (info.jobStatus === _EVENTS2.default.job.succeeded) {
+              resolve(info.results);
+            } else if (info.jobStatus === _EVENTS2.default.job.failed) {
+              reject(info.jobErrorMessage);
+            }
+          }).catch(function (err) {
+            reject(err);
+          });
+
+          // Listen to job events.
+          _this2.once(_EVENTS2.default.job.succeeded, function (data) {
+            _this2.info().then(function (info) {
+              resolve(info.results);
+            });
+          });
+          _this2.once(_EVENTS2.default.job.failed, function (data) {
+            _this2.info().then(function (info) {
+              reject(info.jobErrorMessage);
+            });
+          });
+        });
+      }
+
+      return this._waiting;
+    }
+
+    /**
+     * The JobInfo object contains information about a job.
+     * @typedef {Object} JobInfo
+     * @property {string} jobId - The job id.
+     * @property {string} jobStatus - The status of the job. It can be Accepted,
+     *  Started, Succeeded, or Failed.
+     * @property {string} jobStatusURL - The job status URL.
+     * @property {number} jobProgress - The percentage of job completion.
+     * @property {string} jobProgressMessage - The job progress message.
+     * @property {string} jobRoute - The job route.
+     * @property {string} taskName - The name of the task.
+     * @property {string} serviceName - The name of the service.
+     * @property {string} jobErrorMessage - Any errors generated during job execution.
+     * @property {Object} inputs - The input parameters.
+     * @property {Object[]} messages - Status messages.
+     * @property {Object} results - The job output.
+     */
+
+    /**
+     * Retrieves the job information.
+     * @return {Promise<JobInfo, error>} Returns a promise to a JobInfo object.
+     */
+
+  }, {
+    key: 'info',
+    value: function info() {
+      var _this3 = this;
+
+      return new _promise2.default(function (resolve, reject) {
+        var jobStatusURL = _this3._jobStatusURL;
+        // Get job status.
+        request.get(jobStatusURL).use(nocache) // Prevents caching of *only* this request
+        .end(function (err, res) {
+          if (res && res.ok) {
+            // Create object from results array.
+            var jobInfo = res.body;
+            var results = {};
+            jobInfo.results.forEach(function (result) {
+              results[result.name] = result.value;
+            });
+            jobInfo.results = results;
+
+            // Remap ese statuses to our own.
+            jobInfo.jobStatus = STATUS_MAP[jobInfo.jobStatus];
+
+            resolve(jobInfo);
+          } else {
+            var status = err && err.status ? ': ' + err.status : '';
+            var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
+            reject('Error requesting job info' + status + text);
+          }
+        });
+      });
+    }
+
+    /**
+     * Cancels the job.
+     * @param {boolean} force - If true, the job will force cancel.  Please note that
+     *  setting force to true may be unsafe depending on the type of job
+     *  as it may not be able to properly shut down or clean up.
+     * @return {Promise<true, error>} Returns a promise when cancel is submitted.  If request
+     *  is successfully submitted, the promise will be resolved with a value of true.
+     *  If the request fails, the promise will be resolved with an error message.
+     *  Note that this only represents the success of the request made to the server,
+     *  not the cancellation itself.  Use the Job.Info() function (or Job events)
+     *  to retrieve the status of the job and to learn when it is actually cancelled.
+     */
+
+  }, {
+    key: 'cancel',
+    value: function cancel(force) {
+      // Job url.
+      var url = this._jobURL;
+      return new _promise2.default(function (resolve, reject) {
+        // Cancel force flag.
+        var kill = force ? '?kill=true' : '';
+        // Cancel job.
+        request.delete(url + kill).use(nocache) // Prevents caching of *only* this request
+        .end(function (err, res) {
+          if (res && res.ok) {
+            resolve(true);
+          } else {
+            var status = err && err.status ? ': ' + err.status : '';
+            var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
+            reject('Error cancelling job' + status + text);
+          }
+        });
+      });
+    }
+  }]);
+  return Job;
+}(_events2.default);
+
+exports.default = Job;
+
+/**
+ * Emitted when a job fails.
+ * @typedef {Object} Failed
+ * @property {number} jobId - The job id.
+ */
+
+/**
+ * Emitted when a job succeeds.
+ * @typedef {Object} Succeeded
+ * @property {number} jobId - The job id.
+ */
+
+/**
+ * Emitted when a job completes.
+ * @typedef {Object} Completed
+ * @property {number} jobId - The job id.
+ * @property {boolean} success - A boolean set to true if the job succeeds, false if it fails.
+ */
+
+/**
+ * Emitted when a job starts.  This event may never fire for a job
+ *  if the Job object is created after the event fires.  In this case it
+ *  is more reliable to listen to the JobStarted events on the GSF object.
+ * @typedef {Object} Started
+ * @property {number} jobId - The job id.
+ */
+
+/**
+ * Emitted when a job is accepted by the server.  This event may never fire for a job
+ *  if the Job object is created after the event fires.  In this case it
+ *  is more reliable to listen to the JobAccepted events on the GSF object.
+ * @typedef {Object} Accepted
+ * @property {number} jobId - The job id.
+ */
+
+/**
+ * Emitted when a job reports progress.
+ * @typedef {Object} Progress
+ * @property {number} jobId - The job id.
+ * @property {number} progress - The job progress percent.
+ * @property {string} [message] - The job progress message, if any.
+ */
+
+module.exports = exports['default'];
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  job: {
+    accepted: 'Accepted',
+    started: 'Started',
+    completed: 'Completed',
+    succeeded: 'Succeeded',
+    progress: 'Progress',
+    failed: 'Failed'
+  },
+  server: {
+    accepted: 'JobAccepted',
+    started: 'JobStarted',
+    completed: 'JobCompleted',
+    succeeded: 'JobSucceeded',
+    progress: 'JobProgress',
+    failed: 'JobFailed'
+  }
+};
+module.exports = exports['default'];
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(67);
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Server = __webpack_require__(68);
 
 var _Server2 = _interopRequireDefault(_Server);
 
@@ -2958,7 +2785,7 @@ exports.default = {
 module.exports = exports['default'];
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2968,35 +2795,35 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _promise = __webpack_require__(17);
+var _promise = __webpack_require__(16);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _keys = __webpack_require__(46);
+var _keys = __webpack_require__(56);
 
 var _keys2 = _interopRequireDefault(_keys);
 
-var _getPrototypeOf = __webpack_require__(45);
+var _getPrototypeOf = __webpack_require__(58);
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-var _classCallCheck2 = __webpack_require__(18);
+var _classCallCheck2 = __webpack_require__(22);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _createClass2 = __webpack_require__(19);
+var _createClass2 = __webpack_require__(23);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(48);
+var _possibleConstructorReturn2 = __webpack_require__(59);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = __webpack_require__(47);
+var _inherits2 = __webpack_require__(62);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _superagent = __webpack_require__(27);
+var _superagent = __webpack_require__(25);
 
 var request = _interopRequireWildcard(_superagent);
 
@@ -3004,29 +2831,35 @@ var _superagentNoCache = __webpack_require__(26);
 
 var _superagentNoCache2 = _interopRequireDefault(_superagentNoCache);
 
-var _events = __webpack_require__(65);
+var _events = __webpack_require__(63);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _Service = __webpack_require__(43);
+var _utils = __webpack_require__(27);
+
+var sdkUtils = _interopRequireWildcard(_utils);
+
+var _Service = __webpack_require__(123);
 
 var _Service2 = _interopRequireDefault(_Service);
 
-var _Job = __webpack_require__(42);
+var _Job = __webpack_require__(64);
 
 var _Job2 = _interopRequireDefault(_Job);
 
-var _ESE_API = __webpack_require__(16);
+var _ESE_API = __webpack_require__(28);
 
 var SERVER_API = _interopRequireWildcard(_ESE_API);
 
-var _EVENTS = __webpack_require__(44);
+var _EVENTS = __webpack_require__(65);
 
 var _EVENTS2 = _interopRequireDefault(_EVENTS);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var nocache = sdkUtils.isIE() ? _superagentNoCache2.default.withQueryStrings : _superagentNoCache2.default;
 
 /**
  * The Server class is used to connect to the server and retrieve information
@@ -3035,6 +2868,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * // Obtain server object from GSF.
  * const server = GSF.server({address:'MyServer',port:9191});
  */
+
 var Server = function (_EventEmitter) {
   (0, _inherits3.default)(Server, _EventEmitter);
 
@@ -3102,8 +2936,17 @@ var Server = function (_EventEmitter) {
     // Allow infinite listeners.
     _this.setMaxListeners(0);
 
+    // Use global EventSource for browsers and the node package for node.
+    var Eventsource = void 0;
+    if (false) {
+      // Webpack defined global
+      Eventsource = require('eventsource');
+    } else {
+      Eventsource = EventSource;
+    }
+
     // Attach to server sent events and re broadcast.
-    _this._events = new EventSource([_this.URL, SERVER_API.EVENTS_PATH].join('/'));
+    _this._events = new Eventsource([_this.URL, SERVER_API.EVENTS_PATH].join('/'));
 
     // Emit succeeded and failed events.
     _this.on(_EVENTS2.default.server.completed, function (data) {
@@ -3146,7 +2989,7 @@ var Server = function (_EventEmitter) {
         var url = [_this2.rootURL, SERVER_API.SERVICES_PATH].join('/');
 
         // Get service list.
-        request.get(url).use(_superagentNoCache2.default) // Prevents caching of *only* this request
+        request.get(url).use(nocache) // Prevents caching of *only* this request
         .end(function (err, res) {
           if (res && res.ok) {
             var services = res.body.services;
@@ -3213,7 +3056,7 @@ var Server = function (_EventEmitter) {
         }
 
         // Get job list.
-        request.get(url).use(_superagentNoCache2.default) // Prevents caching of *only* this request
+        request.get(url).use(nocache) // Prevents caching of *only* this request
         .end(function (err, res) {
           if (res && res.ok) {
             var jobs = res.body;
@@ -3307,932 +3150,20 @@ exports.default = Server;
 module.exports = exports['default'];
 
 /***/ }),
-/* 68 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _stringify = __webpack_require__(70);
-
-var _stringify2 = _interopRequireDefault(_stringify);
-
-var _promise = __webpack_require__(17);
-
-var _promise2 = _interopRequireDefault(_promise);
-
-var _classCallCheck2 = __webpack_require__(18);
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(19);
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _superagent = __webpack_require__(27);
-
-var request = _interopRequireWildcard(_superagent);
-
-var _superagentNoCache = __webpack_require__(26);
-
-var _superagentNoCache2 = _interopRequireDefault(_superagentNoCache);
-
-var _Job = __webpack_require__(42);
-
-var _Job2 = _interopRequireDefault(_Job);
-
-var _Service = __webpack_require__(43);
-
-var _Service2 = _interopRequireDefault(_Service);
-
-var _ESE_API = __webpack_require__(16);
-
-var SERVER_API = _interopRequireWildcard(_ESE_API);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * The Task class is used to submit and inspect tasks.
- */
-var Task = function () {
-  /**
-   * @param {GSF} server - The server object.
-   * @param {string} serviceName - The name of the service.
-   * @param {string} taskName - The name of the task.
-   */
-  function Task(server, serviceName, taskName) {
-    (0, _classCallCheck3.default)(this, Task);
-
-    /**
-     * The task name.
-     * @type {string}
-     */
-    this.name = taskName;
-
-    /**
-     * The parent service.
-     * @type {Service}
-     */
-    this.service = new _Service2.default(server, serviceName);
-
-    // Server object.
-    this._server = server;
-
-    // Task endpoint for this task.
-    this._taskURL = [server.rootURL, SERVER_API.SERVICES_PATH, serviceName, taskName].join('/');
-  }
-
-  /**
-   * Retrieves the task information.
-   * @return {Promise<TaskInfo, error>} Returns a promise to the TaskInfo object.
-   */
-
-
-  (0, _createClass3.default)(Task, [{
-    key: 'info',
-    value: function info() {
-      var _this = this;
-
-      return new _promise2.default(function (resolve, reject) {
-        // Task info url.
-        var taskURL = _this._taskURL;
-
-        // Get task info.
-        request.get(taskURL).use(_superagentNoCache2.default) // Prevents caching of *only* this request
-        .end(function (err, res) {
-          if (res && res.ok) {
-            // Replace parmeter array with object using name as key.
-            var taskInfo = res.body;
-            var parameters = {};
-
-            taskInfo.parameters.forEach(function (param) {
-              parameters[param.name] = param;
-              delete parameters[param.name].name;
-            });
-
-            taskInfo.parameters = parameters;
-            resolve(taskInfo);
-          } else {
-            var status = err && err.status ? ': ' + err.status : '';
-            var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
-            reject('Error requesting task info' + status + text);
-          }
-        });
-      });
-    }
-
-    /**
-     * Options for submitting a job.
-     * @typedef {Object} SubmitOptions
-     * @property {JobInputParameters} options.parameters - The input parameters.
-     * @property {JobRoute} [options.route] - The route on which to run the job if
-     * there is one.
-     */
-
-    /**
-     * Submits the job.
-     * @param {SubmitOptions} options - The job submit options.
-     * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
-     * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
-     *  For more reliable job started information, listen to the GSF JobStarted
-     *  events as this callback may not always get called.  In some cases the job
-     *  can start before the callback is registered.
-     * @return {Promise<Job, error>} Returns a promise to a Job object.
-     */
-
-  }, {
-    key: 'submit',
-    value: function submit(options, progressCallback, startedCallback) {
-      var _this2 = this;
-
-      return new _promise2.default(function (resolve, reject) {
-        // Task info url.
-        var taskURL = _this2._taskURL;
-        var route = options.route || null;
-
-        // Build task submit url.
-        var url = route ? [taskURL, route, SERVER_API.SUBMIT_JOB_PATH].join('/') : [taskURL, SERVER_API.SUBMIT_JOB_PATH].join('/');
-
-        // Submit task as a job.
-        request.post(url).set('Content-Type', 'application/json').set('GSF-noredirect', 'true').send((0, _stringify2.default)(options.parameters || options)).use(_superagentNoCache2.default) // Prevents caching of *only* this request
-        .end(function (err, res) {
-          if (res && res.ok) {
-            // Return new job object using ID.
-            resolve(new _Job2.default(_this2._server, res.body.jobId, progressCallback, startedCallback));
-          } else {
-            var status = err && err.status ? ': ' + err.status : '';
-            var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
-            reject('Error submitting job to ' + url + ' ' + status + text);
-          }
-        });
-      });
-    }
-
-    /**
-     * Submits the job and waits for results.  Resolves the promise if the job
-     *  succeeds and rejects the promise if the job fails.
-     * @param {SubmitOptions} options - The job submit options.
-     * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
-     * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
-     *    For more reliable job started information, listen to the GSF JobStarted
-     *   events as this callback may not always get called.  In some cases the job
-     *   can start before the callback is registered.
-     * @return {Promise<JobResults, error>} Returns a promise to a Job object.
-     */
-
-  }, {
-    key: 'submitAndWait',
-    value: function submitAndWait(options, progressCallback, startedCallback) {
-      return this.submit(options, progressCallback, startedCallback).then(function (job) {
-        return job.wait();
-      });
-    }
-  }]);
-  return Task;
-}();
-
-exports.default = Task;
-
-/**
- * The TaskInfo object contains information about a task.
- * @typedef {object} TaskInfo
- * @property {string} name - The name of the task.
- * @property {string} [displayName] - A readable name for the task. This is only used for display
- *   purposes.
- * @property {string} [description] - A description of the task.
- * @property {string} [parameters.<parameterName>.displayName] - A display name for the parameter.
- * @property {string} [parameters.<parameterName>.description] - A description of the parameter.
- * @property {string} parameters.<parameterName>.parameterType - A string set to either "required" or
- *  "optional".
- * @property {string} parameters.<parameterName>.direction - A string set to either "INPUT" or "OUTPUT".
- * @property {string} parameters.<parameterName>.dataType - A type for the parameter.
- * @property {string[]} [parameters.<parameterName>.choiceList] - A list of values that will be accepted as input
- *   for the parameter.
- * @property {any} [parameters.<parameterName>.default] - A default value for the parameter.
- */
-
-/**
- * The JobResults object contains the job results.
- * @typedef {Object} JobResults
- */
-
-/**
- * Information about job progress.
- * @typedef {Object} JobProgressInfo
- * @property {number} jobId - The job id.
- * @property {number} progress - The job progress percent.
- * @property {string} [message] - The job progress message, if any.
- */
-
-/**
- * Called when a job starts processing.
- *  For more reliable job started information, listen to the GSF JobStarted
- * events as this callback may not always get called.
- * In some cases the job can start before the callback is registered.
- * @typedef {Object} JobStartedInfo
- * @property {number} jobId - The job id.
- */
-
-module.exports = exports['default'];
-
-/***/ }),
 /* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  esriJobSucceeded: 'Succeeded',
-  esriJobFailed: 'Failed',
-  esriJobSubmitted: 'Accepted',
-  esriJobExecuting: 'Started'
-};
-module.exports = exports['default'];
+__webpack_require__(43);
+__webpack_require__(44);
+__webpack_require__(53);
+__webpack_require__(78);
+module.exports = __webpack_require__(0).Promise;
 
 /***/ }),
 /* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(78), __esModule: true };
-
-/***/ }),
-/* 71 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(79), __esModule: true };
-
-/***/ }),
-/* 72 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(80), __esModule: true };
-
-/***/ }),
-/* 73 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(81), __esModule: true };
-
-/***/ }),
-/* 74 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(84), __esModule: true };
-
-/***/ }),
-/* 75 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(86), __esModule: true };
-
-/***/ }),
-/* 76 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(87), __esModule: true };
-
-/***/ }),
-/* 77 */
-/***/ (function(module, exports) {
-
-/**
- * Export `ie`.
- */
-
-module.exports = ie();
-
-/**
- * Initialize `ie`
- *
- * @return {Number|undefined}
- * @api public
- */
-
-function ie() {
-  for( var v = 3,
-           el = document.createElement('b'),
-           // empty array as loop breaker (and exception-avoider) for non-IE and IE10+
-           all = el.all || [];
-       // i tag not well-formed since we know that IE5-IE9 won't mind
-       el.innerHTML = '<!--[if gt IE ' + (++v) + ']><i><![endif]-->',
-       all[0];
-     );
-  // return the documentMode for IE10+ compatibility
-  // non-IE will get undefined
-  return v > 4 ? v : document.documentMode;
-}
-
-
-/***/ }),
-/* 78 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var core  = __webpack_require__(0)
-  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
-module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
-  return $JSON.stringify.apply($JSON, arguments);
-};
-
-/***/ }),
-/* 79 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(114);
-module.exports = __webpack_require__(0).Object.assign;
-
-/***/ }),
-/* 80 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(115);
-var $Object = __webpack_require__(0).Object;
-module.exports = function create(P, D){
-  return $Object.create(P, D);
-};
-
-/***/ }),
-/* 81 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(116);
-var $Object = __webpack_require__(0).Object;
-module.exports = function defineProperty(it, key, desc){
-  return $Object.defineProperty(it, key, desc);
-};
-
-/***/ }),
-/* 82 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(117);
-module.exports = __webpack_require__(0).Object.getPrototypeOf;
-
-/***/ }),
-/* 83 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(118);
-module.exports = __webpack_require__(0).Object.keys;
-
-/***/ }),
-/* 84 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(119);
-module.exports = __webpack_require__(0).Object.setPrototypeOf;
-
-/***/ }),
-/* 85 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(62);
-__webpack_require__(63);
-__webpack_require__(64);
-__webpack_require__(120);
-module.exports = __webpack_require__(0).Promise;
-
-/***/ }),
-/* 86 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(121);
-__webpack_require__(62);
-__webpack_require__(122);
-__webpack_require__(123);
-module.exports = __webpack_require__(0).Symbol;
-
-/***/ }),
-/* 87 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(63);
-__webpack_require__(64);
-module.exports = __webpack_require__(40).f('iterator');
-
-/***/ }),
-/* 88 */
-/***/ (function(module, exports) {
-
-module.exports = function(){ /* empty */ };
-
-/***/ }),
-/* 89 */
-/***/ (function(module, exports) {
-
-module.exports = function(it, Constructor, name, forbiddenField){
-  if(!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)){
-    throw TypeError(name + ': incorrect invocation!');
-  } return it;
-};
-
-/***/ }),
-/* 90 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// false -> Array#indexOf
-// true  -> Array#includes
-var toIObject = __webpack_require__(9)
-  , toLength  = __webpack_require__(61)
-  , toIndex   = __webpack_require__(111);
-module.exports = function(IS_INCLUDES){
-  return function($this, el, fromIndex){
-    var O      = toIObject($this)
-      , length = toLength(O.length)
-      , index  = toIndex(fromIndex, length)
-      , value;
-    // Array#includes uses SameValueZero equality algorithm
-    if(IS_INCLUDES && el != el)while(length > index){
-      value = O[index++];
-      if(value != value)return true;
-    // Array#toIndex ignores holes, Array#includes - not
-    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
-      if(O[index] === el)return IS_INCLUDES || index || 0;
-    } return !IS_INCLUDES && -1;
-  };
-};
-
-/***/ }),
-/* 91 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// all enumerable object keys, includes symbols
-var getKeys = __webpack_require__(12)
-  , gOPS    = __webpack_require__(34)
-  , pIE     = __webpack_require__(21);
-module.exports = function(it){
-  var result     = getKeys(it)
-    , getSymbols = gOPS.f;
-  if(getSymbols){
-    var symbols = getSymbols(it)
-      , isEnum  = pIE.f
-      , i       = 0
-      , key;
-    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
-  } return result;
-};
-
-/***/ }),
-/* 92 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var ctx         = __webpack_require__(14)
-  , call        = __webpack_require__(96)
-  , isArrayIter = __webpack_require__(94)
-  , anObject    = __webpack_require__(3)
-  , toLength    = __webpack_require__(61)
-  , getIterFn   = __webpack_require__(112)
-  , BREAK       = {}
-  , RETURN      = {};
-var exports = module.exports = function(iterable, entries, fn, that, ITERATOR){
-  var iterFn = ITERATOR ? function(){ return iterable; } : getIterFn(iterable)
-    , f      = ctx(fn, that, entries ? 2 : 1)
-    , index  = 0
-    , length, step, iterator, result;
-  if(typeof iterFn != 'function')throw TypeError(iterable + ' is not iterable!');
-  // fast case for arrays with default iterator
-  if(isArrayIter(iterFn))for(length = toLength(iterable.length); length > index; index++){
-    result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
-    if(result === BREAK || result === RETURN)return result;
-  } else for(iterator = iterFn.call(iterable); !(step = iterator.next()).done; ){
-    result = call(iterator, f, step.value, entries);
-    if(result === BREAK || result === RETURN)return result;
-  }
-};
-exports.BREAK  = BREAK;
-exports.RETURN = RETURN;
-
-/***/ }),
-/* 93 */
-/***/ (function(module, exports) {
-
-// fast apply, http://jsperf.lnkit.com/fast-apply/5
-module.exports = function(fn, args, that){
-  var un = that === undefined;
-  switch(args.length){
-    case 0: return un ? fn()
-                      : fn.call(that);
-    case 1: return un ? fn(args[0])
-                      : fn.call(that, args[0]);
-    case 2: return un ? fn(args[0], args[1])
-                      : fn.call(that, args[0], args[1]);
-    case 3: return un ? fn(args[0], args[1], args[2])
-                      : fn.call(that, args[0], args[1], args[2]);
-    case 4: return un ? fn(args[0], args[1], args[2], args[3])
-                      : fn.call(that, args[0], args[1], args[2], args[3]);
-  } return              fn.apply(that, args);
-};
-
-/***/ }),
-/* 94 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// check on default Array iterator
-var Iterators  = __webpack_require__(15)
-  , ITERATOR   = __webpack_require__(1)('iterator')
-  , ArrayProto = Array.prototype;
-
-module.exports = function(it){
-  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
-};
-
-/***/ }),
-/* 95 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 7.2.2 IsArray(argument)
-var cof = __webpack_require__(13);
-module.exports = Array.isArray || function isArray(arg){
-  return cof(arg) == 'Array';
-};
-
-/***/ }),
-/* 96 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// call something on iterator step with safe closing on error
-var anObject = __webpack_require__(3);
-module.exports = function(iterator, fn, value, entries){
-  try {
-    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
-  // 7.4.6 IteratorClose(iterator, completion)
-  } catch(e){
-    var ret = iterator['return'];
-    if(ret !== undefined)anObject(ret.call(iterator));
-    throw e;
-  }
-};
-
-/***/ }),
-/* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var create         = __webpack_require__(33)
-  , descriptor     = __webpack_require__(22)
-  , setToStringTag = __webpack_require__(23)
-  , IteratorPrototype = {};
-
-// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-__webpack_require__(8)(IteratorPrototype, __webpack_require__(1)('iterator'), function(){ return this; });
-
-module.exports = function(Constructor, NAME, next){
-  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
-  setToStringTag(Constructor, NAME + ' Iterator');
-};
-
-/***/ }),
-/* 98 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var ITERATOR     = __webpack_require__(1)('iterator')
-  , SAFE_CLOSING = false;
-
-try {
-  var riter = [7][ITERATOR]();
-  riter['return'] = function(){ SAFE_CLOSING = true; };
-  Array.from(riter, function(){ throw 2; });
-} catch(e){ /* empty */ }
-
-module.exports = function(exec, skipClosing){
-  if(!skipClosing && !SAFE_CLOSING)return false;
-  var safe = false;
-  try {
-    var arr  = [7]
-      , iter = arr[ITERATOR]();
-    iter.next = function(){ return {done: safe = true}; };
-    arr[ITERATOR] = function(){ return iter; };
-    exec(arr);
-  } catch(e){ /* empty */ }
-  return safe;
-};
-
-/***/ }),
-/* 99 */
-/***/ (function(module, exports) {
-
-module.exports = function(done, value){
-  return {value: value, done: !!done};
-};
-
-/***/ }),
-/* 100 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var getKeys   = __webpack_require__(12)
-  , toIObject = __webpack_require__(9);
-module.exports = function(object, el){
-  var O      = toIObject(object)
-    , keys   = getKeys(O)
-    , length = keys.length
-    , index  = 0
-    , key;
-  while(length > index)if(O[key = keys[index++]] === el)return key;
-};
-
-/***/ }),
-/* 101 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var META     = __webpack_require__(25)('meta')
-  , isObject = __webpack_require__(11)
-  , has      = __webpack_require__(7)
-  , setDesc  = __webpack_require__(6).f
-  , id       = 0;
-var isExtensible = Object.isExtensible || function(){
-  return true;
-};
-var FREEZE = !__webpack_require__(10)(function(){
-  return isExtensible(Object.preventExtensions({}));
-});
-var setMeta = function(it){
-  setDesc(it, META, {value: {
-    i: 'O' + ++id, // object ID
-    w: {}          // weak collections IDs
-  }});
-};
-var fastKey = function(it, create){
-  // return primitive with prefix
-  if(!isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
-  if(!has(it, META)){
-    // can't set metadata to uncaught frozen object
-    if(!isExtensible(it))return 'F';
-    // not necessary to add metadata
-    if(!create)return 'E';
-    // add missing metadata
-    setMeta(it);
-  // return object ID
-  } return it[META].i;
-};
-var getWeak = function(it, create){
-  if(!has(it, META)){
-    // can't set metadata to uncaught frozen object
-    if(!isExtensible(it))return true;
-    // not necessary to add metadata
-    if(!create)return false;
-    // add missing metadata
-    setMeta(it);
-  // return hash weak collections IDs
-  } return it[META].w;
-};
-// add metadata on freeze-family methods calling
-var onFreeze = function(it){
-  if(FREEZE && meta.NEED && isExtensible(it) && !has(it, META))setMeta(it);
-  return it;
-};
-var meta = module.exports = {
-  KEY:      META,
-  NEED:     false,
-  fastKey:  fastKey,
-  getWeak:  getWeak,
-  onFreeze: onFreeze
-};
-
-/***/ }),
-/* 102 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var global    = __webpack_require__(2)
-  , macrotask = __webpack_require__(60).set
-  , Observer  = global.MutationObserver || global.WebKitMutationObserver
-  , process   = global.process
-  , Promise   = global.Promise
-  , isNode    = __webpack_require__(13)(process) == 'process';
-
-module.exports = function(){
-  var head, last, notify;
-
-  var flush = function(){
-    var parent, fn;
-    if(isNode && (parent = process.domain))parent.exit();
-    while(head){
-      fn   = head.fn;
-      head = head.next;
-      try {
-        fn();
-      } catch(e){
-        if(head)notify();
-        else last = undefined;
-        throw e;
-      }
-    } last = undefined;
-    if(parent)parent.enter();
-  };
-
-  // Node.js
-  if(isNode){
-    notify = function(){
-      process.nextTick(flush);
-    };
-  // browsers with MutationObserver
-  } else if(Observer){
-    var toggle = true
-      , node   = document.createTextNode('');
-    new Observer(flush).observe(node, {characterData: true}); // eslint-disable-line no-new
-    notify = function(){
-      node.data = toggle = !toggle;
-    };
-  // environments with maybe non-completely correct, but existent Promise
-  } else if(Promise && Promise.resolve){
-    var promise = Promise.resolve();
-    notify = function(){
-      promise.then(flush);
-    };
-  // for other environments - macrotask based on:
-  // - setImmediate
-  // - MessageChannel
-  // - window.postMessag
-  // - onreadystatechange
-  // - setTimeout
-  } else {
-    notify = function(){
-      // strange IE + webpack dev server bug - use .call(global)
-      macrotask.call(global, flush);
-    };
-  }
-
-  return function(fn){
-    var task = {fn: fn, next: undefined};
-    if(last)last.next = task;
-    if(!head){
-      head = task;
-      notify();
-    } last = task;
-  };
-};
-
-/***/ }),
-/* 103 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// 19.1.2.1 Object.assign(target, source, ...)
-var getKeys  = __webpack_require__(12)
-  , gOPS     = __webpack_require__(34)
-  , pIE      = __webpack_require__(21)
-  , toObject = __webpack_require__(24)
-  , IObject  = __webpack_require__(52)
-  , $assign  = Object.assign;
-
-// should work with symbols and should have deterministic property order (V8 bug)
-module.exports = !$assign || __webpack_require__(10)(function(){
-  var A = {}
-    , B = {}
-    , S = Symbol()
-    , K = 'abcdefghijklmnopqrst';
-  A[S] = 7;
-  K.split('').forEach(function(k){ B[k] = k; });
-  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
-}) ? function assign(target, source){ // eslint-disable-line no-unused-vars
-  var T     = toObject(target)
-    , aLen  = arguments.length
-    , index = 1
-    , getSymbols = gOPS.f
-    , isEnum     = pIE.f;
-  while(aLen > index){
-    var S      = IObject(arguments[index++])
-      , keys   = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S)
-      , length = keys.length
-      , j      = 0
-      , key;
-    while(length > j)if(isEnum.call(S, key = keys[j++]))T[key] = S[key];
-  } return T;
-} : $assign;
-
-/***/ }),
-/* 104 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var dP       = __webpack_require__(6)
-  , anObject = __webpack_require__(3)
-  , getKeys  = __webpack_require__(12);
-
-module.exports = __webpack_require__(4) ? Object.defineProperties : function defineProperties(O, Properties){
-  anObject(O);
-  var keys   = getKeys(Properties)
-    , length = keys.length
-    , i = 0
-    , P;
-  while(length > i)dP.f(O, P = keys[i++], Properties[P]);
-  return O;
-};
-
-/***/ }),
-/* 105 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-var toIObject = __webpack_require__(9)
-  , gOPN      = __webpack_require__(55).f
-  , toString  = {}.toString;
-
-var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
-  ? Object.getOwnPropertyNames(window) : [];
-
-var getWindowNames = function(it){
-  try {
-    return gOPN(it);
-  } catch(e){
-    return windowNames.slice();
-  }
-};
-
-module.exports.f = function getOwnPropertyNames(it){
-  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
-};
-
-
-/***/ }),
-/* 106 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var hide = __webpack_require__(8);
-module.exports = function(target, src, safe){
-  for(var key in src){
-    if(safe && target[key])target[key] = src[key];
-    else hide(target, key, src[key]);
-  } return target;
-};
-
-/***/ }),
-/* 107 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Works with __proto__ only. Old v8 can't work with null proto objects.
-/* eslint-disable no-proto */
-var isObject = __webpack_require__(11)
-  , anObject = __webpack_require__(3);
-var check = function(O, proto){
-  anObject(O);
-  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
-};
-module.exports = {
-  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
-    function(test, buggy, set){
-      try {
-        set = __webpack_require__(14)(Function.call, __webpack_require__(54).f(Object.prototype, '__proto__').set, 2);
-        set(test, []);
-        buggy = !(test instanceof Array);
-      } catch(e){ buggy = true; }
-      return function setPrototypeOf(O, proto){
-        check(O, proto);
-        if(buggy)O.__proto__ = proto;
-        else set(O, proto);
-        return O;
-      };
-    }({}, false) : undefined),
-  check: check
-};
-
-/***/ }),
-/* 108 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var global      = __webpack_require__(2)
-  , core        = __webpack_require__(0)
-  , dP          = __webpack_require__(6)
-  , DESCRIPTORS = __webpack_require__(4)
-  , SPECIES     = __webpack_require__(1)('species');
-
-module.exports = function(KEY){
-  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
-  if(DESCRIPTORS && C && !C[SPECIES])dP.f(C, SPECIES, {
-    configurable: true,
-    get: function(){ return this; }
-  });
-};
-
-/***/ }),
-/* 109 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 7.3.20 SpeciesConstructor(O, defaultConstructor)
-var anObject  = __webpack_require__(3)
-  , aFunction = __webpack_require__(29)
-  , SPECIES   = __webpack_require__(1)('species');
-module.exports = function(O, D){
-  var C = anObject(O).constructor, S;
-  return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
-};
-
-/***/ }),
-/* 110 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var toInteger = __webpack_require__(37)
+var toInteger = __webpack_require__(29)
   , defined   = __webpack_require__(30);
 // true  -> String#at
 // false -> String#codePointAt
@@ -4251,10 +3182,73 @@ module.exports = function(TO_STRING){
 };
 
 /***/ }),
-/* 111 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toInteger = __webpack_require__(37)
+"use strict";
+
+var create         = __webpack_require__(34)
+  , descriptor     = __webpack_require__(18)
+  , setToStringTag = __webpack_require__(20)
+  , IteratorPrototype = {};
+
+// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+__webpack_require__(7)(IteratorPrototype, __webpack_require__(1)('iterator'), function(){ return this; });
+
+module.exports = function(Constructor, NAME, next){
+  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
+  setToStringTag(Constructor, NAME + ' Iterator');
+};
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP       = __webpack_require__(4)
+  , anObject = __webpack_require__(5)
+  , getKeys  = __webpack_require__(12);
+
+module.exports = __webpack_require__(6) ? Object.defineProperties : function defineProperties(O, Properties){
+  anObject(O);
+  var keys   = getKeys(Properties)
+    , length = keys.length
+    , i = 0
+    , P;
+  while(length > i)dP.f(O, P = keys[i++], Properties[P]);
+  return O;
+};
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// false -> Array#indexOf
+// true  -> Array#includes
+var toIObject = __webpack_require__(9)
+  , toLength  = __webpack_require__(50)
+  , toIndex   = __webpack_require__(74);
+module.exports = function(IS_INCLUDES){
+  return function($this, el, fromIndex){
+    var O      = toIObject($this)
+      , length = toLength(O.length)
+      , index  = toIndex(fromIndex, length)
+      , value;
+    // Array#includes uses SameValueZero equality algorithm
+    if(IS_INCLUDES && el != el)while(length > index){
+      value = O[index++];
+      if(value != value)return true;
+    // Array#toIndex ignores holes, Array#includes - not
+    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
+      if(O[index] === el)return IS_INCLUDES || index || 0;
+    } return !IS_INCLUDES && -1;
+  };
+};
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__(29)
   , max       = Math.max
   , min       = Math.min;
 module.exports = function(index, length){
@@ -4263,34 +3257,21 @@ module.exports = function(index, length){
 };
 
 /***/ }),
-/* 112 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var classof   = __webpack_require__(49)
-  , ITERATOR  = __webpack_require__(1)('iterator')
-  , Iterators = __webpack_require__(15);
-module.exports = __webpack_require__(0).getIteratorMethod = function(it){
-  if(it != undefined)return it[ITERATOR]
-    || it['@@iterator']
-    || Iterators[classof(it)];
-};
-
-/***/ }),
-/* 113 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var addToUnscopables = __webpack_require__(88)
-  , step             = __webpack_require__(99)
-  , Iterators        = __webpack_require__(15)
+var addToUnscopables = __webpack_require__(76)
+  , step             = __webpack_require__(77)
+  , Iterators        = __webpack_require__(14)
   , toIObject        = __webpack_require__(9);
 
 // 22.1.3.4 Array.prototype.entries()
 // 22.1.3.13 Array.prototype.keys()
 // 22.1.3.29 Array.prototype.values()
 // 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = __webpack_require__(53)(Array, 'Array', function(iterated, kind){
+module.exports = __webpack_require__(45)(Array, 'Array', function(iterated, kind){
   this._t = toIObject(iterated); // target
   this._i = 0;                   // next index
   this._k = kind;                // kind
@@ -4316,84 +3297,37 @@ addToUnscopables('values');
 addToUnscopables('entries');
 
 /***/ }),
-/* 114 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 76 */
+/***/ (function(module, exports) {
 
-// 19.1.3.1 Object.assign(target, source)
-var $export = __webpack_require__(5);
-
-$export($export.S + $export.F, 'Object', {assign: __webpack_require__(103)});
+module.exports = function(){ /* empty */ };
 
 /***/ }),
-/* 115 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 77 */
+/***/ (function(module, exports) {
 
-var $export = __webpack_require__(5)
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', {create: __webpack_require__(33)});
-
-/***/ }),
-/* 116 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var $export = __webpack_require__(5);
-// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-$export($export.S + $export.F * !__webpack_require__(4), 'Object', {defineProperty: __webpack_require__(6).f});
+module.exports = function(done, value){
+  return {value: value, done: !!done};
+};
 
 /***/ }),
-/* 117 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.9 Object.getPrototypeOf(O)
-var toObject        = __webpack_require__(24)
-  , $getPrototypeOf = __webpack_require__(56);
-
-__webpack_require__(58)('getPrototypeOf', function(){
-  return function getPrototypeOf(it){
-    return $getPrototypeOf(toObject(it));
-  };
-});
-
-/***/ }),
-/* 118 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.14 Object.keys(O)
-var toObject = __webpack_require__(24)
-  , $keys    = __webpack_require__(12);
-
-__webpack_require__(58)('keys', function(){
-  return function keys(it){
-    return $keys(toObject(it));
-  };
-});
-
-/***/ }),
-/* 119 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.3.19 Object.setPrototypeOf(O, proto)
-var $export = __webpack_require__(5);
-$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(107).set});
-
-/***/ }),
-/* 120 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var LIBRARY            = __webpack_require__(20)
+var LIBRARY            = __webpack_require__(17)
   , global             = __webpack_require__(2)
-  , ctx                = __webpack_require__(14)
-  , classof            = __webpack_require__(49)
-  , $export            = __webpack_require__(5)
-  , isObject           = __webpack_require__(11)
-  , aFunction          = __webpack_require__(29)
-  , anInstance         = __webpack_require__(89)
-  , forOf              = __webpack_require__(92)
-  , speciesConstructor = __webpack_require__(109)
-  , task               = __webpack_require__(60).set
-  , microtask          = __webpack_require__(102)()
+  , ctx                = __webpack_require__(13)
+  , classof            = __webpack_require__(54)
+  , $export            = __webpack_require__(3)
+  , isObject           = __webpack_require__(10)
+  , aFunction          = __webpack_require__(31)
+  , anInstance         = __webpack_require__(79)
+  , forOf              = __webpack_require__(80)
+  , speciesConstructor = __webpack_require__(84)
+  , task               = __webpack_require__(55).set
+  , microtask          = __webpack_require__(86)()
   , PROMISE            = 'Promise'
   , TypeError          = global.TypeError
   , process            = global.process
@@ -4585,7 +3519,7 @@ if(!USE_NATIVE){
     this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
     this._n = false;          // <- notify
   };
-  Internal.prototype = __webpack_require__(106)($Promise.prototype, {
+  Internal.prototype = __webpack_require__(87)($Promise.prototype, {
     // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
     then: function then(onFulfilled, onRejected){
       var reaction    = newPromiseCapability(speciesConstructor(this, $Promise));
@@ -4611,8 +3545,8 @@ if(!USE_NATIVE){
 }
 
 $export($export.G + $export.W + $export.F * !USE_NATIVE, {Promise: $Promise});
-__webpack_require__(23)($Promise, PROMISE);
-__webpack_require__(108)(PROMISE);
+__webpack_require__(20)($Promise, PROMISE);
+__webpack_require__(88)(PROMISE);
 Wrapper = __webpack_require__(0)[PROMISE];
 
 // statics
@@ -4636,7 +3570,7 @@ $export($export.S + $export.F * (LIBRARY || !USE_NATIVE), PROMISE, {
     return capability.promise;
   }
 });
-$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(98)(function(iter){
+$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(89)(function(iter){
   $Promise.all(iter)['catch'](empty);
 })), PROMISE, {
   // 25.4.4.1 Promise.all(iterable)
@@ -4682,36 +3616,380 @@ $export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(98)(function
 });
 
 /***/ }),
-/* 121 */
+/* 79 */
+/***/ (function(module, exports) {
+
+module.exports = function(it, Constructor, name, forbiddenField){
+  if(!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)){
+    throw TypeError(name + ': incorrect invocation!');
+  } return it;
+};
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var ctx         = __webpack_require__(13)
+  , call        = __webpack_require__(81)
+  , isArrayIter = __webpack_require__(82)
+  , anObject    = __webpack_require__(5)
+  , toLength    = __webpack_require__(50)
+  , getIterFn   = __webpack_require__(83)
+  , BREAK       = {}
+  , RETURN      = {};
+var exports = module.exports = function(iterable, entries, fn, that, ITERATOR){
+  var iterFn = ITERATOR ? function(){ return iterable; } : getIterFn(iterable)
+    , f      = ctx(fn, that, entries ? 2 : 1)
+    , index  = 0
+    , length, step, iterator, result;
+  if(typeof iterFn != 'function')throw TypeError(iterable + ' is not iterable!');
+  // fast case for arrays with default iterator
+  if(isArrayIter(iterFn))for(length = toLength(iterable.length); length > index; index++){
+    result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
+    if(result === BREAK || result === RETURN)return result;
+  } else for(iterator = iterFn.call(iterable); !(step = iterator.next()).done; ){
+    result = call(iterator, f, step.value, entries);
+    if(result === BREAK || result === RETURN)return result;
+  }
+};
+exports.BREAK  = BREAK;
+exports.RETURN = RETURN;
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// call something on iterator step with safe closing on error
+var anObject = __webpack_require__(5);
+module.exports = function(iterator, fn, value, entries){
+  try {
+    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
+  // 7.4.6 IteratorClose(iterator, completion)
+  } catch(e){
+    var ret = iterator['return'];
+    if(ret !== undefined)anObject(ret.call(iterator));
+    throw e;
+  }
+};
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// check on default Array iterator
+var Iterators  = __webpack_require__(14)
+  , ITERATOR   = __webpack_require__(1)('iterator')
+  , ArrayProto = Array.prototype;
+
+module.exports = function(it){
+  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
+};
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var classof   = __webpack_require__(54)
+  , ITERATOR  = __webpack_require__(1)('iterator')
+  , Iterators = __webpack_require__(14);
+module.exports = __webpack_require__(0).getIteratorMethod = function(it){
+  if(it != undefined)return it[ITERATOR]
+    || it['@@iterator']
+    || Iterators[classof(it)];
+};
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.3.20 SpeciesConstructor(O, defaultConstructor)
+var anObject  = __webpack_require__(5)
+  , aFunction = __webpack_require__(31)
+  , SPECIES   = __webpack_require__(1)('species');
+module.exports = function(O, D){
+  var C = anObject(O).constructor, S;
+  return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
+};
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports) {
+
+// fast apply, http://jsperf.lnkit.com/fast-apply/5
+module.exports = function(fn, args, that){
+  var un = that === undefined;
+  switch(args.length){
+    case 0: return un ? fn()
+                      : fn.call(that);
+    case 1: return un ? fn(args[0])
+                      : fn.call(that, args[0]);
+    case 2: return un ? fn(args[0], args[1])
+                      : fn.call(that, args[0], args[1]);
+    case 3: return un ? fn(args[0], args[1], args[2])
+                      : fn.call(that, args[0], args[1], args[2]);
+    case 4: return un ? fn(args[0], args[1], args[2], args[3])
+                      : fn.call(that, args[0], args[1], args[2], args[3]);
+  } return              fn.apply(that, args);
+};
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global    = __webpack_require__(2)
+  , macrotask = __webpack_require__(55).set
+  , Observer  = global.MutationObserver || global.WebKitMutationObserver
+  , process   = global.process
+  , Promise   = global.Promise
+  , isNode    = __webpack_require__(15)(process) == 'process';
+
+module.exports = function(){
+  var head, last, notify;
+
+  var flush = function(){
+    var parent, fn;
+    if(isNode && (parent = process.domain))parent.exit();
+    while(head){
+      fn   = head.fn;
+      head = head.next;
+      try {
+        fn();
+      } catch(e){
+        if(head)notify();
+        else last = undefined;
+        throw e;
+      }
+    } last = undefined;
+    if(parent)parent.enter();
+  };
+
+  // Node.js
+  if(isNode){
+    notify = function(){
+      process.nextTick(flush);
+    };
+  // browsers with MutationObserver
+  } else if(Observer){
+    var toggle = true
+      , node   = document.createTextNode('');
+    new Observer(flush).observe(node, {characterData: true}); // eslint-disable-line no-new
+    notify = function(){
+      node.data = toggle = !toggle;
+    };
+  // environments with maybe non-completely correct, but existent Promise
+  } else if(Promise && Promise.resolve){
+    var promise = Promise.resolve();
+    notify = function(){
+      promise.then(flush);
+    };
+  // for other environments - macrotask based on:
+  // - setImmediate
+  // - MessageChannel
+  // - window.postMessag
+  // - onreadystatechange
+  // - setTimeout
+  } else {
+    notify = function(){
+      // strange IE + webpack dev server bug - use .call(global)
+      macrotask.call(global, flush);
+    };
+  }
+
+  return function(fn){
+    var task = {fn: fn, next: undefined};
+    if(last)last.next = task;
+    if(!head){
+      head = task;
+      notify();
+    } last = task;
+  };
+};
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var hide = __webpack_require__(7);
+module.exports = function(target, src, safe){
+  for(var key in src){
+    if(safe && target[key])target[key] = src[key];
+    else hide(target, key, src[key]);
+  } return target;
+};
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var global      = __webpack_require__(2)
+  , core        = __webpack_require__(0)
+  , dP          = __webpack_require__(4)
+  , DESCRIPTORS = __webpack_require__(6)
+  , SPECIES     = __webpack_require__(1)('species');
+
+module.exports = function(KEY){
+  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
+  if(DESCRIPTORS && C && !C[SPECIES])dP.f(C, SPECIES, {
+    configurable: true,
+    get: function(){ return this; }
+  });
+};
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var ITERATOR     = __webpack_require__(1)('iterator')
+  , SAFE_CLOSING = false;
+
+try {
+  var riter = [7][ITERATOR]();
+  riter['return'] = function(){ SAFE_CLOSING = true; };
+  Array.from(riter, function(){ throw 2; });
+} catch(e){ /* empty */ }
+
+module.exports = function(exec, skipClosing){
+  if(!skipClosing && !SAFE_CLOSING)return false;
+  var safe = false;
+  try {
+    var arr  = [7]
+      , iter = arr[ITERATOR]();
+    iter.next = function(){ return {done: safe = true}; };
+    arr[ITERATOR] = function(){ return iter; };
+    exec(arr);
+  } catch(e){ /* empty */ }
+  return safe;
+};
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(91);
+module.exports = __webpack_require__(0).Object.keys;
+
+/***/ }),
+/* 91 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 Object.keys(O)
+var toObject = __webpack_require__(21)
+  , $keys    = __webpack_require__(12);
+
+__webpack_require__(57)('keys', function(){
+  return function keys(it){
+    return $keys(toObject(it));
+  };
+});
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(93);
+module.exports = __webpack_require__(0).Object.getPrototypeOf;
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.9 Object.getPrototypeOf(O)
+var toObject        = __webpack_require__(21)
+  , $getPrototypeOf = __webpack_require__(52);
+
+__webpack_require__(57)('getPrototypeOf', function(){
+  return function getPrototypeOf(it){
+    return $getPrototypeOf(toObject(it));
+  };
+});
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(95), __esModule: true };
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(96);
+var $Object = __webpack_require__(0).Object;
+module.exports = function defineProperty(it, key, desc){
+  return $Object.defineProperty(it, key, desc);
+};
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(3);
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !__webpack_require__(6), 'Object', {defineProperty: __webpack_require__(4).f});
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(98), __esModule: true };
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(44);
+__webpack_require__(53);
+module.exports = __webpack_require__(39).f('iterator');
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(100), __esModule: true };
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(101);
+__webpack_require__(43);
+__webpack_require__(107);
+__webpack_require__(108);
+module.exports = __webpack_require__(0).Symbol;
+
+/***/ }),
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 // ECMAScript 6 symbols shim
 var global         = __webpack_require__(2)
-  , has            = __webpack_require__(7)
-  , DESCRIPTORS    = __webpack_require__(4)
-  , $export        = __webpack_require__(5)
-  , redefine       = __webpack_require__(59)
-  , META           = __webpack_require__(101).KEY
-  , $fails         = __webpack_require__(10)
+  , has            = __webpack_require__(8)
+  , DESCRIPTORS    = __webpack_require__(6)
+  , $export        = __webpack_require__(3)
+  , redefine       = __webpack_require__(47)
+  , META           = __webpack_require__(102).KEY
+  , $fails         = __webpack_require__(11)
   , shared         = __webpack_require__(36)
-  , setToStringTag = __webpack_require__(23)
-  , uid            = __webpack_require__(25)
+  , setToStringTag = __webpack_require__(20)
+  , uid            = __webpack_require__(19)
   , wks            = __webpack_require__(1)
-  , wksExt         = __webpack_require__(40)
-  , wksDefine      = __webpack_require__(39)
-  , keyOf          = __webpack_require__(100)
-  , enumKeys       = __webpack_require__(91)
-  , isArray        = __webpack_require__(95)
-  , anObject       = __webpack_require__(3)
+  , wksExt         = __webpack_require__(39)
+  , wksDefine      = __webpack_require__(40)
+  , keyOf          = __webpack_require__(103)
+  , enumKeys       = __webpack_require__(104)
+  , isArray        = __webpack_require__(105)
+  , anObject       = __webpack_require__(5)
   , toIObject      = __webpack_require__(9)
-  , toPrimitive    = __webpack_require__(38)
-  , createDesc     = __webpack_require__(22)
-  , _create        = __webpack_require__(33)
-  , gOPNExt        = __webpack_require__(105)
-  , $GOPD          = __webpack_require__(54)
-  , $DP            = __webpack_require__(6)
+  , toPrimitive    = __webpack_require__(33)
+  , createDesc     = __webpack_require__(18)
+  , _create        = __webpack_require__(34)
+  , gOPNExt        = __webpack_require__(106)
+  , $GOPD          = __webpack_require__(61)
+  , $DP            = __webpack_require__(4)
   , $keys          = __webpack_require__(12)
   , gOPD           = $GOPD.f
   , dP             = $DP.f
@@ -4835,11 +4113,11 @@ if(!USE_NATIVE){
 
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f   = $defineProperty;
-  __webpack_require__(55).f = gOPNExt.f = $getOwnPropertyNames;
-  __webpack_require__(21).f  = $propertyIsEnumerable;
-  __webpack_require__(34).f = $getOwnPropertySymbols;
+  __webpack_require__(60).f = gOPNExt.f = $getOwnPropertyNames;
+  __webpack_require__(24).f  = $propertyIsEnumerable;
+  __webpack_require__(41).f = $getOwnPropertySymbols;
 
-  if(DESCRIPTORS && !__webpack_require__(20)){
+  if(DESCRIPTORS && !__webpack_require__(17)){
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
   }
 
@@ -4914,7 +4192,7 @@ $JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function(){
 });
 
 // 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
-$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(8)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(7)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
 // 19.4.3.5 Symbol.prototype[@@toStringTag]
 setToStringTag($Symbol, 'Symbol');
 // 20.2.1.9 Math[@@toStringTag]
@@ -4923,46 +4201,397 @@ setToStringTag(Math, 'Math', true);
 setToStringTag(global.JSON, 'JSON', true);
 
 /***/ }),
-/* 122 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(39)('asyncIterator');
+var META     = __webpack_require__(19)('meta')
+  , isObject = __webpack_require__(10)
+  , has      = __webpack_require__(8)
+  , setDesc  = __webpack_require__(4).f
+  , id       = 0;
+var isExtensible = Object.isExtensible || function(){
+  return true;
+};
+var FREEZE = !__webpack_require__(11)(function(){
+  return isExtensible(Object.preventExtensions({}));
+});
+var setMeta = function(it){
+  setDesc(it, META, {value: {
+    i: 'O' + ++id, // object ID
+    w: {}          // weak collections IDs
+  }});
+};
+var fastKey = function(it, create){
+  // return primitive with prefix
+  if(!isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+  if(!has(it, META)){
+    // can't set metadata to uncaught frozen object
+    if(!isExtensible(it))return 'F';
+    // not necessary to add metadata
+    if(!create)return 'E';
+    // add missing metadata
+    setMeta(it);
+  // return object ID
+  } return it[META].i;
+};
+var getWeak = function(it, create){
+  if(!has(it, META)){
+    // can't set metadata to uncaught frozen object
+    if(!isExtensible(it))return true;
+    // not necessary to add metadata
+    if(!create)return false;
+    // add missing metadata
+    setMeta(it);
+  // return hash weak collections IDs
+  } return it[META].w;
+};
+// add metadata on freeze-family methods calling
+var onFreeze = function(it){
+  if(FREEZE && meta.NEED && isExtensible(it) && !has(it, META))setMeta(it);
+  return it;
+};
+var meta = module.exports = {
+  KEY:      META,
+  NEED:     false,
+  fastKey:  fastKey,
+  getWeak:  getWeak,
+  onFreeze: onFreeze
+};
 
 /***/ }),
-/* 123 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(39)('observable');
+var getKeys   = __webpack_require__(12)
+  , toIObject = __webpack_require__(9);
+module.exports = function(object, el){
+  var O      = toIObject(object)
+    , keys   = getKeys(O)
+    , length = keys.length
+    , index  = 0
+    , key;
+  while(length > index)if(O[key = keys[index++]] === el)return key;
+};
 
 /***/ }),
-/* 124 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
+
+// all enumerable object keys, includes symbols
+var getKeys = __webpack_require__(12)
+  , gOPS    = __webpack_require__(41)
+  , pIE     = __webpack_require__(24);
+module.exports = function(it){
+  var result     = getKeys(it)
+    , getSymbols = gOPS.f;
+  if(getSymbols){
+    var symbols = getSymbols(it)
+      , isEnum  = pIE.f
+      , i       = 0
+      , key;
+    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
+  } return result;
+};
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.2.2 IsArray(argument)
+var cof = __webpack_require__(15);
+module.exports = Array.isArray || function isArray(arg){
+  return cof(arg) == 'Array';
+};
+
+/***/ }),
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
+var toIObject = __webpack_require__(9)
+  , gOPN      = __webpack_require__(60).f
+  , toString  = {}.toString;
+
+var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
+  ? Object.getOwnPropertyNames(window) : [];
+
+var getWindowNames = function(it){
+  try {
+    return gOPN(it);
+  } catch(e){
+    return windowNames.slice();
+  }
+};
+
+module.exports.f = function getOwnPropertyNames(it){
+  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
+};
+
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(40)('asyncIterator');
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(40)('observable');
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(110), __esModule: true };
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(111);
+module.exports = __webpack_require__(0).Object.setPrototypeOf;
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.3.19 Object.setPrototypeOf(O, proto)
+var $export = __webpack_require__(3);
+$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(112).set});
+
+/***/ }),
+/* 112 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Works with __proto__ only. Old v8 can't work with null proto objects.
+/* eslint-disable no-proto */
+var isObject = __webpack_require__(10)
+  , anObject = __webpack_require__(5);
+var check = function(O, proto){
+  anObject(O);
+  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
+};
+module.exports = {
+  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+    function(test, buggy, set){
+      try {
+        set = __webpack_require__(13)(Function.call, __webpack_require__(61).f(Object.prototype, '__proto__').set, 2);
+        set(test, []);
+        buggy = !(test instanceof Array);
+      } catch(e){ buggy = true; }
+      return function setPrototypeOf(O, proto){
+        check(O, proto);
+        if(buggy)O.__proto__ = proto;
+        else set(O, proto);
+        return O;
+      };
+    }({}, false) : undefined),
+  check: check
+};
+
+/***/ }),
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(114), __esModule: true };
+
+/***/ }),
+/* 114 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(115);
+var $Object = __webpack_require__(0).Object;
+module.exports = function create(P, D){
+  return $Object.create(P, D);
+};
+
+/***/ }),
+/* 115 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(3)
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+$export($export.S, 'Object', {create: __webpack_require__(34)});
+
+/***/ }),
+/* 116 */
+/***/ (function(module, exports, __webpack_require__) {
+
 
 /**
- * Check if `fn` is a function.
- *
- * @param {Function} fn
- * @return {Boolean}
- * @api private
+ * Expose `Emitter`.
  */
-var isObject = __webpack_require__(41);
 
-function isFunction(fn) {
-  var tag = isObject(fn) ? Object.prototype.toString.call(fn) : '';
-  return tag === '[object Function]';
+if (true) {
+  module.exports = Emitter;
 }
 
-module.exports = isFunction;
+/**
+ * Initialize a new `Emitter`.
+ *
+ * @api public
+ */
+
+function Emitter(obj) {
+  if (obj) return mixin(obj);
+};
+
+/**
+ * Mixin the emitter properties.
+ *
+ * @param {Object} obj
+ * @return {Object}
+ * @api private
+ */
+
+function mixin(obj) {
+  for (var key in Emitter.prototype) {
+    obj[key] = Emitter.prototype[key];
+  }
+  return obj;
+}
+
+/**
+ * Listen on the given `event` with `fn`.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.on =
+Emitter.prototype.addEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
+    .push(fn);
+  return this;
+};
+
+/**
+ * Adds an `event` listener that will be invoked a single
+ * time then automatically removed.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.once = function(event, fn){
+  function on() {
+    this.off(event, on);
+    fn.apply(this, arguments);
+  }
+
+  on.fn = fn;
+  this.on(event, on);
+  return this;
+};
+
+/**
+ * Remove the given callback for `event` or all
+ * registered callbacks.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.off =
+Emitter.prototype.removeListener =
+Emitter.prototype.removeAllListeners =
+Emitter.prototype.removeEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+
+  // all
+  if (0 == arguments.length) {
+    this._callbacks = {};
+    return this;
+  }
+
+  // specific event
+  var callbacks = this._callbacks['$' + event];
+  if (!callbacks) return this;
+
+  // remove all handlers
+  if (1 == arguments.length) {
+    delete this._callbacks['$' + event];
+    return this;
+  }
+
+  // remove specific handler
+  var cb;
+  for (var i = 0; i < callbacks.length; i++) {
+    cb = callbacks[i];
+    if (cb === fn || cb.fn === fn) {
+      callbacks.splice(i, 1);
+      break;
+    }
+  }
+  return this;
+};
+
+/**
+ * Emit `event` with the given args.
+ *
+ * @param {String} event
+ * @param {Mixed} ...
+ * @return {Emitter}
+ */
+
+Emitter.prototype.emit = function(event){
+  this._callbacks = this._callbacks || {};
+  var args = [].slice.call(arguments, 1)
+    , callbacks = this._callbacks['$' + event];
+
+  if (callbacks) {
+    callbacks = callbacks.slice(0);
+    for (var i = 0, len = callbacks.length; i < len; ++i) {
+      callbacks[i].apply(this, args);
+    }
+  }
+
+  return this;
+};
+
+/**
+ * Return array of callbacks for `event`.
+ *
+ * @param {String} event
+ * @return {Array}
+ * @api public
+ */
+
+Emitter.prototype.listeners = function(event){
+  this._callbacks = this._callbacks || {};
+  return this._callbacks['$' + event] || [];
+};
+
+/**
+ * Check if this emitter has `event` handlers.
+ *
+ * @param {String} event
+ * @return {Boolean}
+ * @api public
+ */
+
+Emitter.prototype.hasListeners = function(event){
+  return !! this.listeners(event).length;
+};
 
 
 /***/ }),
-/* 125 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Module of mixed-in functions shared between node and client code
  */
-var isObject = __webpack_require__(41);
+var isObject = __webpack_require__(42);
 
 /**
  * Expose `RequestBase`.
@@ -5553,7 +5182,28 @@ RequestBase.prototype._setTimeouts = function() {
 
 
 /***/ }),
-/* 126 */
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Check if `fn` is a function.
+ *
+ * @param {Function} fn
+ * @return {Boolean}
+ * @api private
+ */
+var isObject = __webpack_require__(42);
+
+function isFunction(fn) {
+  var tag = isObject(fn) ? Object.prototype.toString.call(fn) : '';
+  return tag === '[object Function]';
+}
+
+module.exports = isFunction;
+
+
+/***/ }),
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -5561,7 +5211,7 @@ RequestBase.prototype._setTimeouts = function() {
  * Module dependencies.
  */
 
-var utils = __webpack_require__(128);
+var utils = __webpack_require__(120);
 
 /**
  * Expose `ResponseBase`.
@@ -5692,36 +5342,7 @@ ResponseBase.prototype._setStatusProperties = function(status){
 
 
 /***/ }),
-/* 127 */
-/***/ (function(module, exports) {
-
-var ERROR_CODES = [
-  'ECONNRESET',
-  'ETIMEDOUT',
-  'EADDRINFO',
-  'ESOCKETTIMEDOUT'
-];
-
-/**
- * Determine if a request should be retried.
- * (Borrowed from segmentio/superagent-retry)
- *
- * @param {Error} err
- * @param {Response} [res]
- * @returns {Boolean}
- */
-module.exports = function shouldRetry(err, res) {
-  if (err && err.code && ~ERROR_CODES.indexOf(err.code)) return true;
-  if (res && res.status && res.status >= 500) return true;
-  // Superagent timeout
-  if (err && 'timeout' in err && err.code == 'ECONNABORTED') return true;
-  if (err && 'crossDomain' in err) return true;
-  return false;
-};
-
-
-/***/ }),
-/* 128 */
+/* 120 */
 /***/ (function(module, exports) {
 
 
@@ -5794,180 +5415,605 @@ exports.cleanHeader = function(header, shouldStripCookie){
 };
 
 /***/ }),
+/* 121 */
+/***/ (function(module, exports) {
+
+var ERROR_CODES = [
+  'ECONNRESET',
+  'ETIMEDOUT',
+  'EADDRINFO',
+  'ESOCKETTIMEDOUT'
+];
+
+/**
+ * Determine if a request should be retried.
+ * (Borrowed from segmentio/superagent-retry)
+ *
+ * @param {Error} err
+ * @param {Response} [res]
+ * @returns {Boolean}
+ */
+module.exports = function shouldRetry(err, res) {
+  if (err && err.code && ~ERROR_CODES.indexOf(err.code)) return true;
+  if (res && res.status && res.status >= 500) return true;
+  // Superagent timeout
+  if (err && 'timeout' in err && err.code == 'ECONNABORTED') return true;
+  if (err && 'crossDomain' in err) return true;
+  return false;
+};
+
+
+/***/ }),
+/* 122 */
+/***/ (function(module, exports) {
+
+/**
+ * Export `ie`.
+ */
+
+module.exports = ie();
+
+/**
+ * Initialize `ie`
+ *
+ * @return {Number|undefined}
+ * @api public
+ */
+
+function ie() {
+  for( var v = 3,
+           el = document.createElement('b'),
+           // empty array as loop breaker (and exception-avoider) for non-IE and IE10+
+           all = el.all || [];
+       // i tag not well-formed since we know that IE5-IE9 won't mind
+       el.innerHTML = '<!--[if gt IE ' + (++v) + ']><i><![endif]-->',
+       all[0];
+     );
+  // return the documentMode for IE10+ compatibility
+  // non-IE will get undefined
+  return v > 4 ? v : document.documentMode;
+}
+
+
+/***/ }),
+/* 123 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _assign = __webpack_require__(124);
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _typeof2 = __webpack_require__(38);
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+var _promise = __webpack_require__(16);
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _classCallCheck2 = __webpack_require__(22);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(23);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _superagent = __webpack_require__(25);
+
+var request = _interopRequireWildcard(_superagent);
+
+var _superagentNoCache = __webpack_require__(26);
+
+var _superagentNoCache2 = _interopRequireDefault(_superagentNoCache);
+
+var _utils = __webpack_require__(27);
+
+var sdkUtils = _interopRequireWildcard(_utils);
+
+var _Task = __webpack_require__(128);
+
+var _Task2 = _interopRequireDefault(_Task);
+
+var _ESE_API = __webpack_require__(28);
+
+var SERVER_API = _interopRequireWildcard(_ESE_API);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var nocache = sdkUtils.isIE() ? _superagentNoCache2.default.withQueryStrings : _superagentNoCache2.default;
+
+/**
+ * The Service class is used to inspect and create tasks for a service.
+ */
+
+var Service = function () {
+  /**
+   * @param {GSF} server - The GSF server object.
+   * @param {string} serviceName - The name of the service.
+   */
+  function Service(server, serviceName) {
+    (0, _classCallCheck3.default)(this, Service);
+
+    /**
+     * The service name.
+     * @type {string}
+     */
+    this.name = serviceName;
+
+    // Server object.
+    this._server = server;
+  }
+
+  /**
+   * The ServiceInfo object contains information about a service.
+   * @typedef {Object} ServiceInfo
+   * @property {string} name - The name of the service.
+   * @property {string} description - A description of the service.
+   * @property {string[]} tasks - A list of available tasks on the service.
+   */
+
+  /**
+   * Retrieves the service information.
+   * @return {Promise<ServiceInfo, error>} Returns a Promise to the
+   *  ServiceInfo object.
+   */
+
+
+  (0, _createClass3.default)(Service, [{
+    key: 'info',
+    value: function info() {
+      var _this = this;
+
+      return new _promise2.default(function (resolve, reject) {
+        // Build service info url.
+        var url = [_this._server.rootURL, SERVER_API.SERVICES_PATH, _this.name].join('/');
+
+        // Get service info so we can pull off the tasks array.
+        request.get(url).use(nocache) // Prevents caching of *only* this request
+        .end(function (err, res) {
+          if (res && res.ok) {
+            // Build our version of server info.
+            var serviceInfo = {
+              name: res.body.name,
+              description: res.body.description,
+              tasks: res.body.tasks
+            };
+            resolve(serviceInfo);
+          } else {
+            var status = err && err.status ? ': ' + err.status : '';
+            var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
+            reject('Error requesting service info' + status + text);
+          }
+        });
+      });
+    }
+
+    /**
+     * Returns a task object.
+     * @param {string} taskName - The name of the task.
+     * @return {Task} Returns the task object.
+     */
+
+  }, {
+    key: 'task',
+    value: function task(taskName) {
+      return new _Task2.default(this, taskName);
+    }
+
+    /**
+     * Retrieves the array of task info objects available on the service.
+     * @version 1.1.0
+     * @return {Promise<TaskInfo[], error>} Returns a Promise to an array of TaskInfo objects.
+     */
+
+  }, {
+    key: 'taskInfoList',
+    value: function taskInfoList() {
+      var _this2 = this;
+
+      return new _promise2.default(function (resolve, reject) {
+        // Build service info url.
+        var url = [_this2._server.rootURL, SERVER_API.SERVICES_PATH, _this2.name].join('/');
+
+        // Get service info so we can pull off the tasks array.
+        request.get(url).query({ taskInfo: true }).use(nocache) // Prevents caching of *only* this request
+        .end(function (err, res) {
+          if (res && res.ok) {
+            var tasks = [];
+            res.body.tasks.forEach(function (task) {
+              if ((typeof task === 'undefined' ? 'undefined' : (0, _typeof3.default)(task)) === 'object') {
+                var newTask = (0, _assign2.default)({}, task);
+                newTask.parameters = {};
+                task.parameters.forEach(function (param) {
+                  newTask.parameters[param.name] = (0, _assign2.default)({}, param);
+                });
+                tasks.push(newTask);
+              } else {
+                reject('Unable to get task info list.');
+                return;
+              }
+            });
+            resolve(tasks);
+          } else {
+            var status = err && err.status ? ': ' + err.status : '';
+            var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
+            reject('Error requesting task info objects' + status + text);
+          }
+        });
+      });
+    }
+
+    /**
+     * Retrieves the array of task objects available on the service.
+     * @return {Promise<Task[], error>} Returns a Promise to an array of Task objects.
+     */
+
+  }, {
+    key: 'tasks',
+    value: function tasks() {
+      var _this3 = this;
+
+      return new _promise2.default(function (resolve, reject) {
+        _this3.info().then(function (info) {
+          var tasks = info.tasks.map(function (taskName) {
+            return new _Task2.default(_this3, taskName);
+          });
+          resolve(tasks);
+        }).catch(function (err) {
+          var status = err && err.status ? ': ' + err.status : '';
+          var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
+          reject('Error requesting tasks' + status + text);
+        });
+      });
+    }
+  }]);
+  return Service;
+}();
+
+exports.default = Service;
+module.exports = exports['default'];
+
+/***/ }),
+/* 124 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(125), __esModule: true };
+
+/***/ }),
+/* 125 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(126);
+module.exports = __webpack_require__(0).Object.assign;
+
+/***/ }),
+/* 126 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.3.1 Object.assign(target, source)
+var $export = __webpack_require__(3);
+
+$export($export.S + $export.F, 'Object', {assign: __webpack_require__(127)});
+
+/***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// 19.1.2.1 Object.assign(target, source, ...)
+var getKeys  = __webpack_require__(12)
+  , gOPS     = __webpack_require__(41)
+  , pIE      = __webpack_require__(24)
+  , toObject = __webpack_require__(21)
+  , IObject  = __webpack_require__(49)
+  , $assign  = Object.assign;
+
+// should work with symbols and should have deterministic property order (V8 bug)
+module.exports = !$assign || __webpack_require__(11)(function(){
+  var A = {}
+    , B = {}
+    , S = Symbol()
+    , K = 'abcdefghijklmnopqrst';
+  A[S] = 7;
+  K.split('').forEach(function(k){ B[k] = k; });
+  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+}) ? function assign(target, source){ // eslint-disable-line no-unused-vars
+  var T     = toObject(target)
+    , aLen  = arguments.length
+    , index = 1
+    , getSymbols = gOPS.f
+    , isEnum     = pIE.f;
+  while(aLen > index){
+    var S      = IObject(arguments[index++])
+      , keys   = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S)
+      , length = keys.length
+      , j      = 0
+      , key;
+    while(length > j)if(isEnum.call(S, key = keys[j++]))T[key] = S[key];
+  } return T;
+} : $assign;
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _stringify = __webpack_require__(129);
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _promise = __webpack_require__(16);
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _classCallCheck2 = __webpack_require__(22);
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__(23);
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _superagent = __webpack_require__(25);
+
+var request = _interopRequireWildcard(_superagent);
+
+var _superagentNoCache = __webpack_require__(26);
+
+var _superagentNoCache2 = _interopRequireDefault(_superagentNoCache);
+
+var _utils = __webpack_require__(27);
+
+var sdkUtils = _interopRequireWildcard(_utils);
+
+var _Job = __webpack_require__(64);
+
+var _Job2 = _interopRequireDefault(_Job);
+
+var _ESE_API = __webpack_require__(28);
+
+var SERVER_API = _interopRequireWildcard(_ESE_API);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var nocache = sdkUtils.isIE() ? _superagentNoCache2.default.withQueryStrings : _superagentNoCache2.default;
+
+/**
+ * The Task class is used to submit and inspect tasks.
+ */
+
+var Task = function () {
+  /**
+   * @param {Service} service - The service object.
+   * @param {string} taskName - The name of the task.
+   */
+  function Task(service, taskName) {
+    (0, _classCallCheck3.default)(this, Task);
+
+    /**
+     * The task name.
+     * @type {string}
+     */
+    this.name = taskName;
+
+    /**
+     * The parent service.
+     * @type {Service}
+     */
+    this.service = service;
+
+    // Server object.
+    this._server = service._server;
+
+    // Task endpoint for this task.
+    this._taskURL = [this._server.rootURL, SERVER_API.SERVICES_PATH, this.service.name, this.name].join('/');
+  }
+
+  /**
+   * Retrieves the task information.
+   * @return {Promise<TaskInfo, error>} Returns a promise to the TaskInfo object.
+   */
+
+
+  (0, _createClass3.default)(Task, [{
+    key: 'info',
+    value: function info() {
+      var _this = this;
+
+      return new _promise2.default(function (resolve, reject) {
+        // Task info url.
+        var taskURL = _this._taskURL;
+
+        // Get task info.
+        request.get(taskURL).use(nocache) // Prevents caching of *only* this request
+        .end(function (err, res) {
+          if (res && res.ok) {
+            // Replace parmeter array with object using name as key.
+            var taskInfo = res.body;
+            var parameters = {};
+
+            taskInfo.parameters.forEach(function (param) {
+              parameters[param.name] = param;
+            });
+
+            taskInfo.parameters = parameters;
+            resolve(taskInfo);
+          } else {
+            var status = err && err.status ? ': ' + err.status : '';
+            var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
+            reject('Error requesting task info' + status + text);
+          }
+        });
+      });
+    }
+
+    /**
+     * Options for submitting a job.
+     * @typedef {Object} SubmitOptions
+     * @property {JobInputParameters} options.parameters - The input parameters.
+     * @property {JobRoute} [options.route] - The route on which to run the job if
+     * there is one.
+     */
+
+    /**
+     * Submits the job.
+     * @param {SubmitOptions} options - The job submit options.
+     * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
+     * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
+     *  For more reliable job started information, listen to the GSF JobStarted
+     *  events as this callback may not always get called.  In some cases the job
+     *  can start before the callback is registered.
+     * @return {Promise<Job, error>} Returns a promise to a Job object.
+     */
+
+  }, {
+    key: 'submit',
+    value: function submit(options, progressCallback, startedCallback) {
+      var _this2 = this;
+
+      return new _promise2.default(function (resolve, reject) {
+        // Task info url.
+        var taskURL = _this2._taskURL;
+        var route = options.route || null;
+
+        // Build task submit url.
+        var url = route ? [taskURL, route, SERVER_API.SUBMIT_JOB_PATH].join('/') : [taskURL, SERVER_API.SUBMIT_JOB_PATH].join('/');
+
+        // Submit task as a job.
+        request.post(url).set('Content-Type', 'application/json').set('GSF-noredirect', 'true').send((0, _stringify2.default)(options.parameters || options)).use(nocache) // Prevents caching of *only* this request
+        .end(function (err, res) {
+          if (res && res.ok) {
+            // Return new job object using ID.
+            resolve(new _Job2.default(_this2._server, res.body.jobId, progressCallback, startedCallback));
+          } else {
+            var status = err && err.status ? ': ' + err.status : '';
+            var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
+            reject('Error submitting job to ' + url + ' ' + status + text);
+          }
+        });
+      });
+    }
+
+    /**
+     * Submits the job and waits for results.  Resolves the promise if the job
+     *  succeeds and rejects the promise if the job fails.
+     * @param {SubmitOptions} options - The job submit options.
+     * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
+     * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
+     *    For more reliable job started information, listen to the GSF JobStarted
+     *   events as this callback may not always get called.  In some cases the job
+     *   can start before the callback is registered.
+     * @return {Promise<JobResults, error>} Returns a promise to a Job object.
+     */
+
+  }, {
+    key: 'submitAndWait',
+    value: function submitAndWait(options, progressCallback, startedCallback) {
+      return this.submit(options, progressCallback, startedCallback).then(function (job) {
+        return job.wait();
+      });
+    }
+  }]);
+  return Task;
+}();
+
+exports.default = Task;
+
+/**
+ * The TaskInfo object contains information about a task.
+ * @typedef {object} TaskInfo
+ * @property {string} name - The name of the task.
+ * @property {string} [displayName] - A readable name for the task. This is only used for display
+ *   purposes.
+ * @property {string} [description] - A description of the task.
+ * @property {string} [parameters.<parameterName>.name] - The parameter name.
+ * @property {string} [parameters.<parameterName>.displayName] - A display name for the parameter.
+ * @property {string} [parameters.<parameterName>.description] - A description of the parameter.
+ * @property {string} parameters.<parameterName>.parameterType - A string set to either "required" or
+ *  "optional".
+ * @property {string} parameters.<parameterName>.direction - A string set to either "INPUT" or "OUTPUT".
+ * @property {string} parameters.<parameterName>.dataType - A type for the parameter.
+ * @property {string[]} [parameters.<parameterName>.choiceList] - A list of values that will be accepted as input
+ *   for the parameter.
+ * @property {any} [parameters.<parameterName>.default] - A default value for the parameter.
+ */
+
+/**
+ * The JobResults object contains the job results.
+ * @typedef {Object} JobResults
+ */
+
+/**
+ * Information about job progress.
+ * @typedef {Object} JobProgressInfo
+ * @property {number} jobId - The job id.
+ * @property {number} progress - The job progress percent.
+ * @property {string} [message] - The job progress message, if any.
+ */
+
+/**
+ * Called when a job starts processing.
+ *  For more reliable job started information, listen to the GSF JobStarted
+ * events as this callback may not always get called.
+ * In some cases the job can start before the callback is registered.
+ * @typedef {Object} JobStartedInfo
+ * @property {number} jobId - The job id.
+ */
+
+module.exports = exports['default'];
+
+/***/ }),
 /* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
-
-/**
- * Expose `Emitter`.
- */
-
-if (true) {
-  module.exports = Emitter;
-}
-
-/**
- * Initialize a new `Emitter`.
- *
- * @api public
- */
-
-function Emitter(obj) {
-  if (obj) return mixin(obj);
-};
-
-/**
- * Mixin the emitter properties.
- *
- * @param {Object} obj
- * @return {Object}
- * @api private
- */
-
-function mixin(obj) {
-  for (var key in Emitter.prototype) {
-    obj[key] = Emitter.prototype[key];
-  }
-  return obj;
-}
-
-/**
- * Listen on the given `event` with `fn`.
- *
- * @param {String} event
- * @param {Function} fn
- * @return {Emitter}
- * @api public
- */
-
-Emitter.prototype.on =
-Emitter.prototype.addEventListener = function(event, fn){
-  this._callbacks = this._callbacks || {};
-  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
-    .push(fn);
-  return this;
-};
-
-/**
- * Adds an `event` listener that will be invoked a single
- * time then automatically removed.
- *
- * @param {String} event
- * @param {Function} fn
- * @return {Emitter}
- * @api public
- */
-
-Emitter.prototype.once = function(event, fn){
-  function on() {
-    this.off(event, on);
-    fn.apply(this, arguments);
-  }
-
-  on.fn = fn;
-  this.on(event, on);
-  return this;
-};
-
-/**
- * Remove the given callback for `event` or all
- * registered callbacks.
- *
- * @param {String} event
- * @param {Function} fn
- * @return {Emitter}
- * @api public
- */
-
-Emitter.prototype.off =
-Emitter.prototype.removeListener =
-Emitter.prototype.removeAllListeners =
-Emitter.prototype.removeEventListener = function(event, fn){
-  this._callbacks = this._callbacks || {};
-
-  // all
-  if (0 == arguments.length) {
-    this._callbacks = {};
-    return this;
-  }
-
-  // specific event
-  var callbacks = this._callbacks['$' + event];
-  if (!callbacks) return this;
-
-  // remove all handlers
-  if (1 == arguments.length) {
-    delete this._callbacks['$' + event];
-    return this;
-  }
-
-  // remove specific handler
-  var cb;
-  for (var i = 0; i < callbacks.length; i++) {
-    cb = callbacks[i];
-    if (cb === fn || cb.fn === fn) {
-      callbacks.splice(i, 1);
-      break;
-    }
-  }
-  return this;
-};
-
-/**
- * Emit `event` with the given args.
- *
- * @param {String} event
- * @param {Mixed} ...
- * @return {Emitter}
- */
-
-Emitter.prototype.emit = function(event){
-  this._callbacks = this._callbacks || {};
-  var args = [].slice.call(arguments, 1)
-    , callbacks = this._callbacks['$' + event];
-
-  if (callbacks) {
-    callbacks = callbacks.slice(0);
-    for (var i = 0, len = callbacks.length; i < len; ++i) {
-      callbacks[i].apply(this, args);
-    }
-  }
-
-  return this;
-};
-
-/**
- * Return array of callbacks for `event`.
- *
- * @param {String} event
- * @return {Array}
- * @api public
- */
-
-Emitter.prototype.listeners = function(event){
-  this._callbacks = this._callbacks || {};
-  return this._callbacks['$' + event] || [];
-};
-
-/**
- * Check if this emitter has `event` handlers.
- *
- * @param {String} event
- * @return {Boolean}
- * @api public
- */
-
-Emitter.prototype.hasListeners = function(event){
-  return !! this.listeners(event).length;
-};
-
+module.exports = { "default": __webpack_require__(130), __esModule: true };
 
 /***/ }),
 /* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(66);
+var core  = __webpack_require__(0)
+  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
+module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
+  return $JSON.stringify.apply($JSON, arguments);
+};
 
+/***/ }),
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  esriJobSucceeded: 'Succeeded',
+  esriJobFailed: 'Failed',
+  esriJobSubmitted: 'Accepted',
+  esriJobExecuting: 'Started'
+};
+module.exports = exports['default'];
 
 /***/ })
 /******/ ]);

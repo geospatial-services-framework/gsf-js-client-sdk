@@ -1,12 +1,14 @@
 import * as request from 'superagent';
-import nocache from 'superagent-no-cache';
+import saNoCache from 'superagent-no-cache';
 import EventEmitter from 'events';
 
-import Service from 'Service';
-import Job from 'Job';
+import * as sdkUtils from './utils/utils.js';
+import Service from './Service';
+import Job from './Job';
+import * as SERVER_API from './utils/ESE_API';
+import EVENTS from './utils/EVENTS';
 
-import * as SERVER_API from 'ESE_API';
-import EVENTS from 'EVENTS';
+const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 
 /**
  * The Server class is used to connect to the server and retrieve information
@@ -78,8 +80,16 @@ class Server extends EventEmitter {
     // Allow infinite listeners.
     this.setMaxListeners(0);
 
+    // Use global EventSource for browsers and the node package for node.
+    let Eventsource;
+    if (NODE) { // Webpack defined global
+      Eventsource = require('eventsource');
+    } else {
+      Eventsource = EventSource;
+    }
+
     // Attach to server sent events and re broadcast.
-    this._events = new EventSource([this.URL,
+    this._events = new Eventsource([this.URL,
       SERVER_API.EVENTS_PATH].join('/'));
 
     // Emit succeeded and failed events.

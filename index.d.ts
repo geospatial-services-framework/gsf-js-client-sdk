@@ -114,6 +114,7 @@ declare namespace GSF {
         direction: string; 
         dataType: string;
         default?: any;
+        name: string;
     }
 
 }

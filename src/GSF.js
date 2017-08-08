@@ -1,4 +1,4 @@
-import Server from 'Server';
+import Server from './Server';
 
 /**
  * The GSF object provides an entry point to the SDK.
