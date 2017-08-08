@@ -253,8 +253,8 @@ describe('Testing Server class', function() {
           }
         });
 
-         // Use a timeout to prevent events firing before listeners
-         // are added.
+        // Use a timeout to prevent events firing before listeners
+        // are added.
         setTimeout(() => {
           server.service(testTasks.sleepTask.service)
             .task(testTasks.sleepTask.name)

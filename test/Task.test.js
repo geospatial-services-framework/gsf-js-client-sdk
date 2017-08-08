@@ -19,8 +19,8 @@ let server;
 /**
  * Begin tests
  */
- // Avoid using arrow functions with mocha:
- //  http://mochajs.org/#arrow-functions
+// Avoid using arrow functions with mocha:
+//  http://mochajs.org/#arrow-functions
 describe('Testing Task class', function() {
   before(function(done) {
     server = GSF.server(config.localHTTPServer);
