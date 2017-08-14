@@ -1,3 +1,5 @@
+![hero](https://geospatial-services-framework.github.io/assets/img/hero.jpg)
+
 # GSF JavaScript Client SDK
 [![Build Status](https://travis-ci.org/geospatial-services-framework/gsf-js-client-sdk.svg?branch=master)](https://travis-ci.org/geospatial-services-framework/gsf-js-client-sdk)
 [![npm Version](https://img.shields.io/npm/v/gsf-js-client-sdk.svg)](https://www.npmjs.com/package/gsf-js-client-sdk)
