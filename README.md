@@ -31,7 +31,7 @@ The SDK can be installed using [npm].
   `import { Job, Task } from 'gsf-js-client-sdk';`
 
 #### Using Node.js
--Require the SDK module:
+- Require the SDK:
 
   `const GSF = require('gsf-js-client-sdk/dist/GSF-node');`
 
