@@ -19,8 +19,8 @@ const TEST_JOB_ID = 1;
 /**
  * Begin tests
  */
- // Avoid using arrow functions with mocha:
- //  http://mochajs.org/#arrow-functions
+// Avoid using arrow functions with mocha:
+//  http://mochajs.org/#arrow-functions
 describe('Testing Job class', function() {
   before(function(done) {
     server = GSF.server(config.localHTTPServer);
@@ -133,12 +133,12 @@ describe('Testing Job class', function() {
             done();
           });
           job.cancel(force)
-          .then((bool) => {
-            expect(bool).to.be.true;
-          })
-          .catch((err) => {
-            done('Error cancelling job: ' + err);
-          });
+            .then((bool) => {
+              expect(bool).to.be.true;
+            })
+            .catch((err) => {
+              done('Error cancelling job: ' + err);
+            });
         }).catch((err) => {
           done('Error submitting job: ' + err);
         });
@@ -232,19 +232,19 @@ describe('Testing Job class', function() {
       it('fires when job completes', function(done) {
         const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
         task.submit({parameters: testTasks.sleepTask.parameters})
-        .then((job) => {
-          job.once('Completed', function(data) {
-            try {
-              expect(data.success).to.be.true;
-              done();
-            } catch (e) {
-              done(e);
-            }
+          .then((job) => {
+            job.once('Completed', function(data) {
+              try {
+                expect(data.success).to.be.true;
+                done();
+              } catch (e) {
+                done(e);
+              }
 
+            });
+          }).catch((err) => {
+            done('Error submitting job: ' + err);
           });
-        }).catch((err) => {
-          done('Error submitting job: ' + err);
-        });
       });
     });
 
@@ -254,22 +254,22 @@ describe('Testing Job class', function() {
         const task = new Task(server.service(testTasks.sleepTask.service),
           testTasks.sleepTask.name);
         task.submit({parameters: testTasks.sleepTask.parameters})
-        .then((job) => {
-          job.once('Failed', function(data) {
-            failedEventCalled = true;
-          });
-          job.once('Succeeded', function(data) {
-            try {
-              expect(failedEventCalled).to.be.false;
-              done();
-            } catch (e) {
-              done(e);
-            }
+          .then((job) => {
+            job.once('Failed', function(data) {
+              failedEventCalled = true;
+            });
+            job.once('Succeeded', function(data) {
+              try {
+                expect(failedEventCalled).to.be.false;
+                done();
+              } catch (e) {
+                done(e);
+              }
 
+            });
+          }).catch((err) => {
+            done('Error submitting job: ' + err);
           });
-        }).catch((err) => {
-          done('Error submitting job: ' + err);
-        });
       });
     });
 
@@ -279,24 +279,24 @@ describe('Testing Job class', function() {
         const task = new Task(server.service(testTasks.sleepTask.service),
           testTasks.sleepTaskFail.name);
         task.submit({parameters: testTasks.sleepTaskFail.parameters})
-        .then((job) => {
-          job.once('Succeeded', function(data) {
-            succeededEventCalled = true;
-          });
-          job.once('Failed', function(data) {
-            try {
-              expect(data).to.exist;
-              expect(data).to.be.an('object');
-              expect(succeededEventCalled).to.be.false;
-              done();
-            } catch (e) {
-              done(e);
-            }
+          .then((job) => {
+            job.once('Succeeded', function(data) {
+              succeededEventCalled = true;
+            });
+            job.once('Failed', function(data) {
+              try {
+                expect(data).to.exist;
+                expect(data).to.be.an('object');
+                expect(succeededEventCalled).to.be.false;
+                done();
+              } catch (e) {
+                done(e);
+              }
 
+            });
+          }).catch((err) => {
+            done('Error submitting job: ' + err);
           });
-        }).catch((err) => {
-          done('Error submitting job: ' + err);
-        });
       });
     });
 
@@ -314,37 +314,37 @@ describe('Testing Job class', function() {
         const task = new Task(server.service(testTasks.sleepTask.service),
           testTasks.sleepTask.name);
         task.submit({parameters: testTasks.sleepTask.parameters})
-        .then((job2) => {
-          job2.on('Progress', function(data) {
-            try {
-              nProgressEvents++;
-              expect(data.progress).to.exist;
-              expect(data.progress).to.be.a('number');
-              expect(data.progress).to.be.above(-1);
-              expect(data.progress).to.be.below(100);
-              expect(data.message).to.exist;
-              expect(data.message).to.equal(progressMessage);
-            } catch (e) {
-              done(e);
-            }
+          .then((job2) => {
+            job2.on('Progress', function(data) {
+              try {
+                nProgressEvents++;
+                expect(data.progress).to.exist;
+                expect(data.progress).to.be.a('number');
+                expect(data.progress).to.be.above(-1);
+                expect(data.progress).to.be.below(100);
+                expect(data.message).to.exist;
+                expect(data.message).to.equal(progressMessage);
+              } catch (e) {
+                done(e);
+              }
 
-          });
-          job2.once('Succeeded', function(data) {
-            try {
-              expect(nProgressEvents).to.equal(nProgress);
-              done();
-            } catch (e) {
-              done(e);
-            }
+            });
+            job2.once('Succeeded', function(data) {
+              try {
+                expect(nProgressEvents).to.equal(nProgress);
+                done();
+              } catch (e) {
+                done(e);
+              }
 
-          });
-          job2.once('Failed', function(data) {
-            done('Failed');
-          });
+            });
+            job2.once('Failed', function(data) {
+              done('Failed');
+            });
 
-        }).catch((err) => {
-          done('Error submitting job: ' + err);
-        });
+          }).catch((err) => {
+            done('Error submitting job: ' + err);
+          });
       });
     });
   });

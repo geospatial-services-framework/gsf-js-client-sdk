@@ -165,7 +165,7 @@ export default Task;
  * @typedef {Object} JobResults
  */
 
- /**
+/**
   * Information about job progress.
   * @typedef {Object} JobProgressInfo
   * @property {number} jobId - The job id.
@@ -173,7 +173,7 @@ export default Task;
   * @property {string} [message] - The job progress message, if any.
   */
 
- /**
+/**
   * Called when a job starts processing.
   *  For more reliable job started information, listen to the GSF JobStarted
   * events as this callback may not always get called.

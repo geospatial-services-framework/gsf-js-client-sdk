@@ -40,14 +40,14 @@ app.get(serviceEndpoint + '/:taskName/submitJob',
   requestHandler.submitJob);
 
 app.post(serviceEndpoint + '/:taskName/submitJob',
- requestHandler.submitJob);
+  requestHandler.submitJob);
 
- // Submit Job w/ route
+// Submit Job w/ route
 app.all(serviceEndpoint + '/:taskName/:route/submitJob',
   bodyParser.urlencoded({extended: false}));
 
 app.get(serviceEndpoint + '/:taskName/:route/submitJob',
- requestHandler.submitJob);
+  requestHandler.submitJob);
 
 // Job status endpoint.
 const jobsEndPoint = '/' + config.apiRoot + '/' + config.jobRoot;
