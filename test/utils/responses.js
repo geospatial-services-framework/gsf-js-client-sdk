@@ -19,7 +19,7 @@ module.exports = {
                   displayName: 'Param 1',
                   description: 'The first input parameter',
                   dataType: 'String',
-                  default: 'foo',
+                  defaultValue: 'foo',
                   direction: 'INPUT',
                   parameterType: 'required'
                 },
@@ -28,7 +28,7 @@ module.exports = {
                   displayName: 'Param 2',
                   description: 'The second input parameter',
                   dataType: 'String',
-                  default: 'bar',
+                  defaultValue: 'bar',
                   direction: 'INPUT',
                   parameterType: 'required'
                 },
@@ -52,7 +52,7 @@ module.exports = {
                   displayName: 'Param 1',
                   description: 'The first input parameter',
                   dataType: 'String',
-                  default: 'foo',
+                  defaultValue: 'foo',
                   direction: 'INPUT',
                   parameterType: 'required'
                 },
@@ -61,7 +61,7 @@ module.exports = {
                   displayName: 'Param 2',
                   description: 'The second input parameter',
                   dataType: 'String',
-                  default: 'bar',
+                  defaultValue: 'bar',
                   direction: 'INPUT',
                   parameterType: 'required'
                 },
@@ -85,7 +85,7 @@ module.exports = {
                   displayName: 'Param 1',
                   description: 'The first input parameter',
                   dataType: 'String',
-                  default: 'foo',
+                  defaultValue: 'foo',
                   direction: 'INPUT',
                   parameterType: 'required'
                 },
@@ -94,7 +94,7 @@ module.exports = {
                   displayName: 'Param 2',
                   description: 'The second input parameter',
                   dataType: 'String',
-                  default: 'bar',
+                  defaultValue: 'bar',
                   direction: 'INPUT',
                   parameterType: 'required'
                 },
