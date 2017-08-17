@@ -157,7 +157,7 @@ export default Task;
  * @property {string} parameters.<parameterName>.dataType - A type for the parameter.
  * @property {string[]} [parameters.<parameterName>.choiceList] - A list of values that will be accepted as input
  *   for the parameter.
- * @property {any} [parameters.<parameterName>.default] - A default value for the parameter.
+ * @property {any} [parameters.<parameterName>.defaultValue] - A default value for the parameter.
  */
 
 /**
