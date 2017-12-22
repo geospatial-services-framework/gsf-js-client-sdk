@@ -49,6 +49,7 @@ class Task {
       request
         .get(taskURL)
         .use(nocache) // Prevents caching of *only* this request
+        .set(this._server.headers)
         .end((err, res) => {
           if (res && res.ok) {
             // Replace parmeter array with object using name as key.
@@ -105,6 +106,7 @@ class Task {
         .post(url)
         .set('Content-Type', 'application/json')
         .set('GSF-noredirect', 'true')
+        .set(this._server.headers)
         .send(JSON.stringify(options.parameters || options))
         .use(nocache) // Prevents caching of *only* this request
         .end((err, res) => {

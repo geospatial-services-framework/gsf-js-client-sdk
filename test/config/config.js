@@ -2,6 +2,14 @@ export default {
   localHTTPServer: {
     protocol: 'http',
     address: 'localhost',
+    port: 9192,
+    headers: {
+      Authorization: 'testjwt'
+    }
+  },
+  localHTTPServerNoHeader: {
+    protocol: 'http',
+    address: 'localhost',
     port: 9192
   },
   fakeServer: {

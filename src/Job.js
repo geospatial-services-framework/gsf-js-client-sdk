@@ -143,6 +143,7 @@ class Job extends EventEmitter {
       request
         .get(jobStatusURL)
         .use(nocache) // Prevents caching of *only* this request
+        .set(this._server.headers)
         .end((err, res) => {
           if (res && res.ok) {
             // Create object from results array.
@@ -190,6 +191,7 @@ class Job extends EventEmitter {
       request
         .delete(url + kill)
         .use(nocache) // Prevents caching of *only* this request
+        .set(this._server.headers)
         .end((err, res) => {
           if (res && res.ok) {
             resolve(true);

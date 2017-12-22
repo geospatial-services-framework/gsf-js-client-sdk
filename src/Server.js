@@ -23,6 +23,7 @@ class Server extends EventEmitter {
    * @typedef {Object} ServerArgs
    * @property {string} ServerArgs.address - The server address/name.
    * @property {string} [ServerArgs.port=null] - The server port.
+   * @property {Object} ServerArgs.headers - The headers to be used in requests.
    * @property {string} [ServerArgs.APIRoot='ese'] - The API root endpoint.
    * @property {string} [ServerArgs.protocol='http'] - The protocol to use.
    */
@@ -51,6 +52,12 @@ class Server extends EventEmitter {
      * @type {number}
      */
     this.port = serverArgs.port || null;
+
+    /**
+     * The headers to use in requests
+     * @type {Object}
+     */
+    this.headers = serverArgs.headers || {};
 
     /**
      * The API root endpoint.  If none, set to empty string.
@@ -131,6 +138,7 @@ class Server extends EventEmitter {
       request
         .get(url)
         .use(nocache) // Prevents caching of *only* this request
+        .set(this.headers)
         .end((err, res) => {
           if (res && res.ok) {
             const services = res.body.services;
@@ -195,6 +203,7 @@ class Server extends EventEmitter {
       request
         .get(url)
         .use(nocache) // Prevents caching of *only* this request
+        .set(this.headers)
         .end((err, res) => {
           if (res && res.ok) {
             const jobs = res.body;

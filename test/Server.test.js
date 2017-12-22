@@ -34,6 +34,18 @@ describe('Testing Server class', function() {
       expect(server.protocol).to.equal('http');
       expect(server.address).to.equal(config.localHTTPServer.address);
       expect(server.port).to.equal(config.localHTTPServer.port);
+      expect(server.headers).to.equal(config.localHTTPServer.headers);
+      expect(server.URL).to.be.a('string');
+      expect(server.rootURL).to.be.a('string');
+      done();
+    });
+    it('returns a valid GSF object with no headers', function(done) {
+      const server = GSF.server(config.localHTTPServerNoHeader);
+      expect(server).to.be.an('object');
+      expect(server.protocol).to.equal('http');
+      expect(server.address).to.equal(config.localHTTPServerNoHeader.address);
+      expect(server.port).to.equal(config.localHTTPServerNoHeader.port);
+      expect(server.headers).to.be.empty;
       expect(server.URL).to.be.a('string');
       expect(server.rootURL).to.be.a('string');
       done();

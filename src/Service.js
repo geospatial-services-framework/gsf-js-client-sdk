@@ -48,6 +48,7 @@ class Service {
       request
         .get(url)
         .use(nocache) // Prevents caching of *only* this request
+        .set(this._server.headers)
         .end((err, res) => {
           if (res && res.ok) {
             // Build our version of server info.
@@ -91,6 +92,7 @@ class Service {
         .get(url)
         .query({ taskInfo: true })
         .use(nocache) // Prevents caching of *only* this request
+        .set(this._server.headers)
         .end((err, res) => {
           if (res && res.ok) {
             const tasks = [];
