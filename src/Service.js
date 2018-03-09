@@ -3,7 +3,7 @@ import saNoCache from 'superagent-no-cache';
 
 import * as sdkUtils from './utils/utils.js';
 import Task from './Task';
-import * as SERVER_API from './utils/ESE_API';
+import * as SERVER_API from './utils/GSF_API';
 
 const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 
@@ -31,7 +31,6 @@ class Service {
    * @typedef {Object} ServiceInfo
    * @property {string} name - The name of the service.
    * @property {string} description - A description of the service.
-   * @property {string[]} tasks - A list of available tasks on the service.
    */
 
   /**
@@ -53,8 +52,7 @@ class Service {
             // Build our version of server info.
             const serviceInfo = {
               name: res.body.name,
-              description: res.body.description,
-              tasks: res.body.tasks
+              description: res.body.description
             };
             resolve(serviceInfo);
           } else {
@@ -84,7 +82,8 @@ class Service {
   taskInfoList() {
     return new Promise((resolve, reject) => {
       // Build service info url.
-      const url = [this._server.rootURL, SERVER_API.SERVICES_PATH, this.name].join('/');
+      const url = [this._server.rootURL, SERVER_API.SERVICES_PATH,
+        this.name, SERVER_API.TASKS_PATH].join('/');
 
       // Get service info so we can pull off the tasks array.
       request
@@ -93,21 +92,7 @@ class Service {
         .use(nocache) // Prevents caching of *only* this request
         .end((err, res) => {
           if (res && res.ok) {
-            const tasks = [];
-            res.body.tasks.forEach((task) => {
-              if (typeof task === 'object') {
-                const newTask = Object.assign({}, task);
-                newTask.parameters = {};
-                task.parameters.forEach((param) => {
-                  newTask.parameters[param.name] = Object.assign({}, param);
-                });
-                tasks.push(newTask);
-              } else {
-                reject('Unable to get task info list.');
-                return;
-              }
-            });
-            resolve(tasks);
+            resolve(res.body.tasks);
           } else {
             const status = ((err && err.status) ? ': ' + err.status : '');
             const text = ((err && err.response && err.response.text) ? ': ' +
@@ -124,10 +109,10 @@ class Service {
    */
   tasks() {
     return new Promise((resolve, reject) => {
-      this.info()
-        .then((info) => {
-          const tasks = info.tasks.map((taskName) => {
-            return new Task(this, taskName);
+      this.taskInfoList()
+        .then((taskInfoList) => {
+          const tasks = taskInfoList.map((taskInfo) => {
+            return new Task(this, taskInfo.taskName);
           });
           resolve(tasks);
         })

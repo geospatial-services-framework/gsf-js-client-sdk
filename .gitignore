@@ -7,3 +7,4 @@ node_modules
 compliance
 .gitattributes
 .tmp
+package-lock.json

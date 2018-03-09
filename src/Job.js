@@ -3,8 +3,7 @@ import saNoCache from 'superagent-no-cache';
 import EventEmitter from 'events';
 
 import * as sdkUtils from './utils/utils.js';
-import * as SERVER_API from './utils/ESE_API';
-import * as STATUS_MAP from './utils/ESE_STATUS_MAP';
+import * as SERVER_API from './utils/GSF_API';
 import EVENTS from './utils/EVENTS';
 
 const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
@@ -45,9 +44,6 @@ class Job extends EventEmitter {
     this._jobURL = [this._server.rootURL, SERVER_API.JOBS_PATH,
       this.jobId].join('/');
 
-    // Job status endpoint.
-    this._jobStatusURL = [this._jobURL, SERVER_API.STATUS_PATH].join('/');
-
     // Allow infinite listeners.
     this.setMaxListeners(0);
 
@@ -85,13 +81,14 @@ class Job extends EventEmitter {
    */
   wait() {
     if (!this._waiting) {
+
       this._waiting = new Promise((resolve, reject) => {
         // Check to make sure it hasn't already completed.
         this.info().then((info) => {
           if (info.jobStatus === EVENTS.job.succeeded) {
-            resolve(info.results);
+            resolve(info.jobResults);
           } else if (info.jobStatus === EVENTS.job.failed) {
-            reject(info.jobErrorMessage);
+            reject(info.jobError || 'An error occurred.');
           }
         }).catch((err) => {
           reject(err);
@@ -100,12 +97,12 @@ class Job extends EventEmitter {
         // Listen to job events.
         this.once(EVENTS.job.succeeded, (data) => {
           this.info().then((info) => {
-            resolve(info.results);
+            resolve(info.jobResults);
           });
         });
         this.once(EVENTS.job.failed, (data) => {
           this.info().then((info) => {
-            reject(info.jobErrorMessage);
+            reject(info.jobError || 'An error occurred.');
           });
         });
       });
@@ -114,22 +111,25 @@ class Job extends EventEmitter {
     return this._waiting;
   }
 
+  // TODO: node info docs
   /**
    * The JobInfo object contains information about a job.
    * @typedef {Object} JobInfo
+   * @property {string} serviceName - The name of the service.
+   * @property {string} taskName - The name of the task.
+   * @property {JobOptions} jobOptions - Processing directives to submit along with the job.
+   * @property {Object} inputParameters - The input parameters.
    * @property {string} jobId - The job id.
+   * @property {number} jobProgress - The percentage of job completion.
+   * @property {string} jobMessage - A status message that is sent with progress updates.
    * @property {string} jobStatus - The status of the job. It can be Accepted,
    *  Started, Succeeded, or Failed.
-   * @property {string} jobStatusURL - The job status URL.
-   * @property {number} jobProgress - The percentage of job completion.
-   * @property {string} jobProgressMessage - The job progress message.
-   * @property {string} jobRoute - The job route.
-   * @property {string} taskName - The name of the task.
-   * @property {string} serviceName - The name of the service.
-   * @property {string} jobErrorMessage - Any errors generated during job execution.
-   * @property {Object} inputs - The input parameters.
-   * @property {Object[]} messages - Status messages.
-   * @property {Object} results - The job output.
+   * @property {NodeInfo} nodeInfo - Provides the information about the node the ran the job.
+   * @property {Object} jobResults - The job output results.
+   * @property {string} jobSubmitted - Time the jobs was submitted.
+   * @property {string} jobStart - Time the job started processing.
+   * @property {string} jobEnd - Time the job finished processing.
+   * @property {string} [jobError] - An error from the job, if there was one.
    */
 
   /**
@@ -138,25 +138,15 @@ class Job extends EventEmitter {
    */
   info() {
     return new Promise((resolve, reject) => {
-      const jobStatusURL = this._jobStatusURL;
+      const jobStatusURL = this._jobURL;
+
       // Get job status.
       request
         .get(jobStatusURL)
         .use(nocache) // Prevents caching of *only* this request
         .end((err, res) => {
           if (res && res.ok) {
-            // Create object from results array.
-            let jobInfo = res.body;
-            let results = {};
-            jobInfo.results.forEach((result) => {
-              results[result.name] = result.value;
-            });
-            jobInfo.results = results;
-
-            // Remap ese statuses to our own.
-            jobInfo.jobStatus = STATUS_MAP[jobInfo.jobStatus];
-
-            resolve(jobInfo);
+            resolve(res.body);
           } else {
             const status = ((err && err.status) ? ': ' + err.status : '');
             const text = ((err && err.response && err.response.text) ? ': ' +
@@ -185,10 +175,12 @@ class Job extends EventEmitter {
     const url = this._jobURL;
     return new Promise((resolve, reject) => {
       // Cancel force flag.
-      const kill = force ? '?kill=true' : '';
+      const requestStatus = force ? 'KillRequested' : 'CancelRequested';
       // Cancel job.
       request
-        .delete(url + kill)
+        .put(url)
+        .set('Content-Type', 'application/json')
+        .send(JSON.stringify({'jobStatus': requestStatus}))
         .use(nocache) // Prevents caching of *only* this request
         .end((err, res) => {
           if (res && res.ok) {

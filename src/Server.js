@@ -5,7 +5,7 @@ import EventEmitter from 'events';
 import * as sdkUtils from './utils/utils.js';
 import Service from './Service';
 import Job from './Job';
-import * as SERVER_API from './utils/ESE_API';
+import * as SERVER_API from './utils/GSF_API';
 import EVENTS from './utils/EVENTS';
 
 const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
@@ -23,7 +23,7 @@ class Server extends EventEmitter {
    * @typedef {Object} ServerArgs
    * @property {string} ServerArgs.address - The server address/name.
    * @property {string} [ServerArgs.port=null] - The server port.
-   * @property {string} [ServerArgs.APIRoot='ese'] - The API root endpoint.
+   * @property {string} [ServerArgs.APIRoot=''] - The API root endpoint.
    * @property {string} [ServerArgs.protocol='http'] - The protocol to use.
    */
 
@@ -197,8 +197,7 @@ class Server extends EventEmitter {
         .use(nocache) // Prevents caching of *only* this request
         .end((err, res) => {
           if (res && res.ok) {
-            const jobs = res.body;
-            const jobList = jobs
+            const jobList = res.body.jobs
               .map(job => new Job(this, job.jobId));
             resolve(jobList);
           } else {
