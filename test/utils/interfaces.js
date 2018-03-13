@@ -1,30 +1,37 @@
 export default {
   serviceInfo: {
-    name: {type: 'string'},
-    description: {type: 'string'},
-    tasks: {type: 'object'}
+    name: {type: 'string', required: true},
+    description: {type: 'string', required: false}
   },
   jobInfo: {
-    jobId: {type: 'number'},
-    jobStatus: {type: 'string'},
-    jobStatusURL: {type: 'string'},
-    jobProgress: {type: 'number'},
-    jobProgressMessage: {type: 'string'},
-    jobRoute: {type: 'string'},
-    taskName: {type: 'string'},
-    serviceName: {type: 'string'},
-    jobErrorMessage: {type: 'string'},
-    inputs: {type: 'object'},
-    results: {type: 'object'},
-    messages: {type: 'object'}
+    serviceName: {type: 'string', required: true},
+    taskName: {type: 'string', required: true},
+    jobOptions: {type: 'object', required: true},
+    inputParameters: {type: 'object', required: true},
+    jobId: {type: 'number', required: true},
+    jobProgress: {type: 'string', required: true},
+    // jobMessage: {type: 'string', required: true},
+    jobStatus: {type: 'string', required: true},
+    // nodeInfo: {type: 'object', required: true},
+    jobResults: {type: 'object', required: true},
+    jobSubmitted: {type: 'string', required: true},
+    jobStart: {type: 'string', required: true},
+    jobEnd: {type: 'string', required: true}
+    // jobError: {type: 'string', required: false}
   },
   taskInfo: {
-    name: {type: 'string'},
-    parameters: {type: 'object'}
+    taskName: {type: 'string', required: true},
+    // serviceName: {type: 'string', required: true},
+    displayName: {type: 'string', required: false},
+    description: {type: 'string', required: false},
+    inputParameters: {type: 'object', required: true},
+    outputParameters: {type: 'object', required: true}
   },
   taskParameters: {
-    name: {type: 'string'},
-    dataType: {type: 'string'},
-    parameterType: {type: 'string'}
+    name: {type: 'string', required: true},
+    displayName: {type: 'string', required: false},
+    description: {type: 'string', required: false},
+    type: {type: 'string', required: true},
+    required: {type: 'boolean', required: true}
   }
 };
