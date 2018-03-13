@@ -13,8 +13,8 @@ The GSF JavaScript Client SDK provides a client-side JavaScript library for inte
   - `/dist/GSF.min.js.map` - The minified web bundle source map file.
 
 ## Basic Usage
-### Importing the SDK 
-#### Using ECMAScript 2015 
+### Importing the SDK
+#### Using ECMAScript 2015
 - Import everything with GSF namespace:
 
   `import * as GSF from 'gsf-js-client-sdk';`
@@ -43,23 +43,23 @@ The GSF JavaScript Client SDK provides a client-side JavaScript library for inte
 const myAddress = 'MyServer';
 const myPort = 9191;
 
-// GSF Server
-const server = GSF.server({
-  address: myAddress,
-  port: myPort
+// GSF Client
+const client = GSF.client({
+    address: myAddress,
+    port: myPort
   });
 
 // Create a service object.
-const service = server.service('ENVI');
+const service = client.service('ENVI');
 
 // Create a task object.
 const task = service.task('SpectralIndex');
 
 const NDVIParameters = {
-  parameters: {
+  inputParameters: {
     INPUT_RASTER: {
       FACTORY: 'URLRaster',
-      URL: 'http://' + myAddress + ':' + myPort + '/ese/data/qb_boulder_msi'
+      URL: `http://${myAddress}:${myPort}/ese/data/qb_boulder_msi`
     },
     INDEX: 'Normalized Difference Vegetation Index'
   }
@@ -68,7 +68,7 @@ const NDVIParameters = {
 // Submit a job.
 task.submitAndWait(NDVIParameters).then((results) => {
     // Do something with results.
-    AddToMap(results.OUTPUT_RASTER);
+    AddToMap(results.OUTPUT_RASTER.best);
   }).catch((err) => {
     // Display error.
   });
@@ -116,5 +116,5 @@ We have provided a simple mock server implementation that can be used for very b
 
   $ start help/index.html
 
-[**GSF**]:../class/src/GSF.js~GSF.html  
+[**GSF**]:../class/src/GSF.js~GSF.html
 [server-sent events]:https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events

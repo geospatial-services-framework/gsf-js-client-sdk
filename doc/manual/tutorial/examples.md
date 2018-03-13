@@ -2,17 +2,17 @@
 Below are several examples of using the SDK with JavaScript.  For TypeScript specific examples please see the [TypeScript example](#typescript).  Before using the SDK, it is also recommended that you read the [best practices](#bestPractices) section.
 
 ## List Available Services
-The GSF [**Server**] object provides the ability to list the available services on the server.
+The GSF [**Client**] object provides the ability to list the available services on the server.
 
 ```javascript
-// GSF Server
-const server = GSF.server({
+// GSF Client
+const client = GSF.client({
     address: 'MyServer',
     port: '9191'
   });
 
 // Get an array of available services.
-server.services().then((services) => {
+client.services().then((services) => {
   services.forEach((service) => {
     // Print each service name.
     console.log(service.name);
@@ -26,14 +26,14 @@ server.services().then((services) => {
 The [**Service**] object provides the ability to list the available tasks on the service.  The example below lists all tasks associated with the ENVI service.
 
 ```javascript
-// GSF Server
-const server = GSF.server({
+// GSF Client
+const client = GSF.client({
     address: 'MyServer',
     port: '9191'
   });
 
 // Get the ENVI service.
-const service = server.service('ENVI');
+const service = client.service('ENVI');
 
 // Get an array of available tasks.
 service.tasks().then((tasks) => {
@@ -50,14 +50,14 @@ service.tasks().then((tasks) => {
 The [**Task**] object allows you to query the task and its parameters.  This may be useful when dynamically constructing UI elements representing task input parameters.
 
 ```javascript
-// GSF Server
-const server = GSF.server({
+// GSF Client
+const client = GSF.client({
     address: 'MyServer',
     port: '9191'
   });
 
 // Get the ENVI service.
-const service = server.service('ENVI');
+const service = client.service('ENVI');
 
 // Get a task.
 const task = service.task('SpectralIndex');
@@ -74,11 +74,11 @@ task.info().then((info) => {
 There are many ways to run tasks and retrieve results using the GSF JavaScript SDK.  The following examples assume you have completed the steps below to create a task object.
 
 ```javascript
-// Get a task.  
-const task = GSF.server({address:'MyServer',port:'9191'}).service('ENVI').task('SpectralIndex');
+// Get a task.
+const task = GSF.client({address:'MyServer',port:'9191'}).service('ENVI').task('SpectralIndex');
 
 const taskParameters = {
-  parameters: {
+  inputParameters: {
     INPUT_RASTER: {
       FACTORY: 'URLRaster',
       URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
@@ -101,7 +101,7 @@ task.submit(taskParameters)
 .then((results) => {
   // Do something with results.
   // This function is an example and is not provided by the SDK.
-  AddToMap(results.OUTPUT_RASTER);
+  AddToMap(results.OUTPUT_RASTER.best);
 }).catch((jobErrorMessage) => {
   // Display error.
 });
@@ -115,39 +115,39 @@ This function simply combines the [**.submit()**] and [**.wait()**] functions.  
 task.submitAndWait(taskParameters).then((results) => {
     // Do something with results.
     // This function is an example and is not provided by the SDK.
-    AddToMap(results.OUTPUT_RASTER);
+    AddToMap(results.OUTPUT_RASTER.best);
   }).catch((jobErrorMessage) => {
     // Display error.
   });
 ```
 
 ### Using Server Events
-The [**Server**] and [**Job**] objects emits all job events related to that server.  These classes inheret from Node's [**EventEmitter**] and support methods such as .on(), .once(), .removeAllListeners(), etc.  The following example shows how to listen for job events.
+The [**Client**] and [**Job**] objects emits all job events related to that server.  These classes inheret from Node's [**EventEmitter**] and support methods such as .on(), .once(), .removeAllListeners(), etc.  The following example shows how to listen for job events.
 
 ```javascript
-// GSF Server
-const server = GSF.server({
+// GSF Client
+const client = GSF.client({
     address: 'MyServer',
     port: '9191'
   });
 
 // Set up an event listeners.
-server.once('JobSucceeded', (data) => {
+client.once('JobSucceeded', (data) => {
   console.log('Job Succeeded: ', data.jobId);
-});  
+});
 
-server.once('JobFailed', (data) => {
+client.once('JobFailed', (data) => {
   console.log('Job Failed: ', data.jobId);
 });
 
 // Create a service object.
-const service = server.service('ENVI');
+const service = client.service('ENVI');
 
 // Create a task object.
 const task = service.task('SpectralIndex');
 
 const NDVIParameters = {
-  parameters: {
+  inputParameters: {
     INPUT_RASTER: {
       FACTORY: 'URLRaster',
       URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
@@ -160,7 +160,7 @@ const NDVIParameters = {
 task.submit(NDVIParameters);
 ```
 
-For a complete list of available events, please see the [**Server**] class documentation.
+For a complete list of available events, please see the [**Client**] class documentation.
 
 ## Tracking Job Progress
 There are two ways to track the progress of a single job.
@@ -178,39 +178,39 @@ const progressCallback = function (data) {
 task.submitAndWait(parameters, progressCallback).then((results) => {
     // Do something with results.
     // This function is an example and is not provided by the SDK.
-    AddToMap(results.OUTPUT_RASTER);
+    AddToMap(results.OUTPUT_RASTER.best);
   }).catch((jobErrorMessage) => {
     // Display error.
   });
 ```
 
 ### Progress Events
-Job progress events are emitted by the [**Server**] and [**Job**] objects.
+Job progress events are emitted by the [**Client**] and [**Job**] objects.
 
 #### Server Progress Events
-It is possible to listen to all job progress events using the [**Server**] object.
+It is possible to listen to all job progress events using the [**Client**] object.
 
 ```javascript
-// GSF Server
-const server = GSF.server({
+// GSF Client
+const client = GSF.client({
     address: 'MyServer',
     port: '9191'
   });
 
 // Set up an event listeners.
-server.on('JobProgress', (data) => {
+client.on('JobProgress', (data) => {
   console.log('Job ', data.jobId, ' progress percent: ', data.progress);
   console.log('Job ', data.jobId, ' progress message: ', data.message);
-});  
+});
 
 // Create a service object.
-const service = server.service('ENVI');
+const service = client.service('ENVI');
 
 // Create a task object.
 const task = service.task('SpectralIndex');
 
 const NDVIParameters = {
-  parameters: {
+  inputParameters: {
     INPUT_RASTER: {
       FACTORY: 'URLRaster',
       URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
@@ -227,20 +227,20 @@ task.submit(NDVIParameters);
 A [**Job**] object emits progress events for the particular job which it represents.
 
 ```javascript
-// GSF Server
-const server = GSF.server({
+// GSF Client
+const client = GSF.client({
     address: 'MyServer',
     port: '9191'
   });
 
 // Create a service object.
-const service = server.service('ENVI');
+const service = client.service('ENVI');
 
 // Create a task object.
 const task = service.task('SpectralIndex');
 
 const NDVIParameters = {
-  parameters: {
+  inputParameters: {
     INPUT_RASTER: {
       FACTORY: 'URLRaster',
       URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
@@ -255,7 +255,7 @@ task.submit(NDVIParameters).then((job) => {
   job.on('Progress', (data) => {
     console.log('Job ', data.jobId, ' progress percent: ', data.progress);
     console.log('Job ', data.jobId, ' progress message: ', data.message);
-  });  
+  });
 }).catch((jobErrorMessage) => {
   // Display error.
 });
@@ -266,7 +266,7 @@ Below is an example of cancelling a job based on its job ID.
 
 ```javascript
 const myJobId = 1;
-const job = new server.job(myJobId);
+const job = new client.job(myJobId);
 const force = false; // Do not force cancel.
 
 // Cancel Job
@@ -284,13 +284,13 @@ Below is an example of submitting a job using typescript.
 import * as GSF from 'gsf-js-client-sdk';
 
 // Get a task.
-const serverArgs: GSF.ServerArgs = {address: 'MyServer', port: '9191'};
-const myServer: GSF.Server = GSF.server(serverArgs);
-const ENVIService: GSF.Service = myServer.service('ENVI');
+const clientOptions: GSF.ClientOptions = {address: 'MyServer', port: '9191'};
+const myClient: GSF.Client = GSF.client(clientOptions);
+const ENVIService: GSF.Service = myClient.service('ENVI');
 const myTask: GSF.Task = ENVIService.task('SpectralIndex');
 
 const taskParameters: GSF.SubmitOptions = {
-    parameters: {
+    inputParameters: {
         INPUT_RASTER: {
             FACTORY: 'URLRaster',
             URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
@@ -304,7 +304,7 @@ task.submitAndWait(taskParameters)
     .then((results: GSF.JobResults) => {
         // Do something with results.
         // This function is an example and is not provided by the SDK.
-        AddToMap(results.OUTPUT_RASTER);
+        AddToMap(results.OUTPUT_RASTER.best);
     }).catch((jobErrorMessage) => {
         // Display error.
     });
@@ -312,13 +312,13 @@ task.submitAndWait(taskParameters)
 
 ## <a name="bestPractices"></a> Best Practices
 ### Connecting to Servers
-The examples throughout this documentation explain various concepts within the SDK using complete examples.  Most of the examples create a new 'GSF.server' object for every example.  This is to ensure a fully functional and self-contained example but is not a good practice when developing web apps.  It is recommended that you limit the number of Server (GSF.Server()) objects that you create.  Ideally, your app will create only one instance of this class and pass the reference around where needed.  This helps ensure consistency and prevent the possibility of exceeding the browser's per-domain connection limit.
+The examples throughout this documentation explain various concepts within the SDK using complete examples.  Most of the examples create a new 'GSF.client' object for every example.  This is to ensure a fully functional and self-contained example but is not a good practice when developing web apps.  It is recommended that you limit the number of Client (GSF.Client()) objects that you create.  Ideally, your app will create only one instance of this class and pass the reference around where needed.  This helps ensure consistency and prevent the possibility of exceeding the browser's per-domain connection limit.
 
 [**.wait()**]:../class/src/Job.js~Job.html#instance-method-wait
 [**.submitAndWait()**]:../class/src/Task.js~Task.html#instance-method-submitAndWait
 [**.submit()**]:../class/src/Task.js~Task.html#instance-method-submit
 
-[**Server**]:../class/src/Server.js~Server.html
+[**Client**]:../class/src/Client.js~Client.html
 [**Service**]:../class/src/Service.js~Service.html
 [**Task**]:../class/src/Task.js~Task.html
 [**Job**]:../class/src/Job.js~Job.html

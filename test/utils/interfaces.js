@@ -32,6 +32,7 @@ export default {
     displayName: {type: 'string', required: false},
     description: {type: 'string', required: false},
     type: {type: 'string', required: true},
-    required: {type: 'boolean', required: true}
+    required: {type: 'boolean', required: true},
+    choiceList: {type: 'object', required: false}
   }
 };

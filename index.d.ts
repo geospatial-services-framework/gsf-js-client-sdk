@@ -2,15 +2,15 @@
 declare namespace GSF {
 
         export interface API {
-            server(serverArgs: ServerArgs): Server;
+            client(clientOptions: ClientOptions): Client;
         }
-        export interface ServerArgs {
+        export interface ClientOptions {
             address: string;
             port?: string;
             APIRoot?: string;
             protocol?: string;
         }
-        export interface Server {
+        export interface Client {
             APIRoot: string;
             URL: string;
             address: string;
@@ -77,18 +77,24 @@ declare namespace GSF {
             status?: string;
         }
         export interface JobInfo {
-            jobId: string;
-            jobStatus: string;
-            jobStatusURL: string;
-            jobProgress: number;
-            jobProgressMessage: string;
-            jobRoute: string;
-            taskName: string;
             serviceName: string;
-            jobErrorMessage: string;
-            inputs: object;
-            messages: Array<object>;
-            results: object;
+            taskName: string;
+            jobOptions: JobOptions;
+            inputParameters: Object;
+            jobId: number;
+            jobProgress?: number;
+            jobMessage?: string;
+            jobStatus: string;
+            nodeInfo: Object;
+            jobResults: Object;
+            jobSubmitted: string;
+            jobStart: string;
+            jobEnd: string;
+            jobError?: string;
+        }
+        export interface JobOptions {
+            route: string;
+            storage: object;
         }
         export interface JobResults {
             [key: string]: any;
@@ -96,26 +102,30 @@ declare namespace GSF {
         export interface ServiceInfo {
             name: string;
             description: string;
-            tasks: Array<string>;
         }
         export interface TaskInfo {
-            name: string;
+            taskName: string;
+            serviceName: string;
             displayName?: string;
             description?: string;
-            parameters: TaskParameters;
+            inputParameters: InputParameter[];
+            outputParameters: OutputParameter[];
         }
-        export interface TaskParameters {
-            [key: string]: TaskParameter;
-        }
-        export interface TaskParameter {
+        export interface InputParameter {
             displayName?: string;
             description?: string;
             choiceList?: string[];
-            direction: string;
-            dataType: string;
-            defaultValue?: any;
+            type: string;
+            default?: any;
             name: string;
-            parameterType: string;
+            required: boolean;
+        }
+        export interface OutputParameter {
+            displayName?: string;
+            description?: string;
+            type: string;
+            name: string;
+            required: boolean;
         }
 
     }
