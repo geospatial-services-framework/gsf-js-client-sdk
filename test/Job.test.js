@@ -21,7 +21,7 @@ import GSF from '../src/GSF';
 import Task from '../src/Task';
 import Job from '../src/Job';
 
-let server;
+let client;
 
 const TEST_JOB_ID = 1;
 
@@ -32,19 +32,19 @@ const TEST_JOB_ID = 1;
 //  http://mochajs.org/#arrow-functions
 describe('Testing Job class', function() {
   before(function(done) {
-    server = GSF.server(config.localHTTPServer);
+    client = GSF.client(config.localHTTPServer);
     done();
   });
 
   afterEach(function(done) {
-    server.removeAllListeners('JobProgress');
+    client.removeAllListeners('JobProgress');
     done();
   });
 
   // ==========================================================
   describe('Job() constructor', function() {
     it('returns a valid job object', function(done) {
-      const job = new Job(server, TEST_JOB_ID);
+      const job = new Job(client, TEST_JOB_ID);
       expect(job).to.be.an('object');
       expect(job.jobId).to.equal(TEST_JOB_ID);
       done();
@@ -53,7 +53,7 @@ describe('Testing Job class', function() {
 
   describe('.jobInfo()', function() {
     it('retrieves the job information', function() {
-      const task = new Task(server.service(testTasks.sleepTask.service),
+      const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
 
       let job = null;
@@ -80,7 +80,7 @@ describe('Testing Job class', function() {
     it('rejects promise if error from request', function() {
       this.timeout(config.testTimeout2);
 
-      const job = GSF.server(config.fakeServer).job(TEST_JOB_ID);
+      const job = GSF.client(config.fakeServer).job(TEST_JOB_ID);
       return assert.isRejected(job.info(),
         /Error requesting job info/);
     });
@@ -89,8 +89,9 @@ describe('Testing Job class', function() {
 
   describe('.wait()', function() {
     it('waits for job completion', function() {
+      this.timeout(config.testTimeout2);
 
-      const wait = server
+      const wait = client
         .service(testTasks.sleepTask.service)
         .task(testTasks.sleepTask.name)
         .submit({inputParameters: testTasks.sleepTask.parameters})
@@ -105,7 +106,7 @@ describe('Testing Job class', function() {
     it('rejects promise if job fails', function() {
       this.timeout(config.testTimeout2);
 
-      const wait = server
+      const wait = client
         .service(testTasks.sleepTaskFail.service)
         .task(testTasks.sleepTaskFail.name)
         .submit({inputParameters: testTasks.sleepTaskFail.parameters})
@@ -122,7 +123,7 @@ describe('Testing Job class', function() {
 
       let params = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
       params.SLEEP_TIME = 150;
-      const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
+      const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
       task.submit(params)
         .then((job) => {
           const force = false;
@@ -141,7 +142,7 @@ describe('Testing Job class', function() {
     it('cancels job with kill=true', function(done) {
       this.timeout(config.testTimeout2);
 
-      const task = new Task(server.service(testTasks.sleepTask.service),
+      const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
       const params = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
       params.SLEEP_TIME = 350;
@@ -164,7 +165,7 @@ describe('Testing Job class', function() {
       this.timeout(config.testTimeout2);
 
       const badCancel = GSF
-        .server(config.fakeServer)
+        .client(config.fakeServer)
         .job(1)
         .cancel(false);
 
@@ -176,7 +177,7 @@ describe('Testing Job class', function() {
     describe('\'Started\' event', function() {
       it('fires when job starts', function() {
 
-        const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
+        const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
 
         const params1 = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
         params1.SLEEP_TIME = 800;
@@ -207,7 +208,7 @@ describe('Testing Job class', function() {
 
         const completedListener = sinon.spy();
 
-        return server
+        return client
           .service(testTasks.sleepTask.service)
           .task(testTasks.sleepTask.name)
           .submit({inputParameters: testTasks.sleepTask.parameters})
@@ -228,7 +229,7 @@ describe('Testing Job class', function() {
         const succeededListener = sinon.spy();
         const failedListener = sinon.spy();
         let jobId;
-        return server
+        return client
           .service(testTasks.sleepTask.service)
           .task(testTasks.sleepTask.name)
           .submit({inputParameters: testTasks.sleepTask.parameters})
@@ -250,7 +251,7 @@ describe('Testing Job class', function() {
         const succeededListener = sinon.spy();
         const failedListener = sinon.spy();
         let jobId;
-        return server
+        return client
           .service(testTasks.sleepTask.service)
           .task(testTasks.sleepTask.name)
           .submit({inputParameters: testTasks.sleepTaskFail.parameters})
@@ -284,7 +285,7 @@ describe('Testing Job class', function() {
         const completedListener = sinon.spy();
 
         setTimeout(() => {
-          return server
+          return client
             .service(testTasks.sleepTask.service)
             .task(testTasks.sleepTask.name)
             .submit({inputParameters: testData.sleepTask.parameters})

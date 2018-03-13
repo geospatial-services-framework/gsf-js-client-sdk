@@ -7,7 +7,7 @@ export default {
     progress: 'Progress',
     failed: 'Failed'
   },
-  server: {
+  client: {
     accepted: 'JobAccepted',
     started: 'JobStarted',
     completed: 'JobCompleted',

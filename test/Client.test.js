@@ -1,5 +1,5 @@
 /**
- * Tests for the Server class.
+ * Tests for the Client class.
  */
 const chai = require('chai');
 chai
@@ -17,38 +17,38 @@ import config from './config/config.js';
 
 import GSF from '../src/GSF';
 
-let server;
+let client;
 
 /**
  * Begin tests
  */
 // Avoid using arrow functions with mocha:
 //  http://mochajs.org/#arrow-functions
-describe('Testing Server class', function() {
+describe('Testing Client class', function() {
   before(function(done) {
-    server = GSF.server(config.localHTTPServer);
+    client = GSF.client(config.localHTTPServer);
     done();
   });
 
   afterEach(function(done) {
     // Remove progress listeners after each test.  Other events use .once().
-    server.removeAllListeners('JobAccepted');
-    server.removeAllListeners('JobCompleted');
-    server.removeAllListeners('JobSucceeded');
-    server.removeAllListeners('JobFailed');
-    server.removeAllListeners('JobProgress');
+    client.removeAllListeners('JobAccepted');
+    client.removeAllListeners('JobCompleted');
+    client.removeAllListeners('JobSucceeded');
+    client.removeAllListeners('JobFailed');
+    client.removeAllListeners('JobProgress');
     done();
   });
 
   // =============================================================
-  describe('Server() constructor', function() {
+  describe('Client() constructor', function() {
     it('returns a valid GSF object', function(done) {
-      expect(server).to.be.an('object');
-      expect(server.protocol).to.equal('http');
-      expect(server.address).to.equal(config.localHTTPServer.address);
-      expect(server.port).to.equal(config.localHTTPServer.port);
-      expect(server.URL).to.be.a('string');
-      expect(server.rootURL).to.be.a('string');
+      expect(client).to.be.an('object');
+      expect(client.protocol).to.equal('http');
+      expect(client.address).to.equal(config.localHTTPServer.address);
+      expect(client.port).to.equal(config.localHTTPServer.port);
+      expect(client.URL).to.be.a('string');
+      expect(client.rootURL).to.be.a('string');
       done();
     });
   });
@@ -57,7 +57,7 @@ describe('Testing Server class', function() {
     it('retrieves the services', function() {
       // this.timeout(config.testTimeout2);
       this.timeout('900000');
-      return server
+      return client
         .services()
         .then((serviceList) => {
           expect(serviceList).to.be.an.array;
@@ -73,7 +73,7 @@ describe('Testing Server class', function() {
       this.timeout(config.testTimeout2);
 
       const badServer = GSF
-        .server(config.fakeServer);
+        .client(config.fakeServer);
 
       return assert.isRejected(badServer.services(),
         /Error requesting services/);
@@ -84,12 +84,12 @@ describe('Testing Server class', function() {
   describe('.jobs()', function() {
     // Note: This test could fail the first time
     // if running against
-    // a brand new GSF server or one with a recently
+    // a brand new GSF client or one with a recently
     // flushed job database.
     it('retrieves a list of jobs', function() {
       this.timeout(config.testTimeout2);
 
-      return server
+      return client
         .jobs()
         .then((jobList) => {
           expect(jobList).to.be.an.array;
@@ -101,15 +101,15 @@ describe('Testing Server class', function() {
     });
     // Note: This test could fail the first time
     // if running against
-    // a brand new GSF server or one with a recently
+    // a brand new GSF client or one with a recently
     // flushed job database.
     it('retrieves a list of jobs with offset=1', function(done) {
       this.timeout(config.testTimeout1);
 
       const offset = 1;
-      server.jobs()
+      client.jobs()
         .then((jobList1) => {
-          server.jobs({offset: offset})
+          client.jobs({offset: offset})
             .then((jobList2) => {
               expect(jobList2).to.be.an.array;
               expect(jobList2[0].jobId).to.equal(jobList1[0].jobId + offset);
@@ -124,14 +124,14 @@ describe('Testing Server class', function() {
     });
     // Note: This test could fail the first time
     // if running against
-    // a brand new GSF server or one with a recently
+    // a brand new GSF client or one with a recently
     // flushed job database.
     it('retrieves a list of jobs with status=Succeeded', function() {
       this.timeout(config.testTimeout1);
 
       const status = 'Succeeded';
 
-      const jobList = server.jobs({status: status});
+      const jobList = client.jobs({status: status});
 
       return Promise.all([
         expect(jobList).to.eventually.be.fulfilled,
@@ -142,7 +142,7 @@ describe('Testing Server class', function() {
     });
     // Note: This test could fail the first time
     // if running against
-    // a brand new GSF server or one with a recently
+    // a brand new GSF client or one with a recently
     // flushed job database.
     it('retrieves a list of jobs with reverse=true', function(done) {
       this.timeout(config.testTimeout1);
@@ -157,9 +157,9 @@ describe('Testing Server class', function() {
         reverse: true
       };
 
-      server.jobs(filter1)
+      client.jobs(filter1)
         .then((jobList1) => {
-          server.jobs(filter2)
+          client.jobs(filter2)
             .then((jobList2) => {
               expect(jobList2).to.be.an.array;
               expect(jobList1).to.not.equal(jobList2);
@@ -174,7 +174,7 @@ describe('Testing Server class', function() {
     });
     // Note: This test could fail the first time
     // if running against
-    // a brand new GSF server or one with a recently
+    // a brand new GSF client or one with a recently
     // flushed job database.
     it('retrieves a list of jobs with limit=10', function() {
       this.timeout(config.testTimeout2);
@@ -183,7 +183,7 @@ describe('Testing Server class', function() {
         limit: 10
       };
 
-      return server
+      return client
         .jobs(filter)
         .then((jobList) => {
           expect(jobList).to.be.an.array;
@@ -198,8 +198,8 @@ describe('Testing Server class', function() {
     it('rejects promise if error from request', function() {
       this.timeout(config.testTimeout2);
 
-      const badServer = GSF.server(config.fakeServer);
-      return assert.isRejected(badServer.jobs(),
+      const badclient = GSF.client(config.fakeServer);
+      return assert.isRejected(badclient.jobs(),
         /Error requesting jobs/);
     });
 
@@ -207,7 +207,7 @@ describe('Testing Server class', function() {
 
   describe('.service()', function() {
     it('returns a new service object', function(done) {
-      const service = server.service(testTasks.sleepTask.service);
+      const service = client.service(testTasks.sleepTask.service);
       expect(service).to.be.an('object');
       expect(service.name).to.equal(testTasks.sleepTask.service);
       done();
@@ -217,7 +217,7 @@ describe('Testing Server class', function() {
   describe('.job()', function() {
     it('creates a job object', function(done) {
       const jobId = 1;
-      const job = server.job(jobId);
+      const job = client.job(jobId);
       expect(job).to.be.an('object');
       expect(job.jobId).to.equal(jobId);
       done();
@@ -230,12 +230,12 @@ describe('Testing Server class', function() {
         this.timeout(config.testTimeout2);
 
         const acceptedListener = sinon.spy();
-        server.on('JobAccepted', acceptedListener);
+        client.on('JobAccepted', acceptedListener);
 
         // Use a timeout to prevent events firing before listeners
         // are added.
         setTimeout(() => {
-          return server
+          return client
             .service(testTasks.sleepTask.service)
             .task(testTasks.sleepTask.name)
             .submitAndWait({inputParameters: testTasks.sleepTask.parameters})
@@ -251,12 +251,12 @@ describe('Testing Server class', function() {
         this.timeout(config.testTimeout2);
 
         const startedListener = sinon.spy();
-        server.on('JobStarted', startedListener);
+        client.on('JobStarted', startedListener);
 
         // Use a timeout to prevent events firing before listeners
         // are added.
         setTimeout(() => {
-          return server
+          return client
             .service(testTasks.sleepTask.service)
             .task(testTasks.sleepTask.name)
             .submitAndWait({inputParameters: testTasks.sleepTask.parameters})
@@ -274,10 +274,10 @@ describe('Testing Server class', function() {
         let jobId = null;
 
         const completedListener = sinon.spy();
-        server.on('JobCompleted', completedListener);
+        client.on('JobCompleted', completedListener);
 
         setTimeout(() => {
-          return server
+          return client
             .service(testTasks.sleepTask.service)
             .task(testTasks.sleepTask.name)
             .submit({inputParameters: testTasks.sleepTask.parameters})
@@ -300,16 +300,16 @@ describe('Testing Server class', function() {
         let jobId = null;
 
         const failedListener = sinon.spy();
-        server.on('JobFailed', failedListener);
+        client.on('JobFailed', failedListener);
 
         const completedListener = sinon.spy();
-        server.on('JobCompleted', completedListener);
+        client.on('JobCompleted', completedListener);
 
         const succeededListener = sinon.spy();
-        server.on('JobSucceeded', succeededListener);
+        client.on('JobSucceeded', succeededListener);
 
         setTimeout(() => {
-          return server
+          return client
             .service(testTasks.sleepTask.service)
             .task(testTasks.sleepTask.name)
             .submit({inputParameters: testTasks.sleepTask.parameters})
@@ -333,16 +333,16 @@ describe('Testing Server class', function() {
         let jobId = null;
 
         const failedListener = sinon.spy();
-        server.on('JobFailed', failedListener);
+        client.on('JobFailed', failedListener);
 
         const completedListener = sinon.spy();
-        server.on('JobCompleted', completedListener);
+        client.on('JobCompleted', completedListener);
 
         const succeededListener = sinon.spy();
-        server.on('JobSucceeded', succeededListener);
+        client.on('JobSucceeded', succeededListener);
 
         setTimeout(() => {
-          return server
+          return client
             .service(testTasks.sleepTaskFail.service)
             .task(testTasks.sleepTaskFail.name)
             .submit({inputParameters: testTasks.sleepTaskFail.parameters})
@@ -371,13 +371,13 @@ describe('Testing Server class', function() {
         testData.sleepTask.parameters.PROGRESS_MESSAGE = progressMessage;
 
         const progressListener = sinon.spy();
-        server.on('JobProgress', progressListener);
+        client.on('JobProgress', progressListener);
 
         const completedListener = sinon.spy();
-        server.on('JobCompleted', completedListener);
+        client.on('JobCompleted', completedListener);
 
         setTimeout(() => {
-          return server
+          return client
             .service(testTasks.sleepTask.service)
             .task(testTasks.sleepTask.name)
             .submit({inputParameters: testData.sleepTask.parameters})

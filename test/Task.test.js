@@ -23,7 +23,7 @@ import interfaces from './utils/interfaces.js';
 import config from './config/config.js';
 
 let task;
-let server;
+let client;
 
 /**
  * Begin tests
@@ -32,8 +32,8 @@ let server;
 //  http://mochajs.org/#arrow-functions
 describe('Testing Task class', function() {
   before(function(done) {
-    server = GSF.server(config.localHTTPServer);
-    task = new Task(server.service(testTasks.sleepTask.service),
+    client = GSF.client(config.localHTTPServer);
+    task = new Task(client.service(testTasks.sleepTask.service),
       testTasks.sleepTask.name);
     done();
   });
@@ -70,7 +70,7 @@ describe('Testing Task class', function() {
     it('rejects promise if error from request', function() {
       this.timeout(config.testTimeout2);
 
-      const badTask = GSF.server(config.fakeServer)
+      const badTask = GSF.client(config.fakeServer)
         .service(testTasks.sleepTask.service)
         .task(testTasks.sleepTask.name);
 
@@ -124,7 +124,7 @@ describe('Testing Task class', function() {
     it('rejects promise if error from request', function() {
       this.timeout(config.testTimeout2);
 
-      const badServer = GSF.server(config.fakeServer);
+      const badServer = GSF.client(config.fakeServer);
       const badTask = new Task(badServer.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
       const badSubmit = badTask.submit({inputParameters: testTasks.sleepTask.parameters});

@@ -27,8 +27,8 @@ let service;
 //  http://mochajs.org/#arrow-functions
 describe('Testing Service class', function() {
   before(function(done) {
-    const server = GSF.server(config.localHTTPServer);
-    service = new Service(server, testTasks.ENVIService);
+    const client = GSF.client(config.localHTTPServer);
+    service = new Service(client, testTasks.ENVIService);
     done();
   });
 
@@ -57,7 +57,7 @@ describe('Testing Service class', function() {
       this.timeout(config.testTimeout2);
 
       const badInfo = GSF
-        .server(config.fakeServer)
+        .client(config.fakeServer)
         .service(testTasks.ENVIService)
         .info();
 
@@ -97,7 +97,7 @@ describe('Testing Service class', function() {
       this.timeout(config.testTimeout2);
 
       const badInfoList = GSF
-        .server(config.fakeServer)
+        .client(config.fakeServer)
         .service(testTasks.ENVIService)
         .taskInfoList();
 
@@ -123,7 +123,7 @@ describe('Testing Service class', function() {
       this.timeout(config.testTimeout2);
 
       const badInfoList = GSF
-        .server(config.fakeServer)
+        .client(config.fakeServer)
         .service(testTasks.ENVIService)
         .tasks();
 

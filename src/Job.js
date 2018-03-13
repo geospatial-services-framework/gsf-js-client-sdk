@@ -65,8 +65,8 @@ class Job extends EventEmitter {
 
     // Listen for events from our server.  Pass
     // them into the handler with job event type.
-    Object.keys(EVENTS.server).forEach((key) => {
-      this._server.on(EVENTS.server[key], (data) => {
+    Object.keys(EVENTS.client).forEach((key) => {
+      this._server.on(EVENTS.client[key], (data) => {
         this._handler(EVENTS.job[key], data);
       });
     });

@@ -11,24 +11,24 @@ import EVENTS from './utils/EVENTS';
 const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 
 /**
- * The Server class is used to connect to the server and retrieve information
+ * The Client class is used to connect to the server and retrieve information
  *  about available services and jobs.
  * @example
- * // Obtain server object from GSF.
- * const server = GSF.server({address:'MyServer',port:9191});
+ * // Obtain Client object from GSF.
+ * const Client = GSF.client({address:'MyServer',port:9191});
  */
-class Server extends EventEmitter {
+class Client extends EventEmitter {
   /**
-   * The ServerArgs object contains information about the server.
-   * @typedef {Object} ServerArgs
-   * @property {string} ServerArgs.address - The server address/name.
-   * @property {string} [ServerArgs.port=null] - The server port.
-   * @property {string} [ServerArgs.APIRoot=''] - The API root endpoint.
-   * @property {string} [ServerArgs.protocol='http'] - The protocol to use.
+   * The ClientOptions object contains information about the server.
+   * @typedef {Object} ClientOptions
+   * @property {string} ClientOptions.address - The server address/name.
+   * @property {string} [ClientOptions.port=null] - The server port.
+   * @property {string} [ClientOptions.APIRoot=''] - The API root endpoint.
+   * @property {string} [ClientOptions.protocol='http'] - The protocol to use.
    */
 
   /**
-   * @param {ServerArgs} serverArgs - The object containing server information.
+   * @param {ClientOptions} clientOptions - The object containing server information.
    * @emits {JobCompleted}
    * @emits {JobSucceeded}
    * @emits {JobFailed}
@@ -36,7 +36,7 @@ class Server extends EventEmitter {
    * @emits {JobStarted}
    * @emits {JobAccepted}
    */
-  constructor(serverArgs) {
+  constructor(clientOptions) {
     // Init EventEmitter superclass.
     super();
 
@@ -44,25 +44,25 @@ class Server extends EventEmitter {
      * The server address/name.
      * @type {string}
      */
-    this.address = serverArgs.address;
+    this.address = clientOptions.address;
 
     /**
      * The server port.
      * @type {number}
      */
-    this.port = serverArgs.port || null;
+    this.port = clientOptions.port || null;
 
     /**
      * The API root endpoint.  If none, set to empty string.
      * @type {string}
      */
-    this.APIRoot = serverArgs.APIRoot || SERVER_API.ROOT_PATH;
+    this.APIRoot = clientOptions.APIRoot || SERVER_API.ROOT_PATH;
 
     /**
      * The protocol to use.
      * @type {string}
      */
-    this.protocol = serverArgs.protocol || 'http';
+    this.protocol = clientOptions.protocol || 'http';
 
     /**
      * The server url.
@@ -93,8 +93,8 @@ class Server extends EventEmitter {
       SERVER_API.EVENTS_PATH].join('/'));
 
     // Emit succeeded and failed events.
-    this.on(EVENTS.server.completed, (data) => {
-      this.emit(data.success ? EVENTS.server.succeeded : EVENTS.server.failed, data);
+    this.on(EVENTS.client.completed, (data) => {
+      this.emit(data.success ? EVENTS.client.succeeded : EVENTS.client.failed, data);
     });
 
     // Function to handle server sent events.
@@ -107,14 +107,14 @@ class Server extends EventEmitter {
 
     // Listen for events from our server.  Pass
     // them into the handler with job event type.
-    Object.keys(EVENTS.server).forEach((key) => {
+    Object.keys(EVENTS.client).forEach((key) => {
       // Server doesn't emit succeeded or failed events.
-      if ((EVENTS.server[key] === EVENTS.server.succeeded) ||
-       (EVENTS.server[key] === EVENTS.server.failed)) return;
+      if ((EVENTS.client[key] === EVENTS.client.succeeded) ||
+       (EVENTS.client[key] === EVENTS.client.failed)) return;
 
       // Add a listener for each of the sse's.
-      this._events.addEventListener(EVENTS.server[key],
-        handler.bind(this, EVENTS.server[key]));
+      this._events.addEventListener(EVENTS.client[key],
+        handler.bind(this, EVENTS.client[key]));
     });
   }
 
@@ -235,7 +235,7 @@ class Server extends EventEmitter {
 
 }
 
-export default Server;
+export default Client;
 
 /**
  * Emitted when a job completes.
