@@ -3,7 +3,7 @@ export default {
     protocol: 'http',
     address: 'localhost',
     APIRoot: '',
-    port: 9192
+    port: 9191
   },
   fakeServer: {
     protocol: 'http',

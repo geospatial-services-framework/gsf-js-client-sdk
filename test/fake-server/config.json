@@ -1,5 +1,5 @@
 {
-  "port": 9192,
+  "port": 9191,
   "apiRoot": "",
   "jobRoot": "jobs",
   "catalogRoot": "services"
