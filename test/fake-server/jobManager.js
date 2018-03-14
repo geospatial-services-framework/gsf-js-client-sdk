@@ -32,7 +32,7 @@ function jobManager() {
   };
 
   // Add jobs to the queue.
-  this.addToQueue = function(name, service, params, route, user, callback) {
+  this.addToQueue = function(name, service, params, jobOptions, user, callback) {
 
     // Assign a job id.
     let id = jobs.length;
@@ -41,18 +41,18 @@ function jobManager() {
     let job = {
       jobId: id,
       jobProgress: 0,
-      jobProgressMessage: '',
+      jobMessage: '',
       jobStatus: 'Accepted',
-      jobErrorMessage: '',
+      jobError: '',
       taskName: name,
-      jobStatusURL: '',
-      messages: {},
       serviceName: service,
-      inputs: params,
+      inputParameters: params,
       nodeInfo: {},
-      results: [],
-      jobRoute: route || '',
-      jobUser: user || ''
+      jobResults: [],
+      jobOptions: jobOptions || {},
+      jobStart: '',
+      jobEnd: '',
+      jobSubmitted: ''
     };
 
     // Add to the job queue
@@ -93,7 +93,7 @@ function jobManager() {
         });
 
         // Execute job.
-        engine.execute(null, job.taskName, job.inputs, null, createCallback(job));
+        engine.execute(null, job.taskName, job.inputParameters, null, createCallback(job));
       }
     }
   };
@@ -121,14 +121,9 @@ function jobManager() {
         processNextJobIfReady();
 
         job.jobProgress = 100;
-        job.jobStatus = 'esriJobSucceeded';
+        job.jobStatus = 'Succeeded';
         let results = [];
-        if (data) {
-          Object.keys(data).forEach(function(key) {
-            results.push({name: key, value: data[key]});
-          });
-        }
-        job.results = results;
+        job.jobResults = data;
 
         // If there was an error, add an error field and change status;
         if (parseInt(cancelJobId, 10) === job.jobId) {
@@ -136,8 +131,8 @@ function jobManager() {
         }
 
         if (err) {
-          job.jobErrorMessage = err;
-          job.jobStatus = 'esriJobFailed';
+          job.jobError = err;
+          job.jobStatus = 'Failed';
 
           // Job failed event.
           SSE.send({

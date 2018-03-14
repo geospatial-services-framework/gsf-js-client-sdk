@@ -9,7 +9,7 @@ export default {
     jobOptions: {type: 'object', required: true},
     inputParameters: {type: 'object', required: true},
     jobId: {type: 'number', required: true},
-    jobProgress: {type: 'string', required: true},
+    jobProgress: {type: 'number', required: true},
     // jobMessage: {type: 'string', required: true},
     jobStatus: {type: 'string', required: true},
     // nodeInfo: {type: 'object', required: true},

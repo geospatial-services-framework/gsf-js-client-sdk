@@ -16,7 +16,12 @@ function Sleep(API, inputs, scratch, jobResults) {
     if (inputs.FAIL) {
       jobResults.done(inputs.ERROR_MESSAGE);
     } else {
-      jobResults.done(null, {OUTPUT: inputs.INPUT_INTEGER});
+      jobResults.done(null,
+        {
+          OUTPUT: {
+            best: inputs.INPUT_INTEGER
+          }
+        });
     }
   }, inputs.SLEEP_TIME);
 }

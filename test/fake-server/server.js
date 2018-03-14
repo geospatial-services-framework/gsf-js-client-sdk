@@ -18,48 +18,42 @@ app.options('*', cors());
 app.use(bodyParser.json());
 const PORT = config.port;
 
-// Service endpoint.
-const serviceEndpoint = '/' + config.apiRoot + '/' + config.catalogRoot +
- '/' + ':service';
+const rootURL = (config.apiRoot === '') ? '/' : `/${config.apiRoot}/`;
 
-// Services
-app.get('/' + config.apiRoot + '/' + config.catalogRoot,
-  requestHandler.serviceInfo);
+// Service endpoint.
+const serviceEndpoint = rootURL + config.catalogRoot + '/' + ':service';
+
+// List Services
+app.get(rootURL + config.catalogRoot,
+  requestHandler.listServices);
 
 // Service Info
-app.get(serviceEndpoint, requestHandler.listTasks);
+app.get(serviceEndpoint, requestHandler.serviceInfo);
 
 // Task Info
-app.get(serviceEndpoint + '/:taskName', requestHandler.taskInfo);
+app.get(serviceEndpoint + '/tasks/:taskName', requestHandler.taskInfo);
 
-// Submit Job
-app.all(serviceEndpoint + '/:taskName/submitJob',
-  bodyParser.urlencoded({extended: false}));
-
-app.get(serviceEndpoint + '/:taskName/submitJob',
-  requestHandler.submitJob);
-
-app.post(serviceEndpoint + '/:taskName/submitJob',
-  requestHandler.submitJob);
-
-// Submit Job w/ route
-app.all(serviceEndpoint + '/:taskName/:route/submitJob',
-  bodyParser.urlencoded({extended: false}));
-
-app.get(serviceEndpoint + '/:taskName/:route/submitJob',
-  requestHandler.submitJob);
+// List Tasks by service
+app.get(serviceEndpoint + '/tasks', requestHandler.listTasks);
 
 // Job status endpoint.
-const jobsEndPoint = '/' + config.apiRoot + '/' + config.jobRoot;
+const jobsEndPoint = rootURL + config.jobRoot;
+
+// Submit Job
+app.all(jobsEndPoint,
+  bodyParser.urlencoded({extended: false}));
+
+app.post(jobsEndPoint,
+  requestHandler.submitJob);
 
 // Job List
 app.get(jobsEndPoint, requestHandler.listJobs);
 
 // Job Status
-app.get(jobsEndPoint + '/:id/status', requestHandler.jobStatus);
+app.get(jobsEndPoint + '/:id', requestHandler.jobStatus);
 
 // Cancel
-app.delete(jobsEndPoint + '/:id', requestHandler.cancelJob);
+app.put(jobsEndPoint + '/:id', requestHandler.cancelJob);
 
 let SseChannel = require('sse-channel');
 let SSE;

@@ -1,6 +1,6 @@
 {
   "port": 9192,
-  "apiRoot": "ese",
+  "apiRoot": "",
   "jobRoot": "jobs",
   "catalogRoot": "services"
 }
