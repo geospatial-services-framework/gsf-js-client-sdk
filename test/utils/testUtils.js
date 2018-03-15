@@ -1,10 +1,11 @@
 import { expect } from 'chai';
 
-const verifyProperties = function(isObj, expectProps) {
-  Object.keys(expectProps).forEach(function(propName) {
-    if (isObj[propName] || expectProps[propName].required) {
-      expect(isObj[propName]).to.exist;
-      expect(typeof isObj[propName]).to.equal(expectProps[propName].type);
+const verifyProperties = function(properties, interfaces) {
+  Object.keys(interfaces).forEach(function(propName) {
+    if (properties[propName] || interfaces[propName].required) {
+      expect(typeof properties[propName],
+        `${propName} is type ${interfaces[propName].type}`)
+        .to.equal(interfaces[propName].type);
     }
   });
 };

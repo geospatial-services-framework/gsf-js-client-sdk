@@ -1,12 +1,12 @@
 /**
  * Tests for the Service class.
  */
-const chai = require('chai');
-chai
-  .use(require('chai-things'))
-  .use(require('chai-as-promised'));
-/* eslint no-unused-vars: "off" */
-const should = chai.should();
+import chai, {should} from 'chai';
+import chaiThings from 'chai-things';
+import chaiAsPromised from 'chai-as-promised';
+chai.use(chaiThings);
+chai.use(chaiAsPromised);
+should();
 const expect = chai.expect;
 const assert = chai.assert;
 

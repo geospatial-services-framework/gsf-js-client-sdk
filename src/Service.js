@@ -12,18 +12,18 @@ const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
  */
 class Service {
   /**
-   * @param {GSF} server - The GSF server object.
+   * @param {Client} client - The GSF client object.
    * @param {string} serviceName - The name of the service.
    */
-  constructor(server, serviceName) {
+  constructor(client, serviceName) {
     /**
      * The service name.
      * @type {string}
      */
     this.name = serviceName;
 
-    // Server object.
-    this._server = server;
+    // Client object.
+    this._client = client;
   }
 
   /**
@@ -41,7 +41,7 @@ class Service {
   info() {
     return new Promise((resolve, reject) => {
       // Build service info url.
-      const url = [this._server.rootURL, SERVER_API.SERVICES_PATH, this.name].join('/');
+      const url = [this._client.rootURL, SERVER_API.SERVICES_PATH, this.name].join('/');
 
       // Get service info so we can pull off the tasks array.
       request
@@ -49,12 +49,7 @@ class Service {
         .use(nocache) // Prevents caching of *only* this request
         .end((err, res) => {
           if (res && res.ok) {
-            // Build our version of server info.
-            const serviceInfo = {
-              name: res.body.name,
-              description: res.body.description
-            };
-            resolve(serviceInfo);
+            resolve(res.body);
           } else {
             const status = ((err && err.status) ? ': ' + err.status : '');
             const text = ((err && err.response && err.response.text) ? ': ' +
@@ -82,7 +77,7 @@ class Service {
   taskInfoList() {
     return new Promise((resolve, reject) => {
       // Build service info url.
-      const url = [this._server.rootURL, SERVER_API.SERVICES_PATH,
+      const url = [this._client.rootURL, SERVER_API.SERVICES_PATH,
         this.name, SERVER_API.TASKS_PATH].join('/');
 
       // Get service info so we can pull off the tasks array.

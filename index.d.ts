@@ -53,7 +53,10 @@ declare namespace GSF {
         }
 
         export interface SubmitOptions {
-            parameters: object;
+            inputParameters: object;
+            jobOptions?: JobOptions;
+        }
+        export interface JobOptions {
             route?: string;
         }
         export interface ProgressCallback {
@@ -82,20 +85,17 @@ declare namespace GSF {
             jobOptions: JobOptions;
             inputParameters: Object;
             jobId: number;
-            jobProgress?: number;
-            jobMessage?: string;
+            jobProgress: number;
+            jobMessage: string;
             jobStatus: string;
             nodeInfo: Object;
             jobResults: Object;
             jobSubmitted: string;
             jobStart: string;
             jobEnd: string;
-            jobError?: string;
+            jobError: string;
         }
-        export interface JobOptions {
-            route: string;
-            storage: object;
-        }
+
         export interface JobResults {
             [key: string]: any;
         }
@@ -106,23 +106,23 @@ declare namespace GSF {
         export interface TaskInfo {
             taskName: string;
             serviceName: string;
-            displayName?: string;
-            description?: string;
+            displayName: string;
+            description: string;
             inputParameters: InputParameter[];
             outputParameters: OutputParameter[];
         }
         export interface InputParameter {
-            displayName?: string;
-            description?: string;
-            choiceList?: string[];
+            displayName: string;
+            description: string;
+            choiceList: string[];
             type: string;
-            default?: any;
+            default: any;
             name: string;
             required: boolean;
         }
         export interface OutputParameter {
-            displayName?: string;
-            description?: string;
+            displayName: string;
+            description: string;
             type: string;
             name: string;
             required: boolean;

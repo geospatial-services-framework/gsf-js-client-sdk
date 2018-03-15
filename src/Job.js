@@ -13,7 +13,7 @@ const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
  */
 class Job extends EventEmitter {
   /**
-   * @param {GSF} server - The server object.
+   * @param {Client} client - The GSF Client object.
    * @param {number} jobId - The jobId.
    * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
    * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
@@ -27,7 +27,7 @@ class Job extends EventEmitter {
    * @emits {Accepted}
    * @emits {Progress}
    */
-  constructor(server, jobId, progressCallback, startedCallback) {
+  constructor(client, jobId, progressCallback, startedCallback) {
     // Init EventEmitter superclass.
     super();
 
@@ -38,10 +38,10 @@ class Job extends EventEmitter {
     this.jobId = jobId;
 
     // Server object.
-    this._server = server;
+    this._client = client;
 
     // Job endpoint.
-    this._jobURL = [this._server.rootURL, SERVER_API.JOBS_PATH,
+    this._jobURL = [this._client.rootURL, SERVER_API.JOBS_PATH,
       this.jobId].join('/');
 
     // Allow infinite listeners.
@@ -66,7 +66,7 @@ class Job extends EventEmitter {
     // Listen for events from our server.  Pass
     // them into the handler with job event type.
     Object.keys(EVENTS.client).forEach((key) => {
-      this._server.on(EVENTS.client[key], (data) => {
+      this._client.on(EVENTS.client[key], (data) => {
         this._handler(EVENTS.job[key], data);
       });
     });
@@ -129,7 +129,7 @@ class Job extends EventEmitter {
    * @property {string} jobSubmitted - Time the jobs was submitted.
    * @property {string} jobStart - Time the job started processing.
    * @property {string} jobEnd - Time the job finished processing.
-   * @property {string} [jobError] - An error from the job, if there was one.
+   * @property {string} jobError - An error from the job, if there was one.
    */
 
   /**

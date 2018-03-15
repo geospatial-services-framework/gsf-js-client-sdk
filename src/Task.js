@@ -28,8 +28,8 @@ class Task {
      */
     this.service = service;
 
-    // Server object.
-    this._server = service._server;
+    // Client object.
+    this._client = service._client;
   }
 
   /**
@@ -39,7 +39,7 @@ class Task {
   info() {
     return new Promise((resolve, reject) => {
       // Task info url.
-      const taskURL = [this._server.rootURL, SERVER_API.SERVICES_PATH,
+      const taskURL = [this._client.rootURL, SERVER_API.SERVICES_PATH,
         this.service.name, SERVER_API.TASKS_PATH, this.name].join('/');
 
       // Get task info.
@@ -73,22 +73,22 @@ class Task {
     return new Promise((resolve, reject) => {
 
       // Build task submit url.
-      const url = [this._server.rootURL, SERVER_API.JOBS_PATH].join('/');
-      const jobOptions = JSON.parse(JSON.stringify(submitOptions));
-      jobOptions.taskName = this.name;
-      jobOptions.serviceName = this.service.name;
+      const url = [this._client.rootURL, SERVER_API.JOBS_PATH].join('/');
+      const options = JSON.parse(JSON.stringify(submitOptions));
+      options.taskName = this.name;
+      options.serviceName = this.service.name;
 
       // Submit task as a job.
       request
         .post(url)
         .set('Content-Type', 'application/json')
-        .send(JSON.stringify(jobOptions))
+        .send(JSON.stringify(options))
         .set('GSF-noredirect', 'true')
         .use(nocache) // Prevents caching of *only* this request
         .end((err, res) => {
           if (res && res.ok) {
             // Return new job object using ID.
-            resolve(new Job(this._server, res.body.jobID, progressCallback,
+            resolve(new Job(this._client, res.body.jobID, progressCallback,
               startedCallback));
           } else {
             const status = ((err && err.status) ? ': ' + err.status : '');
@@ -126,7 +126,7 @@ export default Task;
  * @property {Object} inputParameters - The input parameters to the job.  This is
  *  an object where the keys represent the names of the
  *  input parameters and the values are the inputs to the task.
- * @property {JobOptions} jobOptions - Processing options to be used when running the job.
+ * @property {JobOptions} [jobOptions] - Processing options to be used when running the job.
  */
 
 /**
@@ -134,43 +134,6 @@ export default Task;
  * @typedef {Object} JobOptions
  * @property {JobRoute} [route] - The route on which to run the job if
  * there is one.
- * @property {JobStorageOptions} [storage] - The job storage options.  This is used for
- * specifying cloud storage for job output.
- */
-
-/* eslint-disable max-len */
-// TODO: Use best way to doc
-/**
- * @typedef {AmazonS3JobStorageOptions | AzureBlockBlobJobStorageOptions | GoogleCloudJobStorageOptions} JobStorageOptions
- */
-/* eslint-enable max-len */
-
-/**
- * @typedef {Object} AmazonS3JobStorageOptions
- * @property {string} [provider] - Set to 'AWS_S3' for Amazon S3 storage.
- * @property {string} [S3Bucket] - Name of the S3 bucket to use.
- * @property {string} [S3Root] - A location (path prefix) within the bucket.
- * @property {string} [accessKeyId] - Access key ID for the S3 bucket.
- * @property {string} [secretAccessKey] - Secret access key for the S3 bucket.
- */
-
-/**
- * @typedef {Object} AzureBlockBlobJobStorageOptions
- * @property {string} [provider] - Set to 'Azure_BlockBlob' for Azure Block Blob storage.
- * @property {string} [containerName] - Name of the Azure Block Blob container to use.
- *  The container name must be all lowercase.
- * @property {string} [host] - Host endpoint URI for connecting to the storage container.
- * @property {string} [sasToken] - Shared Access Signature (SAS) token.
- */
-
-/**
- * @typedef {Object} GoogleCloudJobStorageOptions
- * @property {string} [provider] - Set to 'Google_CS' for Azure Block Blob storage.
- * @property {string} [GCloudBucket] - Name of the bucket.
- * @property {string} [GCloudRoot] - A location (prefix) within the bucket.
- * @property {string} [credentials] - An object containing private_key and
- *  client_email for a service account that has write access to the bucket,
- *  obtained from the Google Developers Console.
  */
 
 /**
@@ -178,9 +141,9 @@ export default Task;
  * @typedef {Object} TaskInfo
  * @property {string} taskName - The name of the task.
  * @property {string} serviceName - The name of the service.
- * @property {string} [displayName] - A readable name for the task. This is only used for display
+ * @property {string} displayName - A readable name for the task. This is only used for display
  *   purposes.
- * @property {string} [description] - A description of the task.
+ * @property {string} description - A description of the task.
  *
  * @property {InputParameter[]} inputParameters - An array containing the input parameter definitions.
  * @property {OutputParameter[]} outputParameters - An array containing the output parameter definitions.
