@@ -20,8 +20,8 @@ The SDK can be installed using [npm].
 
     $ npm install gsf-js-client-sdk --save
 
-### Importing the SDK 
-#### Using ECMAScript 2015 
+### Importing the SDK
+#### Using ECMAScript 2015
 - Import everything with GSF namespace:
 
   `import * as GSF from 'gsf-js-client-sdk';`
@@ -51,20 +51,20 @@ The SDK can be installed using [npm].
 const myAddress = 'MyServer';
 const myPort = 9191;
 
-// GSF Server
-const server = GSF.server({
-  address: myAddress,
-  port: myPort
+// GSF Client
+const client = GSF.client({
+    address: myAddress,
+    port: myPort
   });
 
 // Create a service object.
-const service = server.service('ENVI');
+const service = client.service('ENVI');
 
 // Create a task object.
 const task = service.task('SpectralIndex');
 
 const NDVIParameters = {
-  parameters: {
+  inputParameters: {
     INPUT_RASTER: {
       FACTORY: 'URLRaster',
       URL: 'http://' + myAddress + ':' + myPort + '/ese/data/qb_boulder_msi'
@@ -76,7 +76,7 @@ const NDVIParameters = {
 // Submit a job.
 task.submitAndWait(NDVIParameters).then((results) => {
     // Do something with results.
-    AddToMap(results.OUTPUT_RASTER);
+    AddToMap(results.OUTPUT_RASTER.best);
   }).catch((err) => {
     // Display error.
   });
@@ -89,13 +89,16 @@ Below is an example of submitting a job using typescript.
 import * as GSF from 'gsf-js-client-sdk';
 
 // Get a task.
-const serverArgs: GSF.ServerArgs = {address: 'MyServer', port: '9191'};
-const myServer: GSF.Server = GSF.server(serverArgs);
-const ENVIService: GSF.Service = myServer.service('ENVI');
+const clientOpts: GSF.ClientOptions = {
+    address: 'MyServer',
+    port: '9191'
+  };
+const client: GSF.Client = GSF.client(clientOpts);
+const ENVIService: GSF.Service = client.service('ENVI');
 const myTask: GSF.Task = ENVIService.task('SpectralIndex');
 
 const taskParameters: GSF.SubmitOptions = {
-    parameters: {
+    inputParameters: {
         INPUT_RASTER: {
             FACTORY: 'URLRaster',
             URL: 'http://MyServer:9191/ese/data/qb_boulder_msi'
@@ -109,7 +112,7 @@ task.submitAndWait(taskParameters)
     .then((results: GSF.JobResults) => {
         // Do something with results.
         // This function is an example and is not provided by the SDK.
-        AddToMap(results.OUTPUT_RASTER);
+        AddToMap(results.OUTPUT_RASTER.best);
     }).catch((jobErrorMessage) => {
         // Display error.
     });
