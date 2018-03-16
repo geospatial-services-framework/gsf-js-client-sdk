@@ -18,6 +18,7 @@ module.exports = {
   },
   taskInfo: {
     taskName: 'task',
+    serviceName: 'ThisService',
     inputParameters: [
       {
         name: 'param1',
@@ -41,6 +42,7 @@ module.exports = {
   taskList: [
     {
       taskName: 'ThisTask',
+      serviceName: 'ThisService',
       displayname: 'This Task',
       description: 'A task.',
       inputParameters: [
@@ -74,6 +76,7 @@ module.exports = {
     {
       taskName: 'ThatTask',
       displayname: 'This Task',
+      serviceName: 'ThisService',
       description: 'A task.',
       inputParameters: [
         {
@@ -106,6 +109,7 @@ module.exports = {
     {
       taskName: 'SomeTask',
       displayname: 'This Task',
+      serviceName: 'ThisService',
       description: 'A task.',
       inputParameters: [
         {

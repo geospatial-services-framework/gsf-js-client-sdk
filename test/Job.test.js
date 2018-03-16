@@ -168,7 +168,7 @@ describe('Testing Job class', function() {
         .job(1)
         .cancel(false);
 
-      assert.isRejected(badCancel, /Task Failed/);
+      return assert.isRejected(badCancel, /Error cancelling job/);
     });
   });
 

@@ -1,52 +1,48 @@
 # Migration Guide: Moving from v2 to v3
 The gsf-javascript-client-sdk has undergone a number of changes for version 3.0.  This version change is significant due to the adoption of a new HTTP API for GSF.  This means that if you upgrade your SDK to v3, you will also need to update your server to use the new API. There are a number of breaking changes for the SDK user as a result of switching to the new API.
 
-This purpose of this guide is to help you transition your application's source code from v2 to v3 of the SDK.  The changes are broken down by class.
+The purpose of this guide is to help you transition your application's source code from v2 to v3 of the SDK.  The changes are broken down by class.
 
-// TODO: links
 - Classes
     - [Server](#server-class)
-    - Service
-    - Task
-    - Job
+    - [Service](#service-class)
+    - [Task](#task-class)
+    - [Job](#job-class)
 - Interfaces
-    - ServiceInfo
-    - TaskInfo
-    - SubmitOptions
-    - JobInfo
-    - JobResults
+    - [ServiceInfo](#serviceinfo)
+    - [TaskInfo](#taskinfo)
+    - [SubmitOptions](#submitoptions)
+    - [JobInfo](#jobinfo)
+    - [JobResults](#jobresults)
 
-// TODO: more details on each change.
-// TODO: links
-## Server Class
-### GSF.Server is now GSF.Client.
+### Server Class
+#### GSF.Server is now GSF.Client.
 - The server class has been renamed to 'Client'.
 - The 'ServerArgs' object is now referred to as 'ClientOptions'.
 
-### Client.APIRoot no longer defaults to 'ese'.
+#### Client.APIRoot no longer defaults to 'ese'.
 - The default APIRoot has been removed to align with the new HTTP API.
 
-## Service Class
-### Service.info() no longer contains task list.
-- See [ServiceInfo] for details.  Please use the Service.tasks() or Service.taskInfoList() to obtain task lists.
+### Service Class
+#### Service.info() no longer contains task list.
+- See [ServiceInfo](#serviceinfo) for details.
 
-### Service.taskInfoList() returns new TaskInfo format.
-- See changes to [TaskInfo] for details.
+#### Service.taskInfoList() returns new TaskInfo format.
+- See [TaskInfo](#taskinfo) for details.
 
-## Task Class
-### Task.info() response changed
-- See [TaskInfo] for details.
-- TODO See changes to TaskInfo below (with link)
+### Task Class
+#### Task.info() response changed
+- See [TaskInfo](#taskinfo) for details.
 
-### Task.submit() and Task.submitAndWait() options changed.
+#### Task.submit() and Task.submitAndWait() options changed.
 - The SubmitOptions have change slightly.  The 'parameters' key is now 'inputParameters'.  There is also a new 'jobOptions' key which now contains the route.  Any additional processing directives will reside in this 'JobOptions' object.  See [JobOptions] for more details.
 
-## Job Class
-### Job.info() response changed.
-- See [JobInfo] for more details.
+### Job Class
+#### Job.info() response changed.
+- See [JobInfo](#jobinfo) for more details.
 
 ### Job.wait() response changed.
-- See [JobResults] for more details.
+- See [JobResults](#jobresults) for more details.
 
 ## Interfaces
 
