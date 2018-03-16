@@ -2,6 +2,9 @@
 
 The GSF JavaScript Client SDK provides a client-side JavaScript library for interacting with GSF.
 
+### [» Migration Guide: v2 to v3](./manual/tutorial/migration-guide.html)
+*Update to v3 of the SDK.*
+
 ### [» Installation Guide](./manual/installation/installation.html)
 *Install the SDK.*
 

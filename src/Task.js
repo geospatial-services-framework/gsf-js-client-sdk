@@ -132,7 +132,7 @@ export default Task;
 /**
  * The Job Options object contains processing options to be used when running the job.
  * @typedef {Object} JobOptions
- * @property {JobRoute} [route] - The route on which to run the job if
+ * @property {string} [route] - The route on which to run the job if
  * there is one.
  */
 

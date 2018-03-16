@@ -19,6 +19,7 @@
     "asset": "./doc/asset",
     "installation": ["./doc/manual/installation.md"],
     "tutorial": [
+      "./doc/manual/tutorial/migration-guide.md",
       "./doc/manual/tutorial/getting-started.md",
       "./doc/manual/tutorial/examples.md"
     ],
