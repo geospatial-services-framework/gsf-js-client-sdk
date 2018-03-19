@@ -97,7 +97,7 @@ There are several polyfills available that provide implementations of the EventS
 
 ## Testing the SDK
 #### Using a Test Server
-We have provided a simple mock server implementation that can be used for very basic testing of the SDK.  There are several other test scripts available.  Please see the scripts section of the package.json file for more information.
+We have provided a simple mock server implementation that can be used for very basic testing of the SDK.  There are several other test scripts available. See the scripts section of the package.json file for more information.
 
 ##### Run tests in the browser against mock server.
 

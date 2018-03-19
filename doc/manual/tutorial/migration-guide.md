@@ -53,7 +53,7 @@ The purpose of this guide is to help you transition your application's source co
 - Renamed '<parameter>.defaultValue' to '<parameter>.default'.
 - Replaced 'parameters' with 'inputParameters' and 'outputParameters'.
 - Removed '<parameter>.direction'
-    - New 'inputParameter' and 'outputParameter' objects indicate direction in their name.
+    - New 'inputParameters' and 'outputParameters' arrays indicate direction in their name.
 
 ##### Example of TaskInfo in v2
 ```json
@@ -109,11 +109,12 @@ The purpose of this guide is to help you transition your application's source co
     ]
 }
 ```
-For full documentation please see [**TaskInfo**]
+For full documention see [**TaskInfo**].
+
 
 ### ServiceInfo
 - Removed 'tasks'.
-    - Please use Service.tasks() or Service.taskInfoList() to obtain task lists.
+    - Use Service.tasks() or Service.taskInfoList() to obtain task lists.
 
 ##### Example of ServiceInfo in v2
 ```json
@@ -135,7 +136,7 @@ For full documentation please see [**TaskInfo**]
     "description": "ENVI processing routines"
 }
 ```
-For full documentation please see [**ServiceInfo**]
+For full documentation see [**ServiceInfo**].
 
 ### SubmitOptions
 - Added 'jobOptions' object.
@@ -172,7 +173,7 @@ const submitOptions = {
   }
 };
 ```
-For full documentation please see [**SubmitOptions**]
+For full documentation see [**SubmitOptions**].
 
 ### JobInfo
 - Added 'jobStart'.
@@ -274,7 +275,7 @@ For full documentation please see [**SubmitOptions**]
 	"jobEnd": "2018-01-29T23:08:01.813Z"
 }
 ```
-For full documentation please see [**JobInfo**]
+For full documentation see [**JobInfo**].
 
 ### JobResults
 - Each parameter now contains all of the parameter mappings.  The highest ranked mapping is set to the 'best' key.
@@ -313,7 +314,7 @@ For full documentation please see [**JobInfo**]
     }
 }
 ```
-For full documentation please see [**JobResults**]
+For full documentation see [**JobResults**].
 
 
 [**ServiceInfo**]:../typedef/index.html#static-typedef-ServiceInfo

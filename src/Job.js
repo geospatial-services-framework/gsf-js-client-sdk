@@ -126,7 +126,7 @@ class Job extends EventEmitter {
    *  Started, Succeeded, or Failed.
    * @property {NodeInfo} nodeInfo - Provides the information about the node the ran the job.
    * @property {Object} jobResults - The job output results.
-   * @property {string} jobSubmitted - Time the jobs was submitted.
+   * @property {string} jobSubmitted - Time the job was submitted.
    * @property {string} jobStart - Time the job started processing.
    * @property {string} jobEnd - Time the job finished processing.
    * @property {string} jobError - An error from the job, if there was one.
