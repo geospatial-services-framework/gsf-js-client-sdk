@@ -71,7 +71,7 @@
     "sinon": "^4.4.3",
     "sse-channel": "^2.0.5",
     "superagent": "^3.3.2",
-    "superagent-no-cache": "geospatial-services-framework/superagent-no-cache#features/node",
+    "superagent-no-cache": "johntron/superagent-no-cache",
     "webpack": "^3.5.1",
     "webpack-merge": "^4.1.0"
   }
