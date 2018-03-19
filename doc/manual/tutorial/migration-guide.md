@@ -136,7 +136,7 @@ For full documention see [**TaskInfo**].
     "description": "ENVI processing routines"
 }
 ```
-For full documentation please see [**ServiceInfo**]
+For full documentation see [**ServiceInfo**].
 
 ### SubmitOptions
 - Added 'jobOptions' object.
@@ -173,7 +173,7 @@ const submitOptions = {
   }
 };
 ```
-For full documentation please see [**SubmitOptions**]
+For full documentation see [**SubmitOptions**].
 
 ### JobInfo
 - Added 'jobStart'.
@@ -275,7 +275,7 @@ For full documentation please see [**SubmitOptions**]
 	"jobEnd": "2018-01-29T23:08:01.813Z"
 }
 ```
-For full documentation please see [**JobInfo**]
+For full documentation see [**JobInfo**].
 
 ### JobResults
 - Each parameter now contains all of the parameter mappings.  The highest ranked mapping is set to the 'best' key.
@@ -314,7 +314,7 @@ For full documentation please see [**JobInfo**]
     }
 }
 ```
-For full documentation please see [**JobResults**]
+For full documentation see [**JobResults**].
 
 
 [**ServiceInfo**]:../typedef/index.html#static-typedef-ServiceInfo
