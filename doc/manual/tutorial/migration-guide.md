@@ -35,7 +35,7 @@ The purpose of this guide is to help you transition your application's source co
 - See [TaskInfo](#taskinfo) for details.
 
 #### Task.submit() and Task.submitAndWait() options changed.
-- The SubmitOptions have change slightly.  The 'parameters' key is now 'inputParameters'.  There is also a new 'jobOptions' key which now contains the route.  Any additional processing directives will reside in this 'JobOptions' object.  See [JobOptions] for more details.
+- The SubmitOptions have change slightly.  The 'parameters' key is now 'inputParameters'.  There is also a new 'jobOptions' key which now contains the route.  Any additional processing directives will reside in this [**JobOptions**] object.  See [**JobOptions**] for more details.
 
 ### Job Class
 #### Job.info() response changed.
@@ -51,7 +51,7 @@ The purpose of this guide is to help you transition your application's source co
 - Added 'serviceName'.
 - Replaced 'parameters' with 'inputParameters' and 'outputParameters'.
 - Removed '<parameter>.direction'
-    - New 'inputParameter' and 'outputParameter' objects indicate direction in their name.
+    - New 'inputParameters' and 'outputParameters' arrays indicate direction in their name.
 - Renamed '<parameter>.dataType' to '<parameter>.type'.
 - Renamed '<parameter>.defaultValue' to '<parameter>.default'.
 
@@ -87,12 +87,12 @@ Example of TaskInfo in v3
     ]
 }
 ```
-For full documention please see [**TaskInfo**]
+For full documention see [**TaskInfo**]
 
 
 ### ServiceInfo
 - Removed 'tasks'.
-    - Please use Service.tasks() or Service.taskInfoList() to obtain task lists.
+    - Use Service.tasks() or Service.taskInfoList() to obtain task lists.
 
 Example of ServiceInfo in v2
 ```json

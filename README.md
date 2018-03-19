@@ -5,7 +5,7 @@
 [![npm Version](https://img.shields.io/npm/v/gsf-js-client-sdk.svg)](https://www.npmjs.com/package/gsf-js-client-sdk)
 
 ## About the SDK
-The GSF JavaScript Client SDK provides a client-side JavaScript library for interacting with GSF.  The SDK may be used in the browser as well as Node.js.  For detailed information please visit our [full developer documentation] page.
+The GSF JavaScript Client SDK provides a client-side JavaScript library for interacting with GSF.  The SDK may be used in the browser as well as Node.js.  For detailed information visit our [full developer documentation] page.
 
 1. This repository contains pre-built distributable files located in the `/dist/` directory.
   - `/dist/GSF-node.js` - The Node.js bundle.
@@ -118,18 +118,18 @@ task.submitAndWait(taskParameters)
     });
 ```
 
-This is just a sample of what can be done with the SDK.  Please see our [full developer documentation] to learn more.
+This is just a sample of what can be done with the SDK.  See our [full developer documentation] to learn more.
 
 ## Requirements
 ### Server Sent Events
 The GSF JavaScript Client SDK relies on [server-sent events] for communication with the server.  Developers who wish to build apps that run on browsers lacking EventSource support will want to use a polyfill.  This is not necessary when using the SDK in Node.js.
 
-To view a list of the browsers that support EventSource please go here: https://caniuse.com/#search=eventsource
+To view a list of the browsers that support EventSource go here: https://caniuse.com/#search=eventsource
 
 There are several polyfills available that provide implementations of the EventSource API.  One such polyfill that is available from the npm and Bower package managers is called 'eventsource-polyfill'.  For information on installation and usage, see https://github.com/amvtek/EventSource.
 
 ## Developer Documentation
-Please visit our [full developer documentation] page for more information.
+Visit our [full developer documentation] page for more information.
 
 
 [full developer documentation]: https://geospatial-services-framework.github.io/sdk-docs/

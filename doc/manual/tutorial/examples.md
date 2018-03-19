@@ -1,5 +1,5 @@
 # Examples
-Below are several examples of using the SDK with JavaScript.  For TypeScript specific examples please see the [TypeScript example](#typescript).  Before using the SDK, it is also recommended that you read the [best practices](#bestPractices) section.
+Below are several examples of using the SDK with JavaScript.  For TypeScript specific examples see the [TypeScript example](#typescript).  Before using the SDK, it is also recommended that you read the [best practices](#bestPractices) section.
 
 ## List Available Services
 The GSF [**Client**] object provides the ability to list the available services on the server.
@@ -89,19 +89,21 @@ const taskParameters = {
 ```
 
 ### Using Promises
-The SDK provides a [**Promise**]-based interface for submitting tasks.  If the task succeeds, the promise will be fulfilled.  If the job fails, the job will be rejected.  There are two ways to use promises for job resolution.
+The SDK provides a [**Promise**]-based interface for submitting tasks.  If the task succeeds, the promise will be fulfilled.  If the job fails, the promise will be rejected.  There are two ways to use promises for job submission.
 
-##### 1. Use [**.wait()**]
-This function returns a [**Promise**] to the job results.  The [**.submit()**] function will return a Promise to a [**Job**] object.  You may use this object to query for job information such as ID and status.
+##### 1. Use [**.submit()**] and then [**.wait()**]
+The [**Task**].[**submit()**] function returns a [**Promise**] to a [**Job**], and the [**Job**].[**wait()**] function returns a [**Promise**] to the JobResults.
 
 ```javascript
 // Submit a job.
-task.submit(taskParameters)
-.then(job => job.wait()) // Waits for job to complete.
-.then((results) => {
-  // Do something with results.
-  // This function is an example and is not provided by the SDK.
-  AddToMap(results.OUTPUT_RASTER.best);
+task.submit(taskParameters).then((job) => {
+  // Do something with the job like get its ID or status.
+  console.log(job.jobId);
+  job.wait().then((results) => {
+    // Do something with results.
+    // This function is an example and is not provided by the SDK.
+    AddToMap(results.OUTPUT_RASTER.best);
+  });
 }).catch((jobErrorMessage) => {
   // Display error.
 });
@@ -122,7 +124,7 @@ task.submitAndWait(taskParameters).then((results) => {
 ```
 
 ### Using Server Events
-The [**Client**] and [**Job**] objects emits all job events related to that server.  These classes inheret from Node's [**EventEmitter**] and support methods such as .on(), .once(), .removeAllListeners(), etc.  The following example shows how to listen for job events.
+The [**Client**] and [**Job**] objects give you access to all job related events emitted by the server.  These classes inheret from Node's [**EventEmitter**] and support methods such as .on(), .once(), .removeAllListeners(), etc. The following example shows how to listen for job events on the [**Client**].
 
 ```javascript
 // GSF Client
@@ -160,10 +162,10 @@ const NDVIParameters = {
 task.submit(NDVIParameters);
 ```
 
-For a complete list of available events, please see the [**Client**] class documentation.
+For a complete list of available events, see the [**Client**] class documentation.
 
 ## Tracking Job Progress
-There are two ways to track the progress of a single job.
+There are two ways to track the progress of a job.
 
 ### Progress Callbacks
 The [**.submit()**] and [**.submitAndWait()**] functions support the inclusion of a progress callback for reporting job progress.
@@ -187,8 +189,8 @@ task.submitAndWait(parameters, progressCallback).then((results) => {
 ### Progress Events
 Job progress events are emitted by the [**Client**] and [**Job**] objects.
 
-#### Server Progress Events
-It is possible to listen to all job progress events using the [**Client**] object.
+#### Client Progress Events
+It is possible to listen to all job progress events emitted by the server using the [**Client**] object.
 
 ```javascript
 // GSF Client
@@ -199,8 +201,8 @@ const client = GSF.client({
 
 // Set up an event listeners.
 client.on('JobProgress', (data) => {
-  console.log('Job ', data.jobId, ' progress percent: ', data.progress);
-  console.log('Job ', data.jobId, ' progress message: ', data.message);
+  console.log('Job: ', data.jobId, ' progress percent: ', data.progress);
+  console.log('Job: ', data.jobId, ' progress message: ', data.message);
 });
 
 // Create a service object.
@@ -251,8 +253,8 @@ const NDVIParameters = {
 
 // Submit a job.
 task.submit(NDVIParameters).then((job) => {
-  // Set up an event listeners.
-  job.on('Progress', (data) => {
+  // Set up an event listener on the job.
+  job.on('JobProgress', (data) => {
     console.log('Job ', data.jobId, ' progress percent: ', data.progress);
     console.log('Job ', data.jobId, ' progress message: ', data.message);
   });
@@ -312,11 +314,13 @@ task.submitAndWait(taskParameters)
 
 ## <a name="bestPractices"></a> Best Practices
 ### Connecting to Servers
-The examples throughout this documentation explain various concepts within the SDK using complete examples.  Most of the examples create a new 'GSF.client' object for every example.  This is to ensure a fully functional and self-contained example but is not a good practice when developing web apps.  It is recommended that you limit the number of Client (GSF.Client()) objects that you create.  Ideally, your app will create only one instance of this class and pass the reference around where needed.  This helps ensure consistency and prevent the possibility of exceeding the browser's per-domain connection limit.
+The examples throughout this documentation explain various concepts within the SDK using complete examples.  Most of the examples create a new [**Client**] object for every example.  This is to ensure a fully functional and self-contained example but is not a good practice when developing web apps.  It is recommended that you limit the number of [**Client**] objects that you create.  Ideally, your app will create only one instance of this class and pass the reference around where needed.  This helps ensure consistency and prevent the possibility of exceeding the browser's per-domain connection limit.
 
 [**.wait()**]:../class/src/Job.js~Job.html#instance-method-wait
+[**wait()**]:../class/src/Job.js~Job.html#instance-method-wait
 [**.submitAndWait()**]:../class/src/Task.js~Task.html#instance-method-submitAndWait
 [**.submit()**]:../class/src/Task.js~Task.html#instance-method-submit
+[**submit()**]:../class/src/Task.js~Task.html#instance-method-submit
 
 [**Client**]:../class/src/Client.js~Client.html
 [**Service**]:../class/src/Service.js~Service.html
