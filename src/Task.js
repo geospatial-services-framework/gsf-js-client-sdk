@@ -84,7 +84,6 @@ class Task {
         .post(url)
         .set('Content-Type', 'application/json')
         .send(JSON.stringify(options))
-        .set('GSF-noredirect', 'true')
         .set(this._client.headers)
         .use(nocache) // Prevents caching of *only* this request
         .end((err, res) => {

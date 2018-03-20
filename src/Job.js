@@ -88,7 +88,7 @@ class Job extends EventEmitter {
           if (info.jobStatus === EVENTS.job.succeeded) {
             resolve(info.jobResults);
           } else if (info.jobStatus === EVENTS.job.failed) {
-            reject(info.jobError || 'An error occurred.');
+            reject(info.jobError);
           }
         }).catch((err) => {
           reject(err);
@@ -102,7 +102,7 @@ class Job extends EventEmitter {
         });
         this.once(EVENTS.job.failed, (data) => {
           this.info().then((info) => {
-            reject(info.jobError || 'An error occurred.');
+            reject(info.jobError);
           });
         });
       });
@@ -111,7 +111,6 @@ class Job extends EventEmitter {
     return this._waiting;
   }
 
-  // TODO: node info docs
   /**
    * The JobInfo object contains information about a job.
    * @typedef {Object} JobInfo
@@ -124,7 +123,7 @@ class Job extends EventEmitter {
    * @property {string} jobMessage - A status message that is sent with progress updates.
    * @property {string} jobStatus - The status of the job. It can be Accepted,
    *  Started, Succeeded, or Failed.
-   * @property {NodeInfo} nodeInfo - Provides the information about the node the ran the job.
+   * @property {Object} nodeInfo - Provides the information about the node the ran the job.
    * @property {Object} jobResults - The job output results.
    * @property {string} jobSubmitted - Time the job was submitted.
    * @property {string} jobStart - Time the job started processing.
