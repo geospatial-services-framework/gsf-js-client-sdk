@@ -186,18 +186,22 @@ describe('Testing Job class', function() {
 
         const startedListener = sinon.spy();
 
-        let job;
-        task.submit({inputParameters: params1});
-        return task
-          .submit({inputParameters: params2})
-          .then((jobObj) => {
-            job = jobObj;
-            job.on('Started', startedListener);
-            return jobObj.wait();
-          })
-          .then((results) => {
-            assert(startedListener.calledOnceWith({jobId: job.jobId}));
-          });
+        return task.submit({inputParameters: params1}).then((job1) => {
+
+          // At this point, we are sure that the first job has been accepted
+          // Submit the second job and verify we get the right callback
+          let job2;
+          return task
+            .submit({inputParameters: params2})
+            .then((jobObj) => {
+              job2 = jobObj;
+              job2.on('Started', startedListener);
+              return jobObj.wait();
+            })
+            .then((results) => {
+              assert(startedListener.calledOnceWith({jobId: job2.jobId}));
+            });
+        });
       });
     });
 
