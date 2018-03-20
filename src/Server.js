@@ -23,7 +23,7 @@ class Server extends EventEmitter {
    * @typedef {Object} ServerArgs
    * @property {string} ServerArgs.address - The server address/name.
    * @property {string} [ServerArgs.port=null] - The server port.
-   * @property {Object} ServerArgs.headers - The headers to be used in requests.
+   * @property {Object} [ServerArgs.headers={}] - The headers to be used in requests.
    * @property {string} [ServerArgs.APIRoot='ese'] - The API root endpoint.
    * @property {string} [ServerArgs.protocol='http'] - The protocol to use.
    */
