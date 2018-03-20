@@ -93,10 +93,10 @@ describe('Testing Task class', function() {
       const nProgress = 5;
       const params = Object.assign({}, testTasks.sleepTask.parameters);
       params.N_PROGRESS = nProgress;
-      params.SLEEP_TIME = 300;
+      params.SLEEP_TIME = 400;
       params.PROGRESS_MESSAGE = 'Message';
 
-      const sleepParams = params;
+      const sleepParams = Object.assign({}, params);
       sleepParams.SLEEP_TIME = 100;
 
       const progress = sinon.spy();

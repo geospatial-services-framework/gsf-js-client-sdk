@@ -178,7 +178,7 @@ describe('Testing Job class', function() {
 
         const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
 
-        const params1 = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
+        const params1 = Object.assign({}, testTasks.sleepTask.parameters);
         params1.SLEEP_TIME = 800;
 
         const params2 = Object.assign({}, params1);
@@ -187,9 +187,9 @@ describe('Testing Job class', function() {
         const startedListener = sinon.spy();
 
         let job;
-        task.submit(params1);
+        task.submit({inputParameters: params1});
         return task
-          .submit(params2)
+          .submit({inputParameters: params2})
           .then((jobObj) => {
             job = jobObj;
             job.on('Started', startedListener);
