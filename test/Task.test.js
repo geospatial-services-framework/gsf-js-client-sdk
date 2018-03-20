@@ -105,18 +105,22 @@ describe('Testing Task class', function() {
       // Submit a two jobs so we have one that gets queued.
       // That will ensure that there is a started event.
       // Workers needs to be set to 1 in the server config for this to pass.
-      task.submit({inputParameters: params});
-      return task
-        .submit({inputParameters: sleepParams}, progress, started)
-        .then(job => job.wait())
-        .then((result) => {
-          expect(progress.callCount).to.equal(nProgress);
-          assert(started.calledOnce);
-          const args = progress.args.map((arg) => (arg[0]));
-          (args).should.all.have.property('message');
-          (args).should.all.have.property('jobId');
-          (args).should.all.have.property('progress');
-        });
+      return task.submit({inputParameters: params}).then((job) => {
+
+        // At this point, we are sure that the first job has been accepted
+        // Submit the second job and verify we get the right callbacks
+        return task
+          .submit({inputParameters: sleepParams}, progress, started)
+          .then(job => job.wait())
+          .then((result) => {
+            expect(progress.callCount).to.equal(nProgress);
+            assert(started.calledOnce);
+            const args = progress.args.map((arg) => (arg[0]));
+            (args).should.all.have.property('message');
+            (args).should.all.have.property('jobId');
+            (args).should.all.have.property('progress');
+          });
+      });
     });
 
     it('rejects promise if error from request', function() {
@@ -150,7 +154,7 @@ describe('Testing Task class', function() {
       params.SLEEP_TIME = 500;
       params.PROGRESS_MESSAGE = progressMessage;
 
-      const sleepParams = params;
+      const sleepParams = Object.assign({}, params);
       sleepParams.SLEEP_TIME = 100;
 
       const startedCallback = sinon.spy();
@@ -159,25 +163,23 @@ describe('Testing Task class', function() {
       // Submit a two jobs so we have one that gets queued.
       // That will ensure that there is a started event.
       // Workers needs to be set to 1 in the server config for this to pass.
-      let jobId;
-      task.submit({inputParameters: params});
-      return task
-        .submit({inputParameters: sleepParams}, progressCallback, startedCallback)
-        .then((job) => {
-          jobId = job.jobId;
-          return job.wait();
-        })
-        .then((result) => {
-          assert(startedCallback.calledOnce);
-          expect(progressCallback.callCount).to.equal(nProgress);
-          const args = progressCallback.args.map((arg) => (arg[0]));
-          const progress = args.map((arg) => (arg.progress));
+      return task.submit({inputParameters: params}).then((job) => {
 
-          (args).should.all.have.property('message', progressMessage);
-          (args).should.all.have.property('jobId', jobId);
-          (progress).should.all.have.be.above(-1);
-          (progress).should.all.have.be.below(100);
-        });
+        // At this point, we are sure that the first job has been accepted
+        // Submit the second job and verify we get the right callbacks
+        return task
+          .submitAndWait({inputParameters: sleepParams}, progressCallback, startedCallback)
+          .then((result) => {
+            expect(startedCallback.calledOnce).to.be.true;
+            expect(progressCallback.callCount).to.equal(nProgress);
+            const args = progressCallback.args.map((arg) => (arg[0]));
+            const progress = args.map((arg) => (arg.progress));
+
+            (args).should.all.have.property('message', progressMessage);
+            (progress).should.all.have.be.above(-1);
+            (progress).should.all.have.be.below(100);
+          });
+      });
     });
 
     it('rejects promise if job fails', function() {
