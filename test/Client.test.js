@@ -46,8 +46,20 @@ describe('Testing Client class', function() {
       expect(client.protocol).to.equal('http');
       expect(client.address).to.equal(config.localHTTPServer.address);
       expect(client.port).to.equal(config.localHTTPServer.port);
+      expect(client.headers).to.equal(config.localHTTPServer.headers);
       expect(client.URL).to.be.a('string');
       expect(client.rootURL).to.be.a('string');
+      done();
+    });
+    it('returns a valid GSF object with no headers', function(done) {
+      const clientNoHead = GSF.client(config.localHTTPServerNoHeader);
+      expect(clientNoHead).to.be.an('object');
+      expect(clientNoHead.protocol).to.equal('http');
+      expect(clientNoHead.address).to.equal(config.localHTTPServerNoHeader.address);
+      expect(clientNoHead.port).to.equal(config.localHTTPServerNoHeader.port);
+      expect(clientNoHead.headers).to.be.empty;
+      expect(clientNoHead.URL).to.be.a('string');
+      expect(clientNoHead.rootURL).to.be.a('string');
       done();
     });
   });
