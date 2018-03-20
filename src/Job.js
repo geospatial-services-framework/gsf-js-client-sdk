@@ -144,6 +144,7 @@ class Job extends EventEmitter {
       request
         .get(jobStatusURL)
         .use(nocache) // Prevents caching of *only* this request
+        .set(this._client.headers)
         .end((err, res) => {
           if (res && res.ok) {
             resolve(res.body);
@@ -182,6 +183,7 @@ class Job extends EventEmitter {
         .set('Content-Type', 'application/json')
         .send(JSON.stringify({'jobStatus': requestStatus}))
         .use(nocache) // Prevents caching of *only* this request
+        .set(this._client.headers)
         .end((err, res) => {
           if (res && res.ok) {
             resolve(true);

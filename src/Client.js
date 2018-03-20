@@ -23,6 +23,7 @@ class Client extends EventEmitter {
    * @typedef {Object} ClientOptions
    * @property {string} ClientOptions.address - The server address/name.
    * @property {string} [ClientOptions.port=null] - The server port.
+   * @property {Object} [ClientOptions.headers={}] - The headers to be used in requests.
    * @property {string} [ClientOptions.APIRoot=''] - The API root endpoint.
    * @property {string} [ClientOptions.protocol='http'] - The protocol to use.
    */
@@ -51,6 +52,12 @@ class Client extends EventEmitter {
      * @type {number}
      */
     this.port = clientOptions.port || null;
+
+    /**
+     * The headers to use in requests
+     * @type {Object}
+     */
+    this.headers = clientOptions.headers || {};
 
     /**
      * The API root endpoint.  If none, set to empty string.
@@ -131,6 +138,7 @@ class Client extends EventEmitter {
       request
         .get(url)
         .use(nocache) // Prevents caching of *only* this request
+        .set(this.headers)
         .end((err, res) => {
           if (res && res.ok) {
             const services = res.body.services;
@@ -195,6 +203,7 @@ class Client extends EventEmitter {
       request
         .get(url)
         .use(nocache) // Prevents caching of *only* this request
+        .set(this.headers)
         .end((err, res) => {
           if (res && res.ok) {
             const jobList = res.body.jobs

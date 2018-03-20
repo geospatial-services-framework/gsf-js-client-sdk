@@ -46,6 +46,7 @@ class Task {
       request
         .get(taskURL)
         .use(nocache) // Prevents caching of *only* this request
+        .set(this._client.headers)
         .end((err, res) => {
           if (res && res.ok) {
             resolve(res.body);
@@ -84,6 +85,7 @@ class Task {
         .set('Content-Type', 'application/json')
         .send(JSON.stringify(options))
         .set('GSF-noredirect', 'true')
+        .set(this._client.headers)
         .use(nocache) // Prevents caching of *only* this request
         .end((err, res) => {
           if (res && res.ok) {
