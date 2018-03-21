@@ -116,18 +116,18 @@ class Job extends EventEmitter {
    * @typedef {Object} JobInfo
    * @property {string} serviceName - The name of the service.
    * @property {string} taskName - The name of the task.
-   * @property {JobOptions} jobOptions - Processing directives to submit along with the job.
-   * @property {Object} inputParameters - The input parameters.
+   * @property {JobOptions} [jobOptions] - Processing directives to submit along with the job.
+   * @property {Object} [inputParameters] - The input parameters.
    * @property {string} jobId - The job id.
-   * @property {number} jobProgress - The percentage of job completion.
-   * @property {string} jobMessage - A status message that is sent with progress updates.
+   * @property {number} [jobProgress] - The percentage of job completion.
+   * @property {string} [jobMessage] - A status message that is sent with progress updates.
    * @property {string} jobStatus - The status of the job. It can be Accepted,
    *  Started, Succeeded, or Failed.
-   * @property {Object} jobResults - The job output results.
-   * @property {string} jobSubmitted - Time the job was submitted.
-   * @property {string} jobStart - Time the job started processing.
-   * @property {string} jobEnd - Time the job finished processing.
-   * @property {string} jobError - An error from the job, if there was one.
+   * @property {Object} [jobResults] - The job output results.
+   * @property {string} [jobSubmitted] - Time the job was submitted.
+   * @property {string} [jobStart] - Time the job started processing.
+   * @property {string} [jobEnd] - Time the job finished processing.
+   * @property {string} [jobError] - An error from the job, if there was one.
    */
 
   /**

@@ -142,9 +142,9 @@ export default Task;
  * @typedef {Object} TaskInfo
  * @property {string} taskName - The name of the task.
  * @property {string} serviceName - The name of the service.
- * @property {string} displayName - A readable name for the task. This is only used for display
+ * @property {string} [displayName] - A readable name for the task. This is only used for display
  *   purposes.
- * @property {string} description - A description of the task.
+ * @property {string} [description] - A description of the task.
  *
  * @property {InputParameter[]} inputParameters - An array containing the input parameter definitions.
  * @property {OutputParameter[]} outputParameters - An array containing the output parameter definitions.
@@ -156,10 +156,10 @@ export default Task;
  * @property {string} name - The name of the parameter.
  * @property {string} type - The type for the parameter.
  * @property {boolean} required - A boolean representing whether or not the parameter is required.
- * @property {string} displayName - A display name for the parameter.
- * @property {string} description - A description of the parameter.
- * @property {string} default - A default value for the parameter.
- * @property {string} choiceList - A list of values that will be accepted as input for the parameter.
+ * @property {string} [displayName] - A display name for the parameter.
+ * @property {string} [description] - A description of the parameter.
+ * @property {string} [default] - A default value for the parameter.
+ * @property {string} [choiceList] - A list of values that will be accepted as input for the parameter.
  */
 
 /**
@@ -168,8 +168,8 @@ export default Task;
  * @property {string} name - The name of the parameter.
  * @property {string} type - The type for the parameter.
  * @property {boolean} required - A boolean representing whether or not the parameter is required.
- * @property {string} displayName - A display name for the parameter.
- * @property {string} description - A description of the parameter.
+ * @property {string} [displayName] - A display name for the parameter.
+ * @property {string} [description] - A description of the parameter.
  */
 
 /**

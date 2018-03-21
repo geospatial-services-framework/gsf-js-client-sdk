@@ -65,7 +65,7 @@ declare namespace GSF {
         export interface JobProgressInfo {
             jobId: number;
             progress: number;
-            message: string;
+            message?: string;
         }
         export interface StartedCallback {
             (info: JobStartedInfo) : void;
@@ -82,17 +82,17 @@ declare namespace GSF {
         export interface JobInfo {
             serviceName: string;
             taskName: string;
-            jobOptions: JobOptions;
+            jobOptions?: JobOptions;
             inputParameters: Object;
-            jobId: number;
-            jobProgress: number;
-            jobMessage: string;
+            jobId?: number;
+            jobProgress?: number;
+            jobMessage?: string;
             jobStatus: string;
-            jobResults: Object;
-            jobSubmitted: string;
-            jobStart: string;
-            jobEnd: string;
-            jobError: string;
+            jobResults?: Object;
+            jobSubmitted?: string;
+            jobStart?: string;
+            jobEnd?: string;
+            jobError?: string;
         }
 
         export interface JobResults {
@@ -100,28 +100,28 @@ declare namespace GSF {
         }
         export interface ServiceInfo {
             name: string;
-            description: string;
+            description?: string;
         }
         export interface TaskInfo {
             taskName: string;
             serviceName: string;
-            displayName: string;
-            description: string;
+            displayName?: string;
+            description?: string;
             inputParameters: InputParameter[];
             outputParameters: OutputParameter[];
         }
         export interface InputParameter {
-            displayName: string;
-            description: string;
-            choiceList: string[];
+            displayName?: string;
+            description?: string;
+            choiceList?: string[];
             type: string;
-            default: any;
+            default?: any;
             name: string;
             required: boolean;
         }
         export interface OutputParameter {
-            displayName: string;
-            description: string;
+            displayName?: string;
+            description?: string;
             type: string;
             name: string;
             required: boolean;
