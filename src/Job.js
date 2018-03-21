@@ -20,12 +20,12 @@ class Job extends EventEmitter {
    *  For more reliable job started information, listen to the GSF JobStarted
    *  events as this callback may not always get called.  In some cases the job
    *  can start before the callback is registered.
-   * @emits {Failed}
-   * @emits {Succeeded}
-   * @emits {Completed}
-   * @emits {Started}
-   * @emits {Accepted}
-   * @emits {Progress}
+   * @emits {JobFailed}
+   * @emits {JobSucceeded}
+   * @emits {JobCompleted}
+   * @emits {JobStarted}
+   * @emits {JobAccepted}
+   * @emits {JobProgress}
    */
   constructor(client, jobId, progressCallback, startedCallback) {
     // Init EventEmitter superclass.
@@ -51,8 +51,8 @@ class Job extends EventEmitter {
     this._waiting = null;
 
     // Call progress and started callbacks if supplied to constructor.
-    progressCallback && this.on(EVENTS.job.progress, progressCallback);
-    startedCallback && this.on(EVENTS.job.started, startedCallback);
+    progressCallback && this.on(EVENTS.progress, progressCallback);
+    startedCallback && this.on(EVENTS.started, startedCallback);
 
     // Function to handle events.
     this._handler = (eventName, data) => {
@@ -65,9 +65,9 @@ class Job extends EventEmitter {
 
     // Listen for events from our server.  Pass
     // them into the handler with job event type.
-    Object.keys(EVENTS.client).forEach((key) => {
-      this._client.on(EVENTS.client[key], (data) => {
-        this._handler(EVENTS.job[key], data);
+    Object.keys(EVENTS).forEach((key) => {
+      this._client.on(EVENTS[key], (data) => {
+        this._handler(EVENTS[key], data);
       });
     });
 
@@ -85,9 +85,9 @@ class Job extends EventEmitter {
       this._waiting = new Promise((resolve, reject) => {
         // Check to make sure it hasn't already completed.
         this.info().then((info) => {
-          if (info.jobStatus === EVENTS.job.succeeded) {
+          if (info.jobStatus === EVENTS.succeeded) {
             resolve(info.jobResults);
-          } else if (info.jobStatus === EVENTS.job.failed) {
+          } else if (info.jobStatus === EVENTS.failed) {
             reject(info.jobError);
           }
         }).catch((err) => {
@@ -95,12 +95,12 @@ class Job extends EventEmitter {
         });
 
         // Listen to job events.
-        this.once(EVENTS.job.succeeded, (data) => {
+        this.once(EVENTS.succeeded, (data) => {
           this.info().then((info) => {
             resolve(info.jobResults);
           });
         });
-        this.once(EVENTS.job.failed, (data) => {
+        this.once(EVENTS.failed, (data) => {
           this.info().then((info) => {
             reject(info.jobError);
           });
@@ -197,46 +197,3 @@ class Job extends EventEmitter {
 }
 
 export default Job;
-
-/**
- * Emitted when a job fails.
- * @typedef {Object} Failed
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job succeeds.
- * @typedef {Object} Succeeded
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job completes.
- * @typedef {Object} Completed
- * @property {number} jobId - The job id.
- * @property {boolean} success - A boolean set to true if the job succeeds, false if it fails.
- */
-
-/**
- * Emitted when a job starts.  This event may never fire for a job
- *  if the Job object is created after the event fires.  In this case it
- *  is more reliable to listen to the JobStarted events on the GSF object.
- * @typedef {Object} Started
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job is accepted by the server.  This event may never fire for a job
- *  if the Job object is created after the event fires.  In this case it
- *  is more reliable to listen to the JobAccepted events on the GSF object.
- * @typedef {Object} Accepted
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job reports progress.
- * @typedef {Object} Progress
- * @property {number} jobId - The job id.
- * @property {number} progress - The job progress percent.
- * @property {string} [message] - The job progress message, if any.
- */

@@ -252,7 +252,7 @@ const NDVIParameters = {
 // Submit a job.
 task.submit(NDVIParameters).then((job) => {
   // Set up an event listener on the job.
-  job.on('Progress', (data) => {
+  job.on('JobProgress', (data) => {
     console.log('Job ', data.jobId, ' progress percent: ', data.progress);
     console.log('Job ', data.jobId, ' progress message: ', data.message);
   });

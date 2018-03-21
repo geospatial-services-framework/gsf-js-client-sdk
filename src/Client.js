@@ -100,8 +100,8 @@ class Client extends EventEmitter {
       SERVER_API.EVENTS_PATH].join('/'));
 
     // Emit succeeded and failed events.
-    this.on(EVENTS.client.completed, (data) => {
-      this.emit(data.success ? EVENTS.client.succeeded : EVENTS.client.failed, data);
+    this.on(EVENTS.completed, (data) => {
+      this.emit(data.success ? EVENTS.succeeded : EVENTS.failed, data);
     });
 
     // Function to handle server sent events.
@@ -114,14 +114,14 @@ class Client extends EventEmitter {
 
     // Listen for events from our server.  Pass
     // them into the handler with job event type.
-    Object.keys(EVENTS.client).forEach((key) => {
+    Object.keys(EVENTS).forEach((key) => {
       // Server doesn't emit succeeded or failed events.
-      if ((EVENTS.client[key] === EVENTS.client.succeeded) ||
-       (EVENTS.client[key] === EVENTS.client.failed)) return;
+      if ((EVENTS[key] === EVENTS.succeeded) ||
+       (EVENTS[key] === EVENTS.failed)) return;
 
       // Add a listener for each of the sse's.
-      this._events.addEventListener(EVENTS.client[key],
-        handler.bind(this, EVENTS.client[key]));
+      this._events.addEventListener(EVENTS[key],
+        handler.bind(this, EVENTS[key]));
     });
   }
 
