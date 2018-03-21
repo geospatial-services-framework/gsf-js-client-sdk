@@ -96,17 +96,15 @@ The [**Task**].[**submit()**] function returns a [**Promise**] to a [**Job**], a
 
 ```javascript
 // Submit a job.
-task.submit(taskParameters).then((job) => {
-  // Do something with the job like get its ID or status.
-  console.log(job.jobId);
-  job.wait().then((results) => {
+task.submit(taskParameters)
+  .then(job => job.wait())
+  .then((results) => {
     // Do something with results.
     // This function is an example and is not provided by the SDK.
     AddToMap(results.OUTPUT_RASTER.best);
+  }).catch((jobErrorMessage) => {
+    // Display error.
   });
-}).catch((jobErrorMessage) => {
-  // Display error.
-});
 ```
 
 ##### 2. Use [**.submitAndWait()**]
@@ -254,7 +252,7 @@ const NDVIParameters = {
 // Submit a job.
 task.submit(NDVIParameters).then((job) => {
   // Set up an event listener on the job.
-  job.on('JobProgress', (data) => {
+  job.on('Progress', (data) => {
     console.log('Job ', data.jobId, ' progress percent: ', data.progress);
     console.log('Job ', data.jobId, ' progress message: ', data.message);
   });

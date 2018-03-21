@@ -1,5 +1,5 @@
 # Migration Guide: Moving from v2 to v3
-The gsf-javascript-client-sdk has undergone a number of changes for version 3.0.  This version is significant due to the adoption of a new HTTP API for GSF.  This means that if you upgrade your SDK to v3, you will also need to update your server(s) to GSF version 3.0. There are a number of breaking changes for the SDK user as a result of switching to the new API.
+The gsf-javascript-client-sdk has undergone a number of changes for version 3.0.  This version is significant due to the adoption of a new HTTP API for GSF.  This means that if you upgrade your SDK to v3, you will also need to update your server(s) to GSF version 3.0. Ensure that the gsf-request-handler is enabled on the server before using version 3 of the SDK.  There are a number of breaking changes for the SDK user as a result of switching to the new API.
 
 The purpose of this guide is to help you transition your application's source code from v2 to v3 of the SDK.
 
