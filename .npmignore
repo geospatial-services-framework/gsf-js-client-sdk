@@ -14,5 +14,4 @@ CONTRIBUTING.md
 .tmp
 .vscode
 build
-package-lock.json
 

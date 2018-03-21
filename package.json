@@ -68,10 +68,10 @@
     "mocha": "^3.5.0",
     "mocha-webpack": "^1.0.0-rc.1",
     "shx": "^0.2.2",
-    "sinon": "^4.4.3",
+    "sinon": "^4.4.6",
     "sse-channel": "^2.0.5",
     "superagent": "^3.3.2",
-    "superagent-no-cache": "johntron/superagent-no-cache",
+    "superagent-no-cache": "github:johntron/superagent-no-cache",
     "webpack": "^3.5.1",
     "webpack-merge": "^4.1.0"
   }
