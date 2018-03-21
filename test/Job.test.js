@@ -278,7 +278,7 @@ describe('Testing Job class', function() {
         this.timeout(config.testTimeout2);
 
         let jobId = null;
-        let testData = Object.assign({}, testTasks);
+        const testData = Object.assign({}, testTasks);
         const nProgress = 5;
         const progressMessage = 'Message';
         testData.sleepTask.parameters.N_PROGRESS = nProgress;
@@ -287,29 +287,27 @@ describe('Testing Job class', function() {
         const progressListener = sinon.spy();
         const completedListener = sinon.spy();
 
-        setTimeout(() => {
-          return client
-            .service(testTasks.sleepTask.service)
-            .task(testTasks.sleepTask.name)
-            .submit({inputParameters: testData.sleepTask.parameters})
-            .then((job) => {
-              jobId = job.jobId;
-              job.on('Progress', progressListener);
-              job.on('Completed', completedListener);
-              return job.wait();
-            })
-            .then((results) => {
-              expect(progressListener.callCount).to.equal(nProgress);
-              assert(completedListener.calledOnce);
-              const args = progressListener.args.map((arg) => (arg[0]));
-              const progress = args.map((arg) => (arg.progress));
+        return client
+          .service(testTasks.sleepTask.service)
+          .task(testTasks.sleepTask.name)
+          .submit({inputParameters: testData.sleepTask.parameters})
+          .then((job) => {
+            jobId = job.jobId;
+            job.on('Progress', progressListener);
+            job.on('Completed', completedListener);
+            return job.wait();
+          })
+          .then((results) => {
+            expect(progressListener.callCount).to.equal(nProgress);
+            assert(completedListener.calledOnce);
+            const args = progressListener.args.map((arg) => (arg[0]));
+            const progress = args.map((arg) => (arg.progress));
 
-              (args).should.all.have.property('message', progressMessage);
-              (args).should.all.have.property('jobId', jobId);
-              (progress).should.all.have.be.above(-1);
-              (progress).should.all.have.be.below(100);
-            });
-        }, config.submitTimeout);
+            (args).should.all.have.property('message', progressMessage);
+            (args).should.all.have.property('jobId', jobId);
+            (progress).should.all.have.be.above(-1);
+            (progress).should.all.have.be.below(100);
+          });
       });
     });
   });
