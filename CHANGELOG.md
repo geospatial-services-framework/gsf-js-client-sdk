@@ -1,11 +1,6 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## 2.1.0 / 2018-03-21
-
-### New Features
-- Added headers object to the ServerArgs object to allow custom headers to be used in requests.
-
 ## 2.0.0 / 2017-07-24
 
 ### New Features
