@@ -123,7 +123,6 @@ class Job extends EventEmitter {
    * @property {string} jobMessage - A status message that is sent with progress updates.
    * @property {string} jobStatus - The status of the job. It can be Accepted,
    *  Started, Succeeded, or Failed.
-   * @property {Object} nodeInfo - Provides the information about the node the ran the job.
    * @property {Object} jobResults - The job output results.
    * @property {string} jobSubmitted - Time the job was submitted.
    * @property {string} jobStart - Time the job started processing.

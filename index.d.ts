@@ -88,7 +88,6 @@ declare namespace GSF {
             jobProgress: number;
             jobMessage: string;
             jobStatus: string;
-            nodeInfo: Object;
             jobResults: Object;
             jobSubmitted: string;
             jobStart: string;

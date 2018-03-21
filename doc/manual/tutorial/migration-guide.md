@@ -179,7 +179,6 @@ For full documentation see [**SubmitOptions**].
 - Added 'jobStart'.
 - Added 'jobEnd'.
 - Added 'jobSubmitted'.
-- Added 'nodeInfo'.
 - Added 'jobOptions'.
 - Renamed 'inputs' to 'inputParameters'.
 - Renamed 'jobErrorMessage' to 'jobError'.
@@ -192,7 +191,7 @@ For full documentation see [**SubmitOptions**].
 ```json
 {
 	"jobId": 3410,
-	"jobStatus": "esriJobSucceeded",
+	"jobStatus": "Succeeded",
 	"jobStatusURL": "ese/jobs/3410/status",
 	"jobProgress": 100,
 	"jobProgressMessage": "Completed",
@@ -207,16 +206,15 @@ For full documentation see [**SubmitOptions**].
 			"factory": "URLRaster"
 		}
 	},
-	"results": [{
-		"name": "OUTPUT_RASTER",
-		"value": {
-			"url": "http://myserver:9191/ese/jobs/3410/spectralindex_output_raster_MonJan2916080020181790684800.dat",
+	"results": {
+        "OUTPUT_RASTER": {
+			"url": "/some/url",
 			"factory": "URLRaster",
 			"auxiliary_url": [
-				"http://myserver:9191/ese/jobs/3410/spectralindex_output_raster_MonJan2916080020181790684800.hdr"
+				"/some/url"
 			]
-		}
-	}],
+        }
+	},
 	"messages": [{
 			"type": "esriJobMessageTypeInformative",
 			"description": "Submission Time: Mon Jan 29 2018 16:07:52 GMT-0700 (Mountain Standard Time)"

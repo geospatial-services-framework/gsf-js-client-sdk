@@ -47,7 +47,6 @@ function jobManager() {
       taskName: name,
       serviceName: service,
       inputParameters: params,
-      nodeInfo: {},
       jobResults: [],
       jobOptions: jobOptions || {},
       jobStart: '',

@@ -12,7 +12,6 @@ export default {
     jobProgress: {type: 'number', required: false},
     jobMessage: {type: 'string', required: false},
     jobStatus: {type: 'string', required: true},
-    nodeInfo: {type: 'object', required: false},
     jobResults: {type: 'object', required: false},
     jobSubmitted: {type: 'string', required: false},
     jobStart: {type: 'string', required: false},
