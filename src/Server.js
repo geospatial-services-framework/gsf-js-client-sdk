@@ -221,6 +221,57 @@ class Server extends EventEmitter {
   }
 
   /**
+   * Retrieves an array of job info objects.
+   * @param {JobListOptions} jobListOptions - Object containing options for
+   *  filtering job list.
+   * @return {Promise<JobInfo[], error>} Returns a Promise to an array of
+   *  jobs that exist on the server.
+   */
+  jobInfoList(jobListOptions) {
+    return new Promise((resolve, reject) => {
+      // Service url.
+      let url = [this.rootURL, SERVER_API.JOBS_PATH].join('/');
+
+      // Handle arguments.
+      if (jobListOptions) {
+        let params = [];
+        if (jobListOptions.offset) {
+          params.push('offset=' + jobListOptions.offset);
+        }
+        if (jobListOptions.limit) {
+          params.push('limit=' + jobListOptions.limit);
+        }
+        if (jobListOptions.reverse) {
+          params.push('reverse=' + jobListOptions.reverse);
+        }
+        if (jobListOptions.status) {
+          params.push('status=' + jobListOptions.status);
+        }
+        params = params.join('&');
+        if (params) url += '?' + params;
+      }
+
+      // Get job info list.
+      request
+        .get(url)
+        .use(nocache) // Prevents caching of *only* this request
+        .set(this.headers)
+        .end((err, res) => {
+          console.log('url: ', url);
+          console.log(err);
+          if (res && res.ok) {
+            resolve(res.body);
+          } else {
+            const status = ((err && err.status) ? ': ' + err.status : '');
+            const text = ((err && err.response && err.response.text) ? ': ' +
+             err.response.text : '');
+            reject('Error requesting jobs' + status + text);
+          }
+        });
+    });
+  }
+
+  /**
    * Returns the Service object based on service name.
    * @param {string} serviceName - The name of the service.
    * @return {Service} The Service object.
