@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 2.2.0 / 2018-03-22
+
+### New Features
+- Added Server.jobInfoList() for fetching an array of the current JobInfo objects.
+
 ## 2.1.0 / 2018-03-21
 
 ### New Features
