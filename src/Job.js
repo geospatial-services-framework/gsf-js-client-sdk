@@ -17,15 +17,15 @@ class Job extends EventEmitter {
    * @param {number} jobId - The jobId.
    * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
    * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
-   *  For more reliable job started information, listen to the GSF JobStarted
+   *  For more reliable job started information, listen to the GSF Started
    *  events as this callback may not always get called.  In some cases the job
    *  can start before the callback is registered.
-   * @emits {JobFailed}
-   * @emits {JobSucceeded}
-   * @emits {JobCompleted}
-   * @emits {JobStarted}
-   * @emits {JobAccepted}
-   * @emits {JobProgress}
+   * @emits {Failed}
+   * @emits {Succeeded}
+   * @emits {Completed}
+   * @emits {Started}
+   * @emits {Accepted}
+   * @emits {Progress}
    */
   constructor(client, jobId, progressCallback, startedCallback) {
     // Init EventEmitter superclass.

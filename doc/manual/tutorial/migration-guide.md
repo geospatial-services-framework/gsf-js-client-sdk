@@ -23,6 +23,14 @@ The purpose of this guide is to help you transition your application's source co
 #### Client.APIRoot no longer defaults to 'ese'.
 - The default APIRoot has been removed to align with the new HTTP API.
 
+#### Client event names changed.  They are now the same as the Job events.
+- Renamed 'JobAccepted' to 'Accepted'.
+- Renamed 'JobStarted' to 'Started'.
+- Renamed 'JobProgress' to 'Progress'.
+- Renamed 'JobCompleted' to 'Completed'.
+- Renamed 'JobSucceeded' to 'Succeeded'.
+- Renamed 'JobFailed' to 'Failed'.
+
 ### Service Class
 #### Service.info() no longer contains task list.
 - See [ServiceInfo](#serviceinfo) below for details.
@@ -40,13 +48,6 @@ The purpose of this guide is to help you transition your application's source co
 ### Job Class
 #### Job.info() response changed.
 - See [JobInfo](#jobinfo) below for more details.
-- Event names changed.  They are now the same as the Client events.
-    - Renamed 'Accepted' to 'JobAccepted'.
-    - Renamed 'Started' to 'JobStarted'.
-    - Renamed 'Progress' to 'JobProgress'.
-    - Renamed 'Completed' to 'JobCompleted'.
-    - Renamed 'Succeeded' to 'JobSucceeded'.
-    - Renamed 'Failed' to 'JobFailed'.
 
 ### Job.wait() response changed.
 - See [JobResults](#jobresults) below for more details.

@@ -126,7 +126,7 @@ describe('Testing Job class', function() {
       task.submit(params)
         .then((job) => {
           const force = false;
-          job.once('JobCompleted', function(data) {
+          job.once('Completed', function(data) {
             expect(data.success).to.be.false;
             done();
           });
@@ -150,7 +150,7 @@ describe('Testing Job class', function() {
           const force = true;
           job.cancel(force)
             .then(() => {
-              job.once('JobCompleted', function(data) {
+              job.once('Completed', function(data) {
                 expect(data.success).to.be.false;
                 done();
               });
@@ -195,7 +195,7 @@ describe('Testing Job class', function() {
             .submit({inputParameters: params2})
             .then((jobObj) => {
               job2 = jobObj;
-              job2.on('JobStarted', startedListener);
+              job2.on('Started', startedListener);
               return jobObj.wait();
             })
             .then((results) => {
@@ -216,7 +216,7 @@ describe('Testing Job class', function() {
           .task(testTasks.sleepTask.name)
           .submit({inputParameters: testTasks.sleepTask.parameters})
           .then((job) => {
-            job.on('JobCompleted', completedListener);
+            job.on('Completed', completedListener);
             jobId = job.jobId;
             return job.wait();
           })
@@ -238,8 +238,8 @@ describe('Testing Job class', function() {
           .submit({inputParameters: testTasks.sleepTask.parameters})
           .then((job) => {
             jobId = job.jobId;
-            job.on('JobSucceeded', succeededListener);
-            job.on('JobFailed', failedListener);
+            job.on('Succeeded', succeededListener);
+            job.on('Failed', failedListener);
             return job.wait();
           })
           .then((results) => {
@@ -259,8 +259,8 @@ describe('Testing Job class', function() {
           .task(testTasks.sleepTask.name)
           .submit({inputParameters: testTasks.sleepTaskFail.parameters})
           .then((job) => {
-            job.on('JobSucceeded', succeededListener);
-            job.on('JobFailed', failedListener);
+            job.on('Succeeded', succeededListener);
+            job.on('Failed', failedListener);
             jobId = job.jobId;
             return job.wait();
           })
@@ -293,8 +293,8 @@ describe('Testing Job class', function() {
           .submit({inputParameters: testData.sleepTask.parameters})
           .then((job) => {
             jobId = job.jobId;
-            job.on('JobProgress', progressListener);
-            job.on('JobCompleted', completedListener);
+            job.on('Progress', progressListener);
+            job.on('Completed', completedListener);
             return job.wait();
           })
           .then((results) => {

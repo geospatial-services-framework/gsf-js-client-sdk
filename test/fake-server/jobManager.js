@@ -60,7 +60,7 @@ function jobManager() {
 
     // Send accepted message.
     SSE.send({
-      event: 'JobAccepted',
+      event: 'Accepted',
       data: {
         jobId: job.jobId
       }
@@ -85,7 +85,7 @@ function jobManager() {
 
         // Send started event.
         SSE.send({
-          event: 'JobStarted',
+          event: 'Started',
           data: {
             jobId: job.jobId
           }
@@ -106,7 +106,7 @@ function jobManager() {
         job.jobProgressMessage = message;
         // Send progress event.
         SSE.send({
-          event: 'JobProgress',
+          event: 'Progress',
           data: {
             jobId: job.jobId,
             progress: percent,
@@ -135,7 +135,7 @@ function jobManager() {
 
           // Job failed event.
           SSE.send({
-            event: 'JobFailed',
+            event: 'Failed',
             data: {
               jobId: job.jobId
             }
@@ -143,7 +143,7 @@ function jobManager() {
         } else {
           // Job succeeded event.
           SSE.send({
-            event: 'JobSucceeded',
+            event: 'Succeeded',
             data: {
               jobId: job.jobId
             }
@@ -152,7 +152,7 @@ function jobManager() {
 
         // Send job completed event.
         SSE.send({
-          event: 'JobCompleted',
+          event: 'Completed',
           data: {
             jobId: job.jobId,
             success: !err

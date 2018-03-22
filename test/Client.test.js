@@ -31,11 +31,11 @@ describe('Testing Client class', function() {
 
   afterEach(function(done) {
     // Remove progress listeners after each test.  Other events use .once().
-    client.removeAllListeners('JobAccepted');
-    client.removeAllListeners('JobCompleted');
-    client.removeAllListeners('JobSucceeded');
-    client.removeAllListeners('JobFailed');
-    client.removeAllListeners('JobProgress');
+    client.removeAllListeners('Accepted');
+    client.removeAllListeners('Completed');
+    client.removeAllListeners('Succeeded');
+    client.removeAllListeners('Failed');
+    client.removeAllListeners('Progress');
     done();
   });
 
@@ -238,12 +238,12 @@ describe('Testing Client class', function() {
   });
 
   describe('.on()', function() {
-    describe('\'JobAccepted\' event', function() {
+    describe('\'Accepted\' event', function() {
       it('fires when job is accepted', function() {
         this.timeout(config.testTimeout2);
 
         const acceptedListener = sinon.spy();
-        client.on('JobAccepted', acceptedListener);
+        client.on('Accepted', acceptedListener);
 
         // Use a timeout to prevent events firing before listeners
         // are added.
@@ -259,12 +259,12 @@ describe('Testing Client class', function() {
       });
     });
 
-    describe('\'JobStarted\' event', function() {
+    describe('\'Started\' event', function() {
       it('fires when job starts', function() {
         this.timeout(config.testTimeout2);
 
         const startedListener = sinon.spy();
-        client.on('JobStarted', startedListener);
+        client.on('Started', startedListener);
 
         // Use a timeout to prevent events firing before listeners
         // are added.
@@ -280,14 +280,14 @@ describe('Testing Client class', function() {
       });
     });
 
-    describe('\'JobCompleted\' event', function() {
+    describe('\'Completed\' event', function() {
       it('fires when job completes', function() {
         this.timeout(config.testTimeout2);
 
         let jobId = null;
 
         const completedListener = sinon.spy();
-        client.on('JobCompleted', completedListener);
+        client.on('Completed', completedListener);
 
         setTimeout(() => {
           return client
@@ -306,20 +306,20 @@ describe('Testing Client class', function() {
       });
     });
 
-    describe('\'JobSucceeded\' event', function() {
+    describe('\'Succeeded\' event', function() {
       it('fires when job succeeds', function() {
         this.timeout(config.testTimeout2);
 
         let jobId = null;
 
         const failedListener = sinon.spy();
-        client.on('JobFailed', failedListener);
+        client.on('Failed', failedListener);
 
         const completedListener = sinon.spy();
-        client.on('JobCompleted', completedListener);
+        client.on('Completed', completedListener);
 
         const succeededListener = sinon.spy();
-        client.on('JobSucceeded', succeededListener);
+        client.on('Succeeded', succeededListener);
 
         setTimeout(() => {
           return client
@@ -339,20 +339,20 @@ describe('Testing Client class', function() {
       });
     });
 
-    describe('\'JobFailed\' event', function() {
+    describe('\'Failed\' event', function() {
       it('fires when job fails', function() {
         this.timeout(config.testTimeout2);
 
         let jobId = null;
 
         const failedListener = sinon.spy();
-        client.on('JobFailed', failedListener);
+        client.on('Failed', failedListener);
 
         const completedListener = sinon.spy();
-        client.on('JobCompleted', completedListener);
+        client.on('Completed', completedListener);
 
         const succeededListener = sinon.spy();
-        client.on('JobSucceeded', succeededListener);
+        client.on('Succeeded', succeededListener);
 
         setTimeout(() => {
           return client
@@ -372,7 +372,7 @@ describe('Testing Client class', function() {
       });
     });
 
-    describe('\'JobProgress\' event', function() {
+    describe('\'Progress\' event', function() {
       it('fires when job emits progress', function() {
         this.timeout(config.testTimeout2);
 
@@ -384,10 +384,10 @@ describe('Testing Client class', function() {
         testData.sleepTask.parameters.PROGRESS_MESSAGE = progressMessage;
 
         const progressListener = sinon.spy();
-        client.on('JobProgress', progressListener);
+        client.on('Progress', progressListener);
 
         const completedListener = sinon.spy();
-        client.on('JobCompleted', completedListener);
+        client.on('Completed', completedListener);
 
         setTimeout(() => {
           return client
