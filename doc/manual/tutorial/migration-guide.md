@@ -40,7 +40,8 @@ The purpose of this guide is to help you transition your application's source co
 ### Job Class
 #### Job.info() response changed.
 - See [JobInfo](#jobinfo) below for more details.
-- Event names changed.  They are now the same as the Client events.
+
+#### Job event names changed.  They are now the same as the Client events.
     - Renamed 'Accepted' to 'JobAccepted'.
     - Renamed 'Started' to 'JobStarted'.
     - Renamed 'Progress' to 'JobProgress'.

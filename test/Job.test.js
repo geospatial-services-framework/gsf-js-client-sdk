@@ -173,7 +173,7 @@ describe('Testing Job class', function() {
   });
 
   describe('.on()', function() {
-    describe('\'Started\' event', function() {
+    describe('\'JobStarted\' event', function() {
       it('fires when job starts', function() {
 
         const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
@@ -205,7 +205,7 @@ describe('Testing Job class', function() {
       });
     });
 
-    describe('\'Completed\' event', function() {
+    describe('\'JobCompleted\' event', function() {
       it('fires when job completes', function() {
         let jobId = null;
 
@@ -226,7 +226,7 @@ describe('Testing Job class', function() {
       });
     });
 
-    describe('\'Succeeded\' event', function() {
+    describe('\'JobSucceeded\' event', function() {
       it('fires when job succeeds', function() {
 
         const succeededListener = sinon.spy();
@@ -249,7 +249,7 @@ describe('Testing Job class', function() {
       });
     });
 
-    describe('\'Failed\' event', function() {
+    describe('\'JobFailed\' event', function() {
       it('fires when job fails', function() {
         const succeededListener = sinon.spy();
         const failedListener = sinon.spy();
@@ -273,7 +273,7 @@ describe('Testing Job class', function() {
       });
     });
 
-    describe('\'Progress\' event', function() {
+    describe('\'JobProgress\' event', function() {
       it('fires when job emits progress', function() {
         this.timeout(config.testTimeout2);
 
