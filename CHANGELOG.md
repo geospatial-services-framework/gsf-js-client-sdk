@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### New Features
 - Added Server.jobInfoList() for fetching an array of the current JobInfo objects.
 
+### Bug Fixes
+- Fix #10 - Server.jobInfoList() will retrieve full JobInfo objects from the server.
+
 ## 2.1.0 / 2018-03-21
 
 ### New Features
