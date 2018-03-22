@@ -233,67 +233,53 @@ describe('Testing Server class', function() {
     // if running against
     // a brand new GSF server or one with a recently
     // flushed job database.
-    it.only('retrieves a list of jobs', function(done) {
+    it('retrieves a list of jobs', function() {
       this.timeout(config.testTimeout2);
-
-      server.jobInfoList()
+      return server
+        .jobInfoList()
         .then((jobList) => {
-          console.log('jobList: ', jobList);
           expect(jobList).to.be.an.array;
           expect(jobList.length).to.be.above(1);
-          // verifyProperties(jobList[0], interfaces.)
-
-          done();
-        })
-        .catch((err) => {
-          done(err);
+          verifyProperties(jobList[0], interfaces.jobInfo);
         });
     });
     // Note: This test could fail the first time
     // if running against
     // a brand new GSF server or one with a recently
     // flushed job database.
-    it('retrieves a list of jobs with offset=1', function(done) {
+    it('retrieves a list of jobs with offset=1', function() {
       this.timeout(config.testTimeout1);
-
       const offset = 1;
-      server.jobInfoList()
+      return server
+        .jobInfoList()
         .then((jobList1) => {
-          server.jobInfoList({offset: offset})
+          return server
+            .jobInfoList({offset: offset})
             .then((jobList2) => {
               expect(jobList2).to.be.an.array;
               expect(jobList2[0].jobId).to.equal(jobList1[0].jobId + offset);
-              done();
-            }).catch((err) => {
-              done(err);
             });
-        }).catch((err) => {
-          done(err);
         });
     });
     // Note: This test could fail the first time
     // if running against
     // a brand new GSF server or one with a recently
     // flushed job database.
-    it('retrieves a list of jobs with status=Succeeded', function(done) {
+    it('retrieves a list of jobs with status=Succeeded', function() {
       this.timeout(config.testTimeout1);
-
       const status = 'Succeeded';
-      server.jobInfoList({status: status})
+      return server
+        .jobInfoList({status: status})
         .then((jobList) => {
           expect(jobList).to.be.an.array;
           expect(jobList.length).to.be.above(1);
-          done();
-        }).catch((err) => {
-          done(err);
         });
-
     });
     // Note: This test could fail the first time
     // if running against
     // a brand new GSF server or one with a recently
     // flushed job database.
-    it('retrieves a list of jobs with reverse=true', function(done) {
+    it('retrieves a list of jobs with reverse=true', function() {
       this.timeout(config.testTimeout1);
 
       const filter1 = {
@@ -306,33 +292,31 @@ describe('Testing Server class', function() {
         reverse: true
       };
 
-      server.jobInfoList(filter1)
+      return server
+        .jobInfoList(filter1)
         .then((jobList1) => {
-          server.jobInfoList(filter2)
+          return server
+            .jobInfoList(filter2)
             .then((jobList2) => {
               expect(jobList2).to.be.an.array;
               expect(jobList1).to.not.equal(jobList2);
               expect(jobList1[0].jobId).to.be.below(jobList2[0].jobId);
-              done();
-            }).catch((err) => {
-              done(err);
             });
-        }).catch((err) => {
-          done(err);
         });
     });
     // Note: This test could fail the first time
     // if running against
     // a brand new GSF server or one with a recently
     // flushed job database.
-    it('retrieves a list of jobs with limit=10', function(done) {
+    it('retrieves a list of jobs with limit=10', function() {
       this.timeout(config.testTimeout2);
 
       const filter = {
         limit: 10
       };
 
-      server.jobInfoList(filter)
+      return server
+        .jobInfoList(filter)
         .then((jobList) => {
           expect(jobList).to.be.an.array;
           expect(jobList.length).to.be.above(1);
@@ -340,10 +324,6 @@ describe('Testing Server class', function() {
           expect(jobList[0]).to.be.an('object');
           expect(jobList[0].jobId).to.exist;
           expect(jobList[0].jobId).to.be.a('number');
-          done();
-        })
-        .catch((err) => {
-          done(err);
         });
     });
 

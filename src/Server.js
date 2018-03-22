@@ -176,48 +176,11 @@ class Server extends EventEmitter {
    *  jobs that exist on the server.
    */
   jobs(jobListOptions) {
-    return new Promise((resolve, reject) => {
-      // Service url.
-      let url = [this.rootURL, SERVER_API.JOBS_PATH].join('/');
-
-      // Handle arguments.
-      if (jobListOptions) {
-        let params = [];
-        if (jobListOptions.offset) {
-          params.push('offset=' + jobListOptions.offset);
-        }
-        if (jobListOptions.limit) {
-          params.push('limit=' + jobListOptions.limit);
-        }
-        if (jobListOptions.reverse) {
-          params.push('reverse=' + jobListOptions.reverse);
-        }
-        if (jobListOptions.status) {
-          params.push('status=' + jobListOptions.status);
-        }
-        params = params.join('&');
-        if (params) url += '?' + params;
-      }
-
-      // Get job list.
-      request
-        .get(url)
-        .use(nocache) // Prevents caching of *only* this request
-        .set(this.headers)
-        .end((err, res) => {
-          if (res && res.ok) {
-            const jobs = res.body;
-            const jobList = jobs
-              .map(job => new Job(this, job.jobId));
-            resolve(jobList);
-          } else {
-            const status = ((err && err.status) ? ': ' + err.status : '');
-            const text = ((err && err.response && err.response.text) ? ': ' +
-             err.response.text : '');
-            reject('Error requesting jobs' + status + text);
-          }
-        });
-    });
+    return this
+      .jobInfoList(jobListOptions)
+      .then((jobInfoList) => (
+        jobInfoList.map((jobInfo) => (new Job(this, jobInfo.jobId))))
+      );
   }
 
   /**
@@ -257,8 +220,6 @@ class Server extends EventEmitter {
         .use(nocache) // Prevents caching of *only* this request
         .set(this.headers)
         .end((err, res) => {
-          console.log('url: ', url);
-          console.log(err);
           if (res && res.ok) {
             resolve(res.body);
           } else {
