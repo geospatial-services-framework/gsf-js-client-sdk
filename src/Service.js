@@ -105,21 +105,11 @@ class Service {
    * @return {Promise<Task[], error>} Returns a Promise to an array of Task objects.
    */
   tasks() {
-    return new Promise((resolve, reject) => {
-      this.taskInfoList()
-        .then((taskInfoList) => {
-          const tasks = taskInfoList.map((taskInfo) => {
-            return new Task(this, taskInfo.taskName);
-          });
-          resolve(tasks);
-        })
-        .catch((err) => {
-          const status = ((err && err.status) ? ': ' + err.status : '');
-          const text = ((err && err.response && err.response.text) ? ': ' +
-           err.response.text : '');
-          reject('Error requesting tasks' + status + text);
-        });
-    });
+    return this
+      .taskInfoList()
+      .then((taskInfoList) => (
+        taskInfoList.map((taskInfo) => (new Task(this, taskInfo.taskName))))
+      );
   }
 }
 

@@ -127,7 +127,7 @@ describe('Testing Service class', function() {
         .service(testTasks.ENVIService)
         .tasks();
 
-      return assert.isRejected(badInfoList, /Error requesting tasks/);
+      return assert.isRejected(badInfoList, /Error requesting task info objects/);
     });
 
   });
