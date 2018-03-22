@@ -30,12 +30,12 @@ class Client extends EventEmitter {
 
   /**
    * @param {ClientOptions} clientOptions - The object containing server information.
-   * @emits {Completed}
-   * @emits {Succeeded}
-   * @emits {Failed}
-   * @emits {Progress}
-   * @emits {Started}
-   * @emits {Accepted}
+   * @emits {JobCompleted}
+   * @emits {JobSucceeded}
+   * @emits {JobFailed}
+   * @emits {JobProgress}
+   * @emits {JobStarted}
+   * @emits {JobAccepted}
    */
   constructor(clientOptions) {
     // Init EventEmitter superclass.
@@ -233,7 +233,7 @@ class Client extends EventEmitter {
    * @param {number} jobId - The id of the job from which to retrieve the job object.
    * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
    * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
-   *  For more reliable job started information, listen to the GSF Started
+   *  For more reliable job started information, listen to the GSF JobStarted
    *  events as this callback may not always get called.  In some cases the job
    *  can start before the callback is registered.
    * @return {Job} Returns job object.
@@ -248,7 +248,7 @@ export default Client;
 
 /**
  * Emitted when a job completes.
- * @typedef {Object} Completed
+ * @typedef {Object} JobCompleted
  * @property {number} jobId - The job id.
  * @property {boolean} success - A boolean set to true if the job succeeds,
  *  false if it fails.
@@ -256,19 +256,19 @@ export default Client;
 
 /**
  * Emitted when a job succeeds.
- * @typedef {Object} Succeeded
+ * @typedef {Object} JobSucceeded
  * @property {number} jobId - The job id.
  */
 
 /**
  * Emitted when a job fails.
- * @typedef {Object} Failed
+ * @typedef {Object} JobFailed
  * @property {number} jobId - The job id.
  */
 
 /**
  * Emitted when job progress is updated.
- * @typedef {Object} Progress
+ * @typedef {Object} JobProgress
  * @property {number} jobId - The job id.
  * @property {number} progress - The job progress percent.
  * @property {string} [message] - The job progress message, if any.
@@ -276,12 +276,12 @@ export default Client;
 
 /**
  * Emitted when a job starts.
- * @typedef {Object} Started
+ * @typedef {Object} JobStarted
  * @property {number} jobId - The job id.
  */
 
 /**
  * Emitted when a job is accepted.
- * @typedef {Object} Accepted
+ * @typedef {Object} JobAccepted
  * @property {number} jobId - The job id.
  */

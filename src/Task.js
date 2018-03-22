@@ -65,7 +65,7 @@ class Task {
    * @param {SubmitOptions} submitOptions - The job submit options.
    * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
    * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
-   *  For more reliable job started information, listen to the GSF Started
+   *  For more reliable job started information, listen to the GSF JobStarted
    *  events as this callback may not always get called.  In some cases the job
    *  can start before the callback is registered.
    * @return {Promise<Job, error>} Returns a promise to a Job object.
@@ -107,7 +107,7 @@ class Task {
    * @param {SubmitOptions} submitOptions - The job submit options.
    * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
    * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
-   *    For more reliable job started information, listen to the GSF Started
+   *    For more reliable job started information, listen to the GSF JobStarted
    *   events as this callback may not always get called.  In some cases the job
    *   can start before the callback is registered.
    * @return {Promise<JobResults, error>} Returns a promise to a Job object.
@@ -187,7 +187,7 @@ export default Task;
 
 /**
  * Called when a job starts processing.
- *  For more reliable job started information, listen to the GSF Started
+ *  For more reliable job started information, listen to the GSF JobStarted
  * events as this callback may not always get called.
  * In some cases the job can start before the callback is registered.
  * @typedef {Object} JobStartedInfo

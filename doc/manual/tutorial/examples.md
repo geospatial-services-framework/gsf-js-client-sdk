@@ -132,11 +132,11 @@ const client = GSF.client({
   });
 
 // Set up an event listeners.
-client.once('Succeeded', (data) => {
+client.once('JobSucceeded', (data) => {
   console.log('Job Succeeded: ', data.jobId);
 });
 
-client.once('Failed', (data) => {
+client.once('JobFailed', (data) => {
   console.log('Job Failed: ', data.jobId);
 });
 
@@ -198,7 +198,7 @@ const client = GSF.client({
   });
 
 // Set up an event listeners.
-client.on('Progress', (data) => {
+client.on('JobProgress', (data) => {
   console.log('Job: ', data.jobId, ' progress percent: ', data.progress);
   console.log('Job: ', data.jobId, ' progress message: ', data.message);
 });
@@ -252,7 +252,7 @@ const NDVIParameters = {
 // Submit a job.
 task.submit(NDVIParameters).then((job) => {
   // Set up an event listener on the job.
-  job.on('Progress', (data) => {
+  job.on('JobProgress', (data) => {
     console.log('Job ', data.jobId, ' progress percent: ', data.progress);
     console.log('Job ', data.jobId, ' progress message: ', data.message);
   });
