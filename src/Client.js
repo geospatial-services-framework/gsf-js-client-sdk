@@ -176,6 +176,21 @@ class Client extends EventEmitter {
    *  jobs that exist on the server.
    */
   jobs(jobListOptions) {
+    return this
+      .jobInfoList(jobListOptions)
+      .then((jobInfoList) => (
+        jobInfoList.map((jobInfo) => (new Job(this, jobInfo.jobId))))
+      );
+  }
+
+  /**
+   * Retrieves an array of job info objects.
+   * @param {JobListOptions} jobListOptions - Object containing options for
+   *  filtering job list.
+   * @return {Promise<JobInfo[], error>} Returns a Promise to an array of
+   *  jobs that exist on the server.
+   */
+  jobInfoList(jobListOptions) {
     return new Promise((resolve, reject) => {
       // Service url.
       let url = [this.rootURL, SERVER_API.JOBS_PATH].join('/');
@@ -199,16 +214,14 @@ class Client extends EventEmitter {
         if (params) url += '?' + params;
       }
 
-      // Get job list.
+      // Get job info list.
       request
         .get(url)
         .use(nocache) // Prevents caching of *only* this request
         .set(this.headers)
         .end((err, res) => {
           if (res && res.ok) {
-            const jobList = res.body.jobs
-              .map(job => new Job(this, job.jobId));
-            resolve(jobList);
+            resolve(res.body);
           } else {
             const status = ((err && err.status) ? ': ' + err.status : '');
             const text = ((err && err.response && err.response.text) ? ': ' +
