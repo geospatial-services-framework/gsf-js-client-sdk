@@ -5156,9 +5156,29 @@ var Server = function (_EventEmitter) {
     value: function jobs(jobListOptions) {
       var _this3 = this;
 
+      return this.jobInfoList(jobListOptions).then(function (jobInfoList) {
+        return jobInfoList.map(function (jobInfo) {
+          return new _Job2.default(_this3, jobInfo.jobId);
+        });
+      });
+    }
+
+    /**
+     * Retrieves an array of job info objects.
+     * @param {JobListOptions} jobListOptions - Object containing options for
+     *  filtering job list.
+     * @return {Promise<JobInfo[], error>} Returns a Promise to an array of
+     *  jobs that exist on the server.
+     */
+
+  }, {
+    key: 'jobInfoList',
+    value: function jobInfoList(jobListOptions) {
+      var _this4 = this;
+
       return new _promise2.default(function (resolve, reject) {
         // Service url.
-        var url = [_this3.rootURL, SERVER_API.JOBS_PATH].join('/');
+        var url = [_this4.rootURL, SERVER_API.JOBS_PATH].join('/');
 
         // Handle arguments.
         if (jobListOptions) {
@@ -5179,15 +5199,11 @@ var Server = function (_EventEmitter) {
           if (params) url += '?' + params;
         }
 
-        // Get job list.
+        // Get job info list.
         request.get(url).use(nocache) // Prevents caching of *only* this request
-        .set(_this3.headers).end(function (err, res) {
+        .set(_this4.headers).end(function (err, res) {
           if (res && res.ok) {
-            var jobs = res.body;
-            var jobList = jobs.map(function (job) {
-              return new _Job2.default(_this3, job.jobId);
-            });
-            resolve(jobList);
+            resolve(res.body);
           } else {
             var status = err && err.status ? ': ' + err.status : '';
             var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
