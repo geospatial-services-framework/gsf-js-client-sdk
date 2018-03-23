@@ -11,6 +11,8 @@ const expect = chai.expect;
 const assert = chai.assert;
 import * as sinon from 'sinon';
 
+import { verifyProperties } from './utils/testUtils.js';
+import interfaces from './utils/interfaces.js';
 import * as testTasks from './utils/testTasks.js';
 import config from './config/config.js';
 
@@ -213,6 +215,117 @@ describe('Testing Client class', function() {
 
       const badclient = GSF.client(config.fakeServer);
       return assert.isRejected(badclient.jobs(),
+        /Error requesting jobs/);
+    });
+
+  });
+
+  describe('.jobInfoList()', function() {
+    // Note: This test could fail the first time
+    // if running against
+    // a brand new GSF server or one with a recently
+    // flushed job database.
+    it('retrieves a list of jobs', function() {
+      this.timeout(config.testTimeout2);
+      return client
+        .jobInfoList()
+        .then((jobList) => {
+          expect(jobList).to.be.an.array;
+          expect(jobList.length).to.be.above(1);
+          verifyProperties(jobList[0], interfaces.jobInfo);
+        });
+    });
+    // Note: This test could fail the first time
+    // if running against
+    // a brand new GSF server or one with a recently
+    // flushed job database.
+    it('retrieves a list of jobs with offset=1', function() {
+      this.timeout(config.testTimeout1);
+      const offset = 1;
+      return client
+        .jobInfoList()
+        .then((jobList1) => {
+          return client
+            .jobInfoList({offset: offset})
+            .then((jobList2) => {
+              expect(jobList2).to.be.an.array;
+              expect(jobList2[0].jobId).to.equal(jobList1[0].jobId + offset);
+            });
+        });
+    });
+    // Note: This test could fail the first time
+    // if running against
+    // a brand new GSF server or one with a recently
+    // flushed job database.
+    it('retrieves a list of jobs with status=Succeeded', function() {
+      this.timeout(config.testTimeout1);
+      const status = 'Succeeded';
+      return client
+        .jobInfoList({status: status})
+        .then((jobList) => {
+          expect(jobList).to.be.an.array;
+          expect(jobList.length).to.be.above(1);
+        });
+    });
+    // Note: This test could fail the first time
+    // if running against
+    // a brand new GSF server or one with a recently
+    // flushed job database.
+    it('retrieves a list of jobs with reverse=true', function() {
+      this.timeout(config.testTimeout1);
+
+      const filter1 = {
+        limit: 10,
+        reverse: false
+      };
+
+      const filter2 = {
+        limit: 10,
+        reverse: true
+      };
+
+      return client
+        .jobInfoList(filter1)
+        .then((jobList1) => {
+          return client
+            .jobInfoList(filter2)
+            .then((jobList2) => {
+              expect(jobList2).to.be.an.array;
+              expect(jobList1).to.not.equal(jobList2);
+              expect(jobList1[0].jobId).to.be.below(jobList2[0].jobId);
+            });
+        });
+    });
+    // Note: This test could fail the first time
+    // if running against
+    // a brand new GSF server or one with a recently
+    // flushed job database.
+    it('retrieves a list of jobs with limit=10', function() {
+      this.timeout(config.testTimeout2);
+
+      const filter = {
+        limit: 10
+      };
+
+      return client
+        .jobInfoList(filter)
+        .then((jobList) => {
+          expect(jobList).to.be.an.array;
+          expect(jobList.length).to.be.above(1);
+          expect(jobList.length).to.be.below(11);
+          expect(jobList[0]).to.be.an('object');
+          expect(jobList[0].jobId).to.exist;
+          expect(jobList[0].jobId).to.be.a('number');
+        });
+    });
+
+    it('rejects promise if error from request', function() {
+      this.timeout(config.testTimeout2);
+
+      const badServer = GSF
+        .client(config.fakeServer);
+
+      return assert.isRejected(badServer.jobInfoList(),
         /Error requesting jobs/);
     });
 

@@ -179,8 +179,8 @@ class Client extends EventEmitter {
     return this
       .jobInfoList(jobListOptions)
       .then((jobInfoList) => (
-        jobInfoList.map((jobInfo) => (new Job(this, jobInfo.jobId))))
-      );
+        jobInfoList.map((jobInfo) => (new Job(this, jobInfo.jobId)))
+      ));
   }
 
   /**
@@ -221,7 +221,7 @@ class Client extends EventEmitter {
         .set(this.headers)
         .end((err, res) => {
           if (res && res.ok) {
-            resolve(res.body);
+            resolve(res.body.jobs);
           } else {
             const status = ((err && err.status) ? ': ' + err.status : '');
             const text = ((err && err.response && err.response.text) ? ': ' +

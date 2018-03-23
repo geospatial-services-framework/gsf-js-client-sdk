@@ -145,17 +145,23 @@ module.exports = {
       jobId: 1,
       jobStatus: 'Failed',
       jobError: 'job failed',
-      jobInfo: {}
+      jobInfo: {},
+      taskName: 'task1',
+      serviceName: 'service1'
     },
     {
       jobId: 2,
       jobStatus: 'Succeeded',
-      jobInfo: {}
+      jobInfo: {},
+      taskName: 'task1',
+      serviceName: 'service1'
     },
     {
       jobId: 3,
       jobStatus: 'Succeeded',
-      jobInfo: {}
+      jobInfo: {},
+      taskName: 'task1',
+      serviceName: 'service1'
     }
   ]
 };

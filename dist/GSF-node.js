@@ -4361,12 +4361,12 @@ var Job = function (_EventEmitter) {
    *  For more reliable job started information, listen to the GSF JobStarted
    *  events as this callback may not always get called.  In some cases the job
    *  can start before the callback is registered.
-   * @emits {Failed}
-   * @emits {Succeeded}
-   * @emits {Completed}
-   * @emits {Started}
-   * @emits {Accepted}
-   * @emits {Progress}
+   * @emits {JobFailed}
+   * @emits {JobSucceeded}
+   * @emits {JobCompleted}
+   * @emits {JobStarted}
+   * @emits {JobAccepted}
+   * @emits {JobProgress}
    */
   function Job(client, jobId, progressCallback, startedCallback) {
     (0, _classCallCheck3.default)(this, Job);
@@ -4394,8 +4394,8 @@ var Job = function (_EventEmitter) {
     _this._waiting = null;
 
     // Call progress and started callbacks if supplied to constructor.
-    progressCallback && _this.on(_EVENTS2.default.job.progress, progressCallback);
-    startedCallback && _this.on(_EVENTS2.default.job.started, startedCallback);
+    progressCallback && _this.on(_EVENTS2.default.progress, progressCallback);
+    startedCallback && _this.on(_EVENTS2.default.started, startedCallback);
 
     // Function to handle events.
     _this._handler = function (eventName, data) {
@@ -4408,9 +4408,9 @@ var Job = function (_EventEmitter) {
 
     // Listen for events from our server.  Pass
     // them into the handler with job event type.
-    (0, _keys2.default)(_EVENTS2.default.client).forEach(function (key) {
-      _this._client.on(_EVENTS2.default.client[key], function (data) {
-        _this._handler(_EVENTS2.default.job[key], data);
+    (0, _keys2.default)(_EVENTS2.default).forEach(function (key) {
+      _this._client.on(_EVENTS2.default[key], function (data) {
+        _this._handler(_EVENTS2.default[key], data);
       });
     });
 
@@ -4435,9 +4435,9 @@ var Job = function (_EventEmitter) {
         this._waiting = new _promise2.default(function (resolve, reject) {
           // Check to make sure it hasn't already completed.
           _this2.info().then(function (info) {
-            if (info.jobStatus === _EVENTS2.default.job.succeeded) {
+            if (info.jobStatus === _EVENTS2.default.succeeded) {
               resolve(info.jobResults);
-            } else if (info.jobStatus === _EVENTS2.default.job.failed) {
+            } else if (info.jobStatus === _EVENTS2.default.failed) {
               reject(info.jobError);
             }
           }).catch(function (err) {
@@ -4445,12 +4445,12 @@ var Job = function (_EventEmitter) {
           });
 
           // Listen to job events.
-          _this2.once(_EVENTS2.default.job.succeeded, function (data) {
+          _this2.once(_EVENTS2.default.succeeded, function (data) {
             _this2.info().then(function (info) {
               resolve(info.jobResults);
             });
           });
-          _this2.once(_EVENTS2.default.job.failed, function (data) {
+          _this2.once(_EVENTS2.default.failed, function (data) {
             _this2.info().then(function (info) {
               reject(info.jobError);
             });
@@ -4466,19 +4466,18 @@ var Job = function (_EventEmitter) {
      * @typedef {Object} JobInfo
      * @property {string} serviceName - The name of the service.
      * @property {string} taskName - The name of the task.
-     * @property {JobOptions} jobOptions - Processing directives to submit along with the job.
-     * @property {Object} inputParameters - The input parameters.
+     * @property {JobOptions} [jobOptions] - Processing directives to submit along with the job.
+     * @property {Object} [inputParameters] - The input parameters.
      * @property {string} jobId - The job id.
-     * @property {number} jobProgress - The percentage of job completion.
-     * @property {string} jobMessage - A status message that is sent with progress updates.
+     * @property {number} [jobProgress] - The percentage of job completion.
+     * @property {string} [jobMessage] - A status message that is sent with progress updates.
      * @property {string} jobStatus - The status of the job. It can be Accepted,
      *  Started, Succeeded, or Failed.
-     * @property {Object} nodeInfo - Provides the information about the node the ran the job.
-     * @property {Object} jobResults - The job output results.
-     * @property {string} jobSubmitted - Time the job was submitted.
-     * @property {string} jobStart - Time the job started processing.
-     * @property {string} jobEnd - Time the job finished processing.
-     * @property {string} jobError - An error from the job, if there was one.
+     * @property {Object} [jobResults] - The job output results.
+     * @property {string} [jobSubmitted] - Time the job was submitted.
+     * @property {string} [jobStart] - Time the job started processing.
+     * @property {string} [jobEnd] - Time the job finished processing.
+     * @property {string} [jobError] - An error from the job, if there was one.
      */
 
     /**
@@ -4549,50 +4548,6 @@ var Job = function (_EventEmitter) {
 }(_events2.default);
 
 exports.default = Job;
-
-/**
- * Emitted when a job fails.
- * @typedef {Object} Failed
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job succeeds.
- * @typedef {Object} Succeeded
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job completes.
- * @typedef {Object} Completed
- * @property {number} jobId - The job id.
- * @property {boolean} success - A boolean set to true if the job succeeds, false if it fails.
- */
-
-/**
- * Emitted when a job starts.  This event may never fire for a job
- *  if the Job object is created after the event fires.  In this case it
- *  is more reliable to listen to the JobStarted events on the GSF object.
- * @typedef {Object} Started
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job is accepted by the server.  This event may never fire for a job
- *  if the Job object is created after the event fires.  In this case it
- *  is more reliable to listen to the JobAccepted events on the GSF object.
- * @typedef {Object} Accepted
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job reports progress.
- * @typedef {Object} Progress
- * @property {number} jobId - The job id.
- * @property {number} progress - The job progress percent.
- * @property {string} [message] - The job progress message, if any.
- */
-
 module.exports = exports['default'];
 
 /***/ }),
@@ -4606,22 +4561,12 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = {
-  job: {
-    accepted: 'Accepted',
-    started: 'Started',
-    completed: 'Completed',
-    succeeded: 'Succeeded',
-    progress: 'Progress',
-    failed: 'Failed'
-  },
-  client: {
-    accepted: 'JobAccepted',
-    started: 'JobStarted',
-    completed: 'JobCompleted',
-    succeeded: 'JobSucceeded',
-    progress: 'JobProgress',
-    failed: 'JobFailed'
-  }
+  accepted: 'JobAccepted',
+  started: 'JobStarted',
+  completed: 'JobCompleted',
+  succeeded: 'JobSucceeded',
+  progress: 'JobProgress',
+  failed: 'JobFailed'
 };
 module.exports = exports['default'];
 
@@ -5055,8 +5000,8 @@ var Client = function (_EventEmitter) {
     _this._events = new Eventsource([_this.URL, SERVER_API.EVENTS_PATH].join('/'));
 
     // Emit succeeded and failed events.
-    _this.on(_EVENTS2.default.client.completed, function (data) {
-      _this.emit(data.success ? _EVENTS2.default.client.succeeded : _EVENTS2.default.client.failed, data);
+    _this.on(_EVENTS2.default.completed, function (data) {
+      _this.emit(data.success ? _EVENTS2.default.succeeded : _EVENTS2.default.failed, data);
     });
 
     // Function to handle server sent events.
@@ -5069,12 +5014,12 @@ var Client = function (_EventEmitter) {
 
     // Listen for events from our server.  Pass
     // them into the handler with job event type.
-    (0, _keys2.default)(_EVENTS2.default.client).forEach(function (key) {
+    (0, _keys2.default)(_EVENTS2.default).forEach(function (key) {
       // Server doesn't emit succeeded or failed events.
-      if (_EVENTS2.default.client[key] === _EVENTS2.default.client.succeeded || _EVENTS2.default.client[key] === _EVENTS2.default.client.failed) return;
+      if (_EVENTS2.default[key] === _EVENTS2.default.succeeded || _EVENTS2.default[key] === _EVENTS2.default.failed) return;
 
       // Add a listener for each of the sse's.
-      _this._events.addEventListener(_EVENTS2.default.client[key], handler.bind(_this, _EVENTS2.default.client[key]));
+      _this._events.addEventListener(_EVENTS2.default[key], handler.bind(_this, _EVENTS2.default[key]));
     });
     return _this;
   }
@@ -5138,9 +5083,29 @@ var Client = function (_EventEmitter) {
     value: function jobs(jobListOptions) {
       var _this3 = this;
 
+      return this.jobInfoList(jobListOptions).then(function (jobInfoList) {
+        return jobInfoList.map(function (jobInfo) {
+          return new _Job2.default(_this3, jobInfo.jobId);
+        });
+      });
+    }
+
+    /**
+     * Retrieves an array of job info objects.
+     * @param {JobListOptions} jobListOptions - Object containing options for
+     *  filtering job list.
+     * @return {Promise<JobInfo[], error>} Returns a Promise to an array of
+     *  jobs that exist on the server.
+     */
+
+  }, {
+    key: 'jobInfoList',
+    value: function jobInfoList(jobListOptions) {
+      var _this4 = this;
+
       return new _promise2.default(function (resolve, reject) {
         // Service url.
-        var url = [_this3.rootURL, SERVER_API.JOBS_PATH].join('/');
+        var url = [_this4.rootURL, SERVER_API.JOBS_PATH].join('/');
 
         // Handle arguments.
         if (jobListOptions) {
@@ -5161,14 +5126,11 @@ var Client = function (_EventEmitter) {
           if (params) url += '?' + params;
         }
 
-        // Get job list.
+        // Get job info list.
         request.get(url).use(nocache) // Prevents caching of *only* this request
-        .set(_this3.headers).end(function (err, res) {
+        .set(_this4.headers).end(function (err, res) {
           if (res && res.ok) {
-            var jobList = res.body.jobs.map(function (job) {
-              return new _Job2.default(_this3, job.jobId);
-            });
-            resolve(jobList);
+            resolve(res.body.jobs);
           } else {
             var status = err && err.status ? ': ' + err.status : '';
             var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
@@ -11539,16 +11501,9 @@ var Service = function () {
     value: function tasks() {
       var _this3 = this;
 
-      return new _promise2.default(function (resolve, reject) {
-        _this3.taskInfoList().then(function (taskInfoList) {
-          var tasks = taskInfoList.map(function (taskInfo) {
-            return new _Task2.default(_this3, taskInfo.taskName);
-          });
-          resolve(tasks);
-        }).catch(function (err) {
-          var status = err && err.status ? ': ' + err.status : '';
-          var text = err && err.response && err.response.text ? ': ' + err.response.text : '';
-          reject('Error requesting tasks' + status + text);
+      return this.taskInfoList().then(function (taskInfoList) {
+        return taskInfoList.map(function (taskInfo) {
+          return new _Task2.default(_this3, taskInfo.taskName);
         });
       });
     }
@@ -11755,9 +11710,9 @@ exports.default = Task;
  * @typedef {Object} TaskInfo
  * @property {string} taskName - The name of the task.
  * @property {string} serviceName - The name of the service.
- * @property {string} displayName - A readable name for the task. This is only used for display
+ * @property {string} [displayName] - A readable name for the task. This is only used for display
  *   purposes.
- * @property {string} description - A description of the task.
+ * @property {string} [description] - A description of the task.
  *
  * @property {InputParameter[]} inputParameters - An array containing the input parameter definitions.
  * @property {OutputParameter[]} outputParameters - An array containing the output parameter definitions.
@@ -11769,10 +11724,10 @@ exports.default = Task;
  * @property {string} name - The name of the parameter.
  * @property {string} type - The type for the parameter.
  * @property {boolean} required - A boolean representing whether or not the parameter is required.
- * @property {string} displayName - A display name for the parameter.
- * @property {string} description - A description of the parameter.
- * @property {string} default - A default value for the parameter.
- * @property {string} choiceList - A list of values that will be accepted as input for the parameter.
+ * @property {string} [displayName] - A display name for the parameter.
+ * @property {string} [description] - A description of the parameter.
+ * @property {string} [default] - A default value for the parameter.
+ * @property {string} [choiceList] - A list of values that will be accepted as input for the parameter.
  */
 
 /**
@@ -11781,8 +11736,8 @@ exports.default = Task;
  * @property {string} name - The name of the parameter.
  * @property {string} type - The type for the parameter.
  * @property {boolean} required - A boolean representing whether or not the parameter is required.
- * @property {string} displayName - A display name for the parameter.
- * @property {string} description - A description of the parameter.
+ * @property {string} [displayName] - A display name for the parameter.
+ * @property {string} [description] - A description of the parameter.
  */
 
 /**
