@@ -123,7 +123,7 @@ class Job extends EventEmitter {
    * @property {string} [jobMessage] - A status message that is sent with progress updates.
    * @property {string} jobStatus - The status of the job. It can be Accepted,
    *  Started, Succeeded, or Failed.
-   * @property {Object} [jobResults] - The job output results.
+   * @property {JobResults} [jobResults] - The job output results.
    * @property {string} [jobSubmitted] - Time the job was submitted.
    * @property {string} [jobStart] - Time the job started processing.
    * @property {string} [jobEnd] - Time the job finished processing.
@@ -138,6 +138,14 @@ class Job extends EventEmitter {
     * @property {number} nodePort - The port of the server that ran the job.
     * @property {number} workerID - The ID of the worker that ran the job.
     */
+
+    /**
+     * The job output results.
+     * @typedef {Object} JobResults
+     * @property {*} <parameterName>.best - Result from the first parameter mapper which
+     * was able to reverse translate the output value.
+     * @property {*} <parameterName>.raw - The raw output value returned by the task.
+     */
 
   /**
    * Retrieves the job information.

@@ -88,7 +88,7 @@ declare namespace GSF {
             jobProgress?: number;
             jobMessage?: string;
             jobStatus: string;
-            jobResults?: Object;
+            jobResults?: JobResults;
             jobSubmitted?: string;
             jobStart?: string;
             jobEnd?: string;
@@ -103,8 +103,14 @@ declare namespace GSF {
         }
 
         export interface JobResults {
-            [key: string]: any;
+            [parameterName: string]: JobResult;
         }
+
+        export interface JobResult {
+            best: any;
+            raw: any;
+        }
+
         export interface ServiceInfo {
             name: string;
             description?: string;
