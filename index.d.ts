@@ -93,6 +93,13 @@ declare namespace GSF {
             jobStart?: string;
             jobEnd?: string;
             jobError?: string;
+            nodeInfo?: NodeInfo;
+        }
+
+        export interface NodeInfo {
+            nodeAddress: string;
+            nodePort: number;
+            workerID: number;
         }
 
         export interface JobResults {

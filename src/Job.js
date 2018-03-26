@@ -128,7 +128,16 @@ class Job extends EventEmitter {
    * @property {string} [jobStart] - Time the job started processing.
    * @property {string} [jobEnd] - Time the job finished processing.
    * @property {string} [jobError] - An error from the job, if there was one.
+   * @property {NodeInfo} [nodeInfo] - Provides information about the node on which the job ran.
    */
+
+   /**
+    * Provides information about the node on which the job ran.
+    * @typedef {Object} NodeInfo
+    * @property {string} nodeAddress - This is the address of the machine that ran job.
+    * @property {number} nodePort - The port of the server that ran the job.
+    * @property {number} workerID - The ID of the worker that ran the job.
+    */
 
   /**
    * Retrieves the job information.
