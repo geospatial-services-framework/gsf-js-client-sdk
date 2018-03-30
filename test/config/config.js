@@ -2,7 +2,7 @@ export default {
   localHTTPServer: {
     protocol: 'http',
     address: 'localhost',
-    port: 9192,
+    port: 9191,
     headers: {
       Authorization: 'testjwt'
     }
@@ -10,7 +10,7 @@ export default {
   localHTTPServerNoHeader: {
     protocol: 'http',
     address: 'localhost',
-    port: 9192
+    port: 9191
   },
   fakeServer: {
     protocol: 'http',

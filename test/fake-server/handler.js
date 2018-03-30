@@ -17,24 +17,22 @@ const contentType = {
 // Called by service info endpoint.
 const serviceInfo = function(req, res) {
   res.setHeader('Content-Type', contentType.json);
-  res.send(JSON.stringify(responses.services.response, null, 4));
+  const serviceDescription = responses.listServices.services
+    .find((element) => {
+      return element.name === req.params.service;
+    });
+  res.send(JSON.stringify(serviceDescription));
 };
 
-// Called by services endpoint.
 const listTasks = function(req, res) {
-  // Send requested task list to client
-  var taskList = [];
-  responses.services.response.services[1].tasks.forEach(function(task) {
-    taskList.push(req.query.taskInfo ? task : task.name);
-  });
   res.setHeader('Content-Type', contentType.json);
-  res.send(JSON.stringify({
-    name: req.params.service,
-    executionType: 'asynchronous',
-    description: req.params.service + ' processing routines',
-    readOnly: 'true',
-    tasks: taskList
-  }, null, 2));
+  res.send(JSON.stringify({tasks: responses.taskList}));
+};
+
+
+const listServices = function(req, res) {
+  res.setHeader('Content-Type', contentType.json);
+  res.send(JSON.stringify(responses.listServices));
 };
 
 // Called by jobs endpoint.
@@ -42,8 +40,7 @@ const listJobs = function(req, res) {
 
   // Send requested task list to client
   // Get a fake list of jobs.
-  let outResponses = JSON.parse(JSON.stringify(responses));
-  let outJobList = outResponses.jobList;
+  let outJobList = JSON.parse(JSON.stringify(responses.jobList));
 
   // Add offset to job numbers if specified.
   if (req.query.offset) {
@@ -67,7 +64,7 @@ const listJobs = function(req, res) {
 
   // Send response.
   res.setHeader('Content-Type', contentType.json);
-  res.send(JSON.stringify(outJobList, null, 4));
+  res.send(JSON.stringify({jobs: outJobList}));
 
 };
 
@@ -75,35 +72,34 @@ const listJobs = function(req, res) {
 const taskInfo = function(req, res) {
   // Send response using prebaked info.
   res.setHeader('Content-Type', contentType.json);
-  res.send(JSON.stringify(responses.taskInfo, null, 4));
+  res.send(JSON.stringify(responses.taskInfo));
 };
 
 // Called by submit job endpoint.
 const submitJob = function(req, res) {
+  res.setHeader('Content-Type', 'application/json');
 
-  const taskName = req.params.taskName;
+  const taskName = req.body.taskName;
   if (!taskName) {
     res.status(400).send('Task name not defined');
     return;
   }
 
-  const params = req.body;
-  const service = req.params.service;
-  const route = req.params.route || null;
+  const params = req.body.inputParameters;
+  const jobOptions = req.body.jobOptions;
+  const service = req.body.serviceName;
 
   // Add job to queue.
-  jobManager.addToQueue(taskName, service, params, route, null, function(err, jobID) {
+  jobManager.addToQueue(taskName, service, params, jobOptions, null, function(err, jobID) {
     if (err) {
       res.status(err.code).send(err.message);
       return;
     }
-    if (req.headers.origin && req.headers['gsf-noredirect']) {
-      res.json({jobId: jobID});
-    } else {
-      // Redirect to the job status endpoint
-      res.redirect('/' + 'ese' + '/' + 'jobs' +
-        '/' + jobID + '/status');
-    }
+    // Set the Location header
+    res.setHeader('Location', '/jobs/' + jobID);
+
+    // Send the new job information to the client
+    res.status(201).send(JSON.stringify({message: 'Added to job queue', jobID: jobID}));
   });
 };
 
@@ -136,5 +132,6 @@ module.exports = {
   taskInfo: taskInfo,
   submitJob: submitJob,
   cancelJob: cancelJob,
-  jobStatus: jobStatus
+  jobStatus: jobStatus,
+  listServices: listServices
 };

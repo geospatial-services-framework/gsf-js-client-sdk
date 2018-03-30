@@ -1,117 +1,15 @@
 module.exports = {
-  services: {
-    response: {
+  listServices: {
       services: [
         {
           name: 'IDL',
-          tasks: []
+          description: 'IDL processing routines'
         },
         {
           name: 'ENVI',
-          tasks: [
-            {
-              name: 'ThisTask',
-              displayname: 'This Task',
-              description: 'A task.',
-              parameters: [
-                {
-                  name: 'PARAM1',
-                  displayName: 'Param 1',
-                  description: 'The first input parameter',
-                  dataType: 'String',
-                  defaultValue: 'foo',
-                  direction: 'INPUT',
-                  parameterType: 'required'
-                },
-                {
-                  name: 'PARAM2',
-                  displayName: 'Param 2',
-                  description: 'The second input parameter',
-                  dataType: 'String',
-                  defaultValue: 'bar',
-                  direction: 'INPUT',
-                  parameterType: 'required'
-                },
-                {
-                  name: 'PARAM3',
-                  displayName: 'Param 3',
-                  description: 'The output parameter',
-                  dataType: 'String',
-                  direction: 'OUTPUT',
-                  parameterType: 'required'
-                }
-              ]
-            },
-            {
-              name: 'ThatTask',
-              displayname: 'This Task',
-              description: 'A task.',
-              parameters: [
-                {
-                  name: 'PARAM1',
-                  displayName: 'Param 1',
-                  description: 'The first input parameter',
-                  dataType: 'String',
-                  defaultValue: 'foo',
-                  direction: 'INPUT',
-                  parameterType: 'required'
-                },
-                {
-                  name: 'PARAM2',
-                  displayName: 'Param 2',
-                  description: 'The second input parameter',
-                  dataType: 'String',
-                  defaultValue: 'bar',
-                  direction: 'INPUT',
-                  parameterType: 'required'
-                },
-                {
-                  name: 'PARAM3',
-                  displayName: 'Param 3',
-                  description: 'The output parameter',
-                  dataType: 'String',
-                  direction: 'OUTPUT',
-                  parameterType: 'required'
-                }
-              ]
-            },
-            {
-              name: 'SomeTask',
-              displayname: 'This Task',
-              description: 'A task.',
-              parameters: [
-                {
-                  name: 'PARAM1',
-                  displayName: 'Param 1',
-                  description: 'The first input parameter',
-                  dataType: 'String',
-                  defaultValue: 'foo',
-                  direction: 'INPUT',
-                  parameterType: 'required'
-                },
-                {
-                  name: 'PARAM2',
-                  displayName: 'Param 2',
-                  description: 'The second input parameter',
-                  dataType: 'String',
-                  defaultValue: 'bar',
-                  direction: 'INPUT',
-                  parameterType: 'required'
-                },
-                {
-                  name: 'PARAM3',
-                  displayName: 'Param 3',
-                  description: 'The output parameter',
-                  dataType: 'String',
-                  direction: 'OUTPUT',
-                  parameterType: 'required'
-                }
-              ]
-            }
-          ]
+          description: 'ENVI processing routines'
         }
       ]
-    }
   },
   jobStatus: {
     response: {
@@ -119,37 +17,151 @@ module.exports = {
     }
   },
   taskInfo: {
-    name: 'task',
-    parameters: [
+    taskName: 'task',
+    serviceName: 'ThisService',
+    inputParameters: [
       {
         name: 'param1',
-        type: 'type',
+        type: 'String',
         required: true
       },
       {
         name: 'param2',
-        type: 'type',
+        type: 'String',
         required: true
-      },
+      }
+    ],
+    outputParameters: [
       {
         name: 'param3',
-        type: 'type',
+        type: 'String',
         required: true
       }
     ]
   },
+  taskList: [
+    {
+      taskName: 'ThisTask',
+      serviceName: 'ThisService',
+      displayname: 'This Task',
+      description: 'A task.',
+      inputParameters: [
+        {
+          name: 'PARAM1',
+          displayName: 'Param 1',
+          description: 'The first input parameter',
+          type: 'String',
+          default: 'foo',
+          required: true
+        },
+        {
+          name: 'PARAM2',
+          displayName: 'Param 2',
+          description: 'The second input parameter',
+          type: 'String',
+          default: 'bar',
+          required: true
+        }
+      ],
+      outputParameters: [
+        {
+          name: 'PARAM3',
+          displayName: 'Param 3',
+          description: 'The output parameter',
+          type: 'String',
+          required: true
+        }
+      ]
+    },
+    {
+      taskName: 'ThatTask',
+      displayname: 'This Task',
+      serviceName: 'ThisService',
+      description: 'A task.',
+      inputParameters: [
+        {
+          name: 'PARAM1',
+          displayName: 'Param 1',
+          description: 'The first input parameter',
+          type: 'String',
+          default: 'foo',
+          required: true
+        },
+        {
+          name: 'PARAM2',
+          displayName: 'Param 2',
+          description: 'The second input parameter',
+          type: 'String',
+          default: 'bar',
+          required: true
+        }
+      ],
+      outputParameters: [
+        {
+          name: 'PARAM3',
+          displayName: 'Param 3',
+          description: 'The output parameter',
+          type: 'String',
+          required: true
+        }
+      ]
+    },
+    {
+      taskName: 'SomeTask',
+      displayname: 'This Task',
+      serviceName: 'ThisService',
+      description: 'A task.',
+      inputParameters: [
+        {
+          name: 'PARAM1',
+          displayName: 'Param 1',
+          description: 'The first input parameter',
+          type: 'String',
+          default: 'foo',
+          required: true
+        },
+        {
+          name: 'PARAM2',
+          displayName: 'Param 2',
+          description: 'The second input parameter',
+          type: 'String',
+          default: 'bar',
+          required: true
+        }
+      ],
+      outputParameters: [
+        {
+          name: 'PARAM3',
+          displayName: 'Param 3',
+          description: 'The output parameter',
+          type: 'String',
+          required: true
+        }
+      ]
+    }
+  ],
   jobList: [
     {
       jobId: 1,
-      jobStatus: 'Failed'
+      jobStatus: 'Failed',
+      jobError: 'job failed',
+      jobInfo: {},
+      taskName: 'task1',
+      serviceName: 'service1'
     },
     {
       jobId: 2,
-      jobStatus: 'Succeeded'
+      jobStatus: 'Succeeded',
+      jobInfo: {},
+      taskName: 'task1',
+      serviceName: 'service1'
     },
     {
       jobId: 3,
-      jobStatus: 'Succeeded'
+      jobStatus: 'Succeeded',
+      jobInfo: {},
+      taskName: 'task1',
+      serviceName: 'service1'
     }
   ]
 };

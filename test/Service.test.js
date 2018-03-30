@@ -1,7 +1,14 @@
 /**
  * Tests for the Service class.
  */
-import { expect } from 'chai';
+import chai, {should} from 'chai';
+import chaiThings from 'chai-things';
+import chaiAsPromised from 'chai-as-promised';
+chai.use(chaiThings);
+chai.use(chaiAsPromised);
+should();
+const expect = chai.expect;
+const assert = chai.assert;
 
 import { verifyProperties } from './utils/testUtils.js';
 import interfaces from './utils/interfaces.js';
@@ -20,8 +27,8 @@ let service;
 //  http://mochajs.org/#arrow-functions
 describe('Testing Service class', function() {
   before(function(done) {
-    const server = GSF.server(config.localHTTPServer);
-    service = new Service(server, testTasks.ENVIService);
+    const client = GSF.client(config.localHTTPServer);
+    service = new Service(client, testTasks.ENVIService);
     done();
   });
 
@@ -35,33 +42,26 @@ describe('Testing Service class', function() {
   });
 
   describe('.info()', function() {
-    it('returns the service information', function(done) {
+    it('returns the service information', function() {
       this.timeout(config.testTimeout2);
-
-      service.info().then((info) => {
-        expect(info).to.be.an('object');
-        verifyProperties(info, interfaces.serviceInfo);
-        expect(info.name).to.equal(testTasks.ENVIService);
-        expect(info.tasks.length).to.be.above(2);
-        done();
-      }).catch((err) => {
-        done(err);
-      });
+      return service
+        .info()
+        .then((info) => {
+          expect(info).to.be.an('object');
+          verifyProperties(info, interfaces.serviceInfo);
+          expect(info.name).to.equal(testTasks.ENVIService);
+        });
     });
 
-    it('rejects promise if error from request', function(done) {
+    it('rejects promise if error from request', function() {
       this.timeout(config.testTimeout2);
 
-      const badServer = GSF.server(config.fakeServer);
-      const badService = new Service(badServer, testTasks.ENVIService);
+      const badInfo = GSF
+        .client(config.fakeServer)
+        .service(testTasks.ENVIService)
+        .info();
 
-      badService.info().then(() => {
-        done('Expected promise to be reject.');
-      }).catch((err) => {
-        expect(err).to.exist;
-        expect(err).to.be.a('string');
-        done();
-      });
+      return assert.isRejected(badInfo, /Error requesting service info/);
     });
   });
 
@@ -73,72 +73,61 @@ describe('Testing Service class', function() {
   });
 
   describe('.taskInfoList()', function() {
-    it('returns a list of task info objects', function(done) {
+    it('returns a list of task info objects', function() {
       this.timeout(config.testTimeout2);
 
-      service.taskInfoList().then((taskInfoList) => {
-        expect(taskInfoList).to.be.an.array;
-        expect(taskInfoList.length).to.be.above(2);
-        taskInfoList.forEach((info) => {
-          verifyProperties(info, interfaces.taskInfo);
-          expect(info.parameters).to.be.an.object;
-          expect(info.parameters).to.not.be.an.array;
-          const keys = Object.keys(info.parameters);
-          expect(keys.length).to.be.greaterThan(2);
-          keys.forEach((param) => {
-            verifyProperties(info.parameters[param], interfaces.taskParameters);
+      return service
+        .taskInfoList()
+        .then((taskInfoList) => {
+          expect(taskInfoList).to.be.an.array;
+          expect(taskInfoList.length).to.be.above(2);
+          taskInfoList.forEach((info) => {
+            verifyProperties(info, interfaces.taskInfo);
+            expect(info.inputParameters).to.be.an.array;
+            expect(info.outputParameters).to.be.an.array;
+            [...info.inputParameters,
+              ...info.outputParameters].forEach((param) => {
+              verifyProperties(param, interfaces.taskParameters);
+            });
           });
         });
-        done();
-      }).catch((err) => {
-        done(err);
-      });
     });
 
-    it('rejects promise if error from request', function(done) {
+    it('rejects promise if error from request', function() {
       this.timeout(config.testTimeout2);
 
-      const badServer = GSF.server(config.fakeServer);
-      const badService = new Service(badServer, testTasks.ENVIService);
+      const badInfoList = GSF
+        .client(config.fakeServer)
+        .service(testTasks.ENVIService)
+        .taskInfoList();
 
-      badService.taskInfoList().then(() => {
-        done('Expected promise to be rejected.');
-      }).catch((err) => {
-        expect(err).to.exist;
-        expect(err).to.be.a('string');
-        done();
-      });
+      return assert.isRejected(badInfoList, /Error requesting task info/);
     });
   });
 
   describe('.tasks()', function() {
-    it('returns array of task objects', function(done) {
+    it('returns array of task objects', function() {
       this.timeout(config.testTimeout2);
 
-      service.tasks().then((tasks) => {
-        expect(tasks).to.be.an.array;
-        expect(tasks.length).to.be.above(2);
-        expect(tasks[0]).to.be.an('object');
-        expect(tasks[0].name).to.be.an('string');
-        done();
-      }).catch((err) => {
-        done(err);
-      });
+      return service
+        .tasks()
+        .then((tasks) => {
+          expect(tasks).to.be.an.array;
+          expect(tasks.length).to.be.above(2);
+          expect(tasks[0]).to.be.an('object');
+          expect(tasks[0].name).to.be.an('string');
+        });
     });
 
-    it('rejects promise if error from request', function(done) {
+    it('rejects promise if error from request', function() {
       this.timeout(config.testTimeout2);
 
-      const badServer = GSF.server(config.fakeServer);
-      service = new Service(badServer, testTasks.ENVIService);
+      const badInfoList = GSF
+        .client(config.fakeServer)
+        .service(testTasks.ENVIService)
+        .tasks();
 
-      service.tasks().then(() => {
-        done('Expected promise to be reject.');
-      }).catch((err) => {
-        expect(err).to.exist;
-        expect(err).to.be.a('string');
-        done();
-      });
+      return assert.isRejected(badInfoList, /Error requesting task info objects/);
     });
 
   });

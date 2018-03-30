@@ -3,7 +3,7 @@ import saNoCache from 'superagent-no-cache';
 
 import * as sdkUtils from './utils/utils.js';
 import Task from './Task';
-import * as SERVER_API from './utils/ESE_API';
+import * as SERVER_API from './utils/GSF_API';
 
 const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 
@@ -12,18 +12,18 @@ const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
  */
 class Service {
   /**
-   * @param {GSF} server - The GSF server object.
+   * @param {Client} client - The GSF client object.
    * @param {string} serviceName - The name of the service.
    */
-  constructor(server, serviceName) {
+  constructor(client, serviceName) {
     /**
      * The service name.
      * @type {string}
      */
     this.name = serviceName;
 
-    // Server object.
-    this._server = server;
+    // Client object.
+    this._client = client;
   }
 
   /**
@@ -31,7 +31,6 @@ class Service {
    * @typedef {Object} ServiceInfo
    * @property {string} name - The name of the service.
    * @property {string} description - A description of the service.
-   * @property {string[]} tasks - A list of available tasks on the service.
    */
 
   /**
@@ -42,22 +41,16 @@ class Service {
   info() {
     return new Promise((resolve, reject) => {
       // Build service info url.
-      const url = [this._server.rootURL, SERVER_API.SERVICES_PATH, this.name].join('/');
+      const url = [this._client.rootURL, SERVER_API.SERVICES_PATH, this.name].join('/');
 
       // Get service info so we can pull off the tasks array.
       request
         .get(url)
         .use(nocache) // Prevents caching of *only* this request
-        .set(this._server.headers)
+        .set(this._client.headers)
         .end((err, res) => {
           if (res && res.ok) {
-            // Build our version of server info.
-            const serviceInfo = {
-              name: res.body.name,
-              description: res.body.description,
-              tasks: res.body.tasks
-            };
-            resolve(serviceInfo);
+            resolve(res.body);
           } else {
             const status = ((err && err.status) ? ': ' + err.status : '');
             const text = ((err && err.response && err.response.text) ? ': ' +
@@ -85,31 +78,18 @@ class Service {
   taskInfoList() {
     return new Promise((resolve, reject) => {
       // Build service info url.
-      const url = [this._server.rootURL, SERVER_API.SERVICES_PATH, this.name].join('/');
+      const url = [this._client.rootURL, SERVER_API.SERVICES_PATH,
+        this.name, SERVER_API.TASKS_PATH].join('/');
 
       // Get service info so we can pull off the tasks array.
       request
         .get(url)
         .query({ taskInfo: true })
         .use(nocache) // Prevents caching of *only* this request
-        .set(this._server.headers)
+        .set(this._client.headers)
         .end((err, res) => {
           if (res && res.ok) {
-            const tasks = [];
-            res.body.tasks.forEach((task) => {
-              if (typeof task === 'object') {
-                const newTask = Object.assign({}, task);
-                newTask.parameters = {};
-                task.parameters.forEach((param) => {
-                  newTask.parameters[param.name] = Object.assign({}, param);
-                });
-                tasks.push(newTask);
-              } else {
-                reject('Unable to get task info list.');
-                return;
-              }
-            });
-            resolve(tasks);
+            resolve(res.body.tasks);
           } else {
             const status = ((err && err.status) ? ': ' + err.status : '');
             const text = ((err && err.response && err.response.text) ? ': ' +
@@ -125,21 +105,11 @@ class Service {
    * @return {Promise<Task[], error>} Returns a Promise to an array of Task objects.
    */
   tasks() {
-    return new Promise((resolve, reject) => {
-      this.info()
-        .then((info) => {
-          const tasks = info.tasks.map((taskName) => {
-            return new Task(this, taskName);
-          });
-          resolve(tasks);
-        })
-        .catch((err) => {
-          const status = ((err && err.status) ? ': ' + err.status : '');
-          const text = ((err && err.response && err.response.text) ? ': ' +
-           err.response.text : '');
-          reject('Error requesting tasks' + status + text);
-        });
-    });
+    return this
+      .taskInfoList()
+      .then((taskInfoList) => (
+        taskInfoList.map((taskInfo) => (new Task(this, taskInfo.taskName))))
+      );
   }
 }
 

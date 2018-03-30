@@ -12,7 +12,9 @@ export default {
       FAIL: false
     },
     results: {
-      OUTPUT: 42
+      OUTPUT: {
+        best: 42
+      }
     }
   },
   sleepTaskFail: {

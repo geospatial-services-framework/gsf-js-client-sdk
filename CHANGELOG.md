@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 3.0.0 / 2018-03-21
+
+### New Features
+- Updated the SDK to use the new GSF HTTP API.
+
+### Breaking Changes
+- Several breaking changes were made for this release.  For a detailed summary of the changes, see the Migration Guide in the documentation.
+
 ## 2.2.0 / 2018-03-22
 
 ### New Features

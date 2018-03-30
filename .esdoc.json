@@ -13,12 +13,13 @@
   ],
   "title": "GSF JavaScript Client SDK",
   "styles": ["./doc/styles/main.css"],
-  "includeSource": false,
+  "includeSource": true,
   "index": "./doc/index.md",
   "manual": {
     "asset": "./doc/asset",
     "installation": ["./doc/manual/installation.md"],
     "tutorial": [
+      "./doc/manual/tutorial/migration-guide.md",
       "./doc/manual/tutorial/getting-started.md",
       "./doc/manual/tutorial/examples.md"
     ],

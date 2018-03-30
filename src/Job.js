@@ -3,8 +3,7 @@ import saNoCache from 'superagent-no-cache';
 import EventEmitter from 'events';
 
 import * as sdkUtils from './utils/utils.js';
-import * as SERVER_API from './utils/ESE_API';
-import * as STATUS_MAP from './utils/ESE_STATUS_MAP';
+import * as SERVER_API from './utils/GSF_API';
 import EVENTS from './utils/EVENTS';
 
 const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
@@ -14,21 +13,21 @@ const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
  */
 class Job extends EventEmitter {
   /**
-   * @param {GSF} server - The server object.
+   * @param {Client} client - The GSF Client object.
    * @param {number} jobId - The jobId.
    * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
    * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
    *  For more reliable job started information, listen to the GSF JobStarted
    *  events as this callback may not always get called.  In some cases the job
    *  can start before the callback is registered.
-   * @emits {Failed}
-   * @emits {Succeeded}
-   * @emits {Completed}
-   * @emits {Started}
-   * @emits {Accepted}
-   * @emits {Progress}
+   * @emits {JobFailed}
+   * @emits {JobSucceeded}
+   * @emits {JobCompleted}
+   * @emits {JobStarted}
+   * @emits {JobAccepted}
+   * @emits {JobProgress}
    */
-  constructor(server, jobId, progressCallback, startedCallback) {
+  constructor(client, jobId, progressCallback, startedCallback) {
     // Init EventEmitter superclass.
     super();
 
@@ -39,14 +38,11 @@ class Job extends EventEmitter {
     this.jobId = jobId;
 
     // Server object.
-    this._server = server;
+    this._client = client;
 
     // Job endpoint.
-    this._jobURL = [this._server.rootURL, SERVER_API.JOBS_PATH,
+    this._jobURL = [this._client.rootURL, SERVER_API.JOBS_PATH,
       this.jobId].join('/');
-
-    // Job status endpoint.
-    this._jobStatusURL = [this._jobURL, SERVER_API.STATUS_PATH].join('/');
 
     // Allow infinite listeners.
     this.setMaxListeners(0);
@@ -55,8 +51,8 @@ class Job extends EventEmitter {
     this._waiting = null;
 
     // Call progress and started callbacks if supplied to constructor.
-    progressCallback && this.on(EVENTS.job.progress, progressCallback);
-    startedCallback && this.on(EVENTS.job.started, startedCallback);
+    progressCallback && this.on(EVENTS.progress, progressCallback);
+    startedCallback && this.on(EVENTS.started, startedCallback);
 
     // Function to handle events.
     this._handler = (eventName, data) => {
@@ -69,9 +65,9 @@ class Job extends EventEmitter {
 
     // Listen for events from our server.  Pass
     // them into the handler with job event type.
-    Object.keys(EVENTS.server).forEach((key) => {
-      this._server.on(EVENTS.server[key], (data) => {
-        this._handler(EVENTS.job[key], data);
+    Object.keys(EVENTS).forEach((key) => {
+      this._client.on(EVENTS[key], (data) => {
+        this._handler(EVENTS[key], data);
       });
     });
 
@@ -85,27 +81,28 @@ class Job extends EventEmitter {
    */
   wait() {
     if (!this._waiting) {
+
       this._waiting = new Promise((resolve, reject) => {
         // Check to make sure it hasn't already completed.
         this.info().then((info) => {
-          if (info.jobStatus === EVENTS.job.succeeded) {
-            resolve(info.results);
-          } else if (info.jobStatus === EVENTS.job.failed) {
-            reject(info.jobErrorMessage);
+          if (info.jobStatus === EVENTS.succeeded) {
+            resolve(info.jobResults);
+          } else if (info.jobStatus === EVENTS.failed) {
+            reject(info.jobError);
           }
         }).catch((err) => {
           reject(err);
         });
 
         // Listen to job events.
-        this.once(EVENTS.job.succeeded, (data) => {
+        this.once(EVENTS.succeeded, (data) => {
           this.info().then((info) => {
-            resolve(info.results);
+            resolve(info.jobResults);
           });
         });
-        this.once(EVENTS.job.failed, (data) => {
+        this.once(EVENTS.failed, (data) => {
           this.info().then((info) => {
-            reject(info.jobErrorMessage);
+            reject(info.jobError);
           });
         });
       });
@@ -117,20 +114,38 @@ class Job extends EventEmitter {
   /**
    * The JobInfo object contains information about a job.
    * @typedef {Object} JobInfo
+   * @property {string} serviceName - The name of the service.
+   * @property {string} taskName - The name of the task.
+   * @property {JobOptions} [jobOptions] - Processing directives to submit along with the job.
+   * @property {Object} [inputParameters] - The input parameters.
    * @property {string} jobId - The job id.
+   * @property {number} [jobProgress] - The percentage of job completion.
+   * @property {string} [jobMessage] - A status message that is sent with progress updates.
    * @property {string} jobStatus - The status of the job. It can be Accepted,
    *  Started, Succeeded, or Failed.
-   * @property {string} jobStatusURL - The job status URL.
-   * @property {number} jobProgress - The percentage of job completion.
-   * @property {string} jobProgressMessage - The job progress message.
-   * @property {string} jobRoute - The job route.
-   * @property {string} taskName - The name of the task.
-   * @property {string} serviceName - The name of the service.
-   * @property {string} jobErrorMessage - Any errors generated during job execution.
-   * @property {Object} inputs - The input parameters.
-   * @property {Object[]} messages - Status messages.
-   * @property {Object} results - The job output.
+   * @property {JobResults} [jobResults] - The job output results.
+   * @property {string} [jobSubmitted] - Time the job was submitted.
+   * @property {string} [jobStart] - Time the job started processing.
+   * @property {string} [jobEnd] - Time the job finished processing.
+   * @property {string} [jobError] - An error from the job, if there was one.
+   * @property {NodeInfo} [nodeInfo] - Provides information about the node on which the job ran.
    */
+
+   /**
+    * Provides information about the node on which the job ran.
+    * @typedef {Object} NodeInfo
+    * @property {string} nodeAddress - This is the address of the machine that ran job.
+    * @property {number} nodePort - The port of the server that ran the job.
+    * @property {number} workerID - The ID of the worker that ran the job.
+    */
+
+    /**
+     * The job output results.
+     * @typedef {Object} JobResults
+     * @property {*} <parameterName>.best - Result from the first parameter mapper which
+     * was able to reverse translate the output value.
+     * @property {*} <parameterName>.raw - The raw output value returned by the task.
+     */
 
   /**
    * Retrieves the job information.
@@ -138,26 +153,16 @@ class Job extends EventEmitter {
    */
   info() {
     return new Promise((resolve, reject) => {
-      const jobStatusURL = this._jobStatusURL;
+      const jobStatusURL = this._jobURL;
+
       // Get job status.
       request
         .get(jobStatusURL)
         .use(nocache) // Prevents caching of *only* this request
-        .set(this._server.headers)
+        .set(this._client.headers)
         .end((err, res) => {
           if (res && res.ok) {
-            // Create object from results array.
-            let jobInfo = res.body;
-            let results = {};
-            jobInfo.results.forEach((result) => {
-              results[result.name] = result.value;
-            });
-            jobInfo.results = results;
-
-            // Remap ese statuses to our own.
-            jobInfo.jobStatus = STATUS_MAP[jobInfo.jobStatus];
-
-            resolve(jobInfo);
+            resolve(res.body);
           } else {
             const status = ((err && err.status) ? ': ' + err.status : '');
             const text = ((err && err.response && err.response.text) ? ': ' +
@@ -186,12 +191,14 @@ class Job extends EventEmitter {
     const url = this._jobURL;
     return new Promise((resolve, reject) => {
       // Cancel force flag.
-      const kill = force ? '?kill=true' : '';
+      const requestStatus = force ? 'KillRequested' : 'CancelRequested';
       // Cancel job.
       request
-        .delete(url + kill)
+        .put(url)
+        .set('Content-Type', 'application/json')
+        .send(JSON.stringify({'jobStatus': requestStatus}))
         .use(nocache) // Prevents caching of *only* this request
-        .set(this._server.headers)
+        .set(this._client.headers)
         .end((err, res) => {
           if (res && res.ok) {
             resolve(true);
@@ -207,46 +214,3 @@ class Job extends EventEmitter {
 }
 
 export default Job;
-
-/**
- * Emitted when a job fails.
- * @typedef {Object} Failed
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job succeeds.
- * @typedef {Object} Succeeded
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job completes.
- * @typedef {Object} Completed
- * @property {number} jobId - The job id.
- * @property {boolean} success - A boolean set to true if the job succeeds, false if it fails.
- */
-
-/**
- * Emitted when a job starts.  This event may never fire for a job
- *  if the Job object is created after the event fires.  In this case it
- *  is more reliable to listen to the JobStarted events on the GSF object.
- * @typedef {Object} Started
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job is accepted by the server.  This event may never fire for a job
- *  if the Job object is created after the event fires.  In this case it
- *  is more reliable to listen to the JobAccepted events on the GSF object.
- * @typedef {Object} Accepted
- * @property {number} jobId - The job id.
- */
-
-/**
- * Emitted when a job reports progress.
- * @typedef {Object} Progress
- * @property {number} jobId - The job id.
- * @property {number} progress - The job progress percent.
- * @property {string} [message] - The job progress message, if any.
- */

@@ -1,15 +1,15 @@
-import Server from './Server';
+import Client from './Client';
 
 /**
  * The GSF object provides an entry point to the SDK.
  * @example
- * const server = GSF.server({address:'MyServer',port:9191});
+ * const client = GSF.client({address:'MyServer',port:9191});
  *
  * @typedef {Object} GSF
- * @property {function(serverArgs: ServerArgs): Server} server - The function for creating a new Server object.
+ * @property {function(clientOptions: ClientOptions): Client} client - The function for creating a new Client object.
  */
 export default {
-  server(serverArgs) {
-    return new Server(serverArgs);
+  client(clientOptions) {
+    return new Client(clientOptions);
   }
 };

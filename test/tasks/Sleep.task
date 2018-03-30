@@ -1,5 +1,6 @@
 {
   "taskName": "Sleep",
+  "displayName": "Sleep Task",
   "description": "Sleeps, returns input as output, and optionally.",
   "inputParameters": {
     "SLEEP_TIME": {

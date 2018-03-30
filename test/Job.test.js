@@ -1,7 +1,15 @@
 /**
  * Tests for the Job class.
  */
-import { expect } from 'chai';
+import chai, {should} from 'chai';
+import chaiThings from 'chai-things';
+import chaiAsPromised from 'chai-as-promised';
+chai.use(chaiThings);
+chai.use(chaiAsPromised);
+should();
+const expect = chai.expect;
+const assert = chai.assert;
+import * as sinon from 'sinon';
 
 import { verifyProperties } from './utils/testUtils.js';
 import * as testTasks from './utils/testTasks.js';
@@ -12,7 +20,7 @@ import GSF from '../src/GSF';
 import Task from '../src/Task';
 import Job from '../src/Job';
 
-let server;
+let client;
 
 const TEST_JOB_ID = 1;
 
@@ -23,19 +31,19 @@ const TEST_JOB_ID = 1;
 //  http://mochajs.org/#arrow-functions
 describe('Testing Job class', function() {
   before(function(done) {
-    server = GSF.server(config.localHTTPServer);
+    client = GSF.client(config.localHTTPServer);
     done();
   });
 
   afterEach(function(done) {
-    server.removeAllListeners('JobProgress');
+    client.removeAllListeners('JobProgress');
     done();
   });
 
   // ==========================================================
   describe('Job() constructor', function() {
     it('returns a valid job object', function(done) {
-      const job = new Job(server, TEST_JOB_ID);
+      const job = new Job(client, TEST_JOB_ID);
       expect(job).to.be.an('object');
       expect(job.jobId).to.equal(TEST_JOB_ID);
       done();
@@ -43,77 +51,67 @@ describe('Testing Job class', function() {
   });
 
   describe('.jobInfo()', function() {
-    it('retrieves the job information', function(done) {
-      const task = new Task(server.service(testTasks.sleepTask.service),
+    it('retrieves the job information', function() {
+      const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
-      task.submit({parameters: testTasks.sleepTask.parameters})
-        .then((job) => {
-          job.once('Completed', function(success) {
-            job.info()
-              .then((jobInfo) => {
-                expect(jobInfo).to.be.an('object');
-                expect(Array.isArray(jobInfo.results)).to.be.false;
-                verifyProperties(jobInfo, interfaces.jobInfo);
-                expect(jobInfo.jobStatus).to.equal('Succeeded');
-                expect(jobInfo.results).to.deep
-                  .equal(testTasks.sleepTask.results);
-                done();
-              }).catch((err) => {
-                done('Error getting job info: ' + err);
-              }).catch((err) => {
-                done('Error submitting job: ' + err);
-              });
-          });
+
+      let job = null;
+      return task
+        .submit({inputParameters: testTasks.sleepTask.parameters})
+        .then((jobObj) => {
+          job = jobObj;
+          return job.wait();
+        })
+        .then(() => {
+          return job
+            .info()
+            .then((jobInfo) => {
+              expect(jobInfo).to.be.an('object');
+              expect(jobInfo.jobResults).to.be.an.an('object');
+              verifyProperties(jobInfo, interfaces.jobInfo);
+              expect(jobInfo.jobStatus).to.equal('Succeeded');
+              expect(jobInfo.jobResults).to.deep
+                .equal(testTasks.sleepTask.results);
+            });
         });
     });
 
-    it('rejects promise if error from request', function(done) {
+    it('rejects promise if error from request', function() {
       this.timeout(config.testTimeout2);
 
-      const badServer = GSF.server(config.fakeServer);
-      const job = new Job(badServer, TEST_JOB_ID);
-      job.info()
-        .then(() => {
-          done('Expected promise to be rejected.');
-        })
-        .catch((err) => {
-          expect(err).to.exist;
-          expect(err).to.be.a('string');
-          done();
-        });
+      const job = GSF.client(config.fakeServer).job(TEST_JOB_ID);
+      return assert.isRejected(job.info(),
+        /Error requesting job info/);
     });
 
   });
 
   describe('.wait()', function() {
-    it('waits for job completion', function(done) {
-      const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
-      task.submit({parameters: testTasks.sleepTask.parameters})
-        .then(job => job.wait())
-        .then((results) => {
-          expect(results).to.be.an('object');
-          expect(results).to.deep.equal(testTasks.sleepTask.results);
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
-    });
-
-    it('rejects promise if job fails', function(done) {
+    it('waits for job completion', function() {
       this.timeout(config.testTimeout2);
 
-      const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
-      task.submit({parameters: testTasks.sleepTaskFail.parameters})
-        .then(job => job.wait())
-        .then((result) => {
-          done('Expected promise to be rejected.');
-        })
-        .catch((jobError) => {
-          expect(jobError).to.be.a('string');
-          expect(jobError).to.equal(testTasks.sleepTaskFail.parameters.ERROR_MESSAGE);
-          done();
-        });
+      const wait = client
+        .service(testTasks.sleepTask.service)
+        .task(testTasks.sleepTask.name)
+        .submit({inputParameters: testTasks.sleepTask.parameters})
+        .then(job => job.wait());
+      return Promise.all([
+        expect(wait).to.eventually.be.fulfilled,
+        expect(wait).to.eventually.be.an('Object'),
+        expect(wait).to.eventually.deep.equal(testTasks.sleepTask.results)
+      ]);
+    });
+
+    it('rejects promise if job fails', function() {
+      this.timeout(config.testTimeout2);
+
+      const wait = client
+        .service(testTasks.sleepTaskFail.service)
+        .task(testTasks.sleepTaskFail.name)
+        .submit({inputParameters: testTasks.sleepTaskFail.parameters})
+        .then(job => job.wait());
+
+      return assert.isRejected(wait, /Task Failed/);
     });
 
   });
@@ -122,13 +120,13 @@ describe('Testing Job class', function() {
     it('cancels a job with kill=false', function(done) {
       this.timeout(config.testTimeout2);
 
-      let params = Object.assign({}, testTasks.sleepTask.parameters);
+      let params = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
       params.SLEEP_TIME = 150;
-      const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
-      task.submit({parameters: params})
+      const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
+      task.submit(params)
         .then((job) => {
           const force = false;
-          job.once('Completed', function(data) {
+          job.once('JobCompleted', function(data) {
             expect(data.success).to.be.false;
             done();
           });
@@ -136,214 +134,179 @@ describe('Testing Job class', function() {
             .then((bool) => {
               expect(bool).to.be.true;
             })
-            .catch((err) => {
-              done('Error cancelling job: ' + err);
-            });
-        }).catch((err) => {
-          done('Error submitting job: ' + err);
-        });
+            .catch(done);
+        }).catch(done);
     });
 
     it('cancels job with kill=true', function(done) {
       this.timeout(config.testTimeout2);
 
-      const task = new Task(server.service(testTasks.sleepTask.service),
+      const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
-      let params = Object.assign({}, testTasks.sleepTask.parameters);
-      params.SLEEP_TIME = 150;
-      task.submit({parameters: params})
+      const params = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
+      params.SLEEP_TIME = 350;
+      task.submit(params)
         .then((job) => {
           const force = true;
-          job.cancel(force).then(() => {
-            job.once('Completed', function(data) {
-              expect(data.success).to.be.false;
-              done();
-            });
-          }).catch((err) => {
-            done('Error cancelling job: ' + err);
-          });
-        }).catch((err) => {
-          done('Error submitting job: ' + err);
-        });
+          job.cancel(force)
+            .then(() => {
+              job.once('JobCompleted', function(data) {
+                expect(data.success).to.be.false;
+                done();
+              });
+            })
+            .catch(done);
+        })
+        .catch(done);
     });
 
-    it('rejects promise if error from request', function(done) {
-
+    it('rejects promise if error from request', function() {
       this.timeout(config.testTimeout2);
 
-      const badServer = GSF.server(config.fakeServer);
-      const job = new Job(badServer, 1);
-      job.cancel(false).then(() => {
-        done('Expected promise to be rejected.');
-      }).catch((err) => {
-        expect(err).to.exist;
-        expect(err).to.be.a('string');
-        done();
-      });
+      const badCancel = GSF
+        .client(config.fakeServer)
+        .job(1)
+        .cancel(false);
+
+      return assert.isRejected(badCancel, /Error cancelling job/);
     });
   });
 
   describe('.on()', function() {
-    describe('\'Started\' event', function() {
-      it('fires when job starts', function(done) {
-        let jobStartedFired = true;
+    describe('\'JobStarted\' event', function() {
+      it('fires when job starts', function() {
 
-        const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
-        task.submit({parameters: testTasks.sleepTask.parameters});
+        const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
 
-        let params = Object.assign({}, testTasks.sleepTask.parameters);
-        params.SLEEP_TIME = 500;
+        const params1 = Object.assign({}, testTasks.sleepTask.parameters);
+        params1.SLEEP_TIME = 800;
 
-        let sleepParams = params;
-        sleepParams.SLEEP_TIME = 100;
+        const params2 = Object.assign({}, params1);
+        params2.SLEEP_TIME = 0;
 
-        // Submit a two jobs so we have one that gets queued.
-        // That will ensure that there is a started event.
-        // Workers needs to be set to 1 in the server config for this to pass.
-        task.submit({parameters: params});
-        task.submit({parameters: sleepParams})
+        const startedListener = sinon.spy();
+
+        return task.submit({inputParameters: params1}).then((job1) => {
+
+          // At this point, we are sure that the first job has been accepted
+          // Submit the second job and verify we get the right callback
+          let job2;
+          return task
+            .submit({inputParameters: params2})
+            .then((jobObj) => {
+              job2 = jobObj;
+              job2.on('JobStarted', startedListener);
+              return jobObj.wait();
+            })
+            .then((results) => {
+              assert(startedListener.calledOnceWith({jobId: job2.jobId}));
+            });
+        });
+      });
+    });
+
+    describe('\'JobCompleted\' event', function() {
+      it('fires when job completes', function() {
+        let jobId = null;
+
+        const completedListener = sinon.spy();
+
+        return client
+          .service(testTasks.sleepTask.service)
+          .task(testTasks.sleepTask.name)
+          .submit({inputParameters: testTasks.sleepTask.parameters})
           .then((job) => {
-            job.once('Started', function(data) {
-              try {
-                expect(data.jobId).to.equal(job.jobId);
-                jobStartedFired = true;
-              } catch (e) {
-                done(e);
-              }
-            });
-
-            job.once('Completed', function(data) {
-              try {
-                expect(data.jobId).to.equal(job.jobId);
-                expect(jobStartedFired).to.be.true;
-                done();
-              } catch (e) {
-                done(e);
-              }
-            });
-
-          }).catch((err) => {
-            done(err);
+            job.on('JobCompleted', completedListener);
+            jobId = job.jobId;
+            return job.wait();
+          })
+          .then((results) => {
+            assert(completedListener.calledOnceWith({jobId: jobId, success: true}));
           });
       });
     });
 
-    describe('\'Completed\' event', function() {
-      it('fires when job completes', function(done) {
-        const task = new Task(server.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
-        task.submit({parameters: testTasks.sleepTask.parameters})
-          .then((job) => {
-            job.once('Completed', function(data) {
-              try {
-                expect(data.success).to.be.true;
-                done();
-              } catch (e) {
-                done(e);
-              }
+    describe('\'JobSucceeded\' event', function() {
+      it('fires when job succeeds', function() {
 
-            });
-          }).catch((err) => {
-            done('Error submitting job: ' + err);
+        const succeededListener = sinon.spy();
+        const failedListener = sinon.spy();
+        let jobId;
+        return client
+          .service(testTasks.sleepTask.service)
+          .task(testTasks.sleepTask.name)
+          .submit({inputParameters: testTasks.sleepTask.parameters})
+          .then((job) => {
+            jobId = job.jobId;
+            job.on('JobSucceeded', succeededListener);
+            job.on('JobFailed', failedListener);
+            return job.wait();
+          })
+          .then((results) => {
+            assert(succeededListener.calledOnceWith({jobId: jobId, success: true}));
+            assert(failedListener.notCalled);
           });
       });
     });
 
-    describe('\'Succeeded\' event', function() {
-      it('fires when job succeeds', function(done) {
-        let failedEventCalled = false;
-        const task = new Task(server.service(testTasks.sleepTask.service),
-          testTasks.sleepTask.name);
-        task.submit({parameters: testTasks.sleepTask.parameters})
+    describe('\'JobFailed\' event', function() {
+      it('fires when job fails', function() {
+        const succeededListener = sinon.spy();
+        const failedListener = sinon.spy();
+        let jobId;
+        return client
+          .service(testTasks.sleepTask.service)
+          .task(testTasks.sleepTask.name)
+          .submit({inputParameters: testTasks.sleepTaskFail.parameters})
           .then((job) => {
-            job.once('Failed', function(data) {
-              failedEventCalled = true;
-            });
-            job.once('Succeeded', function(data) {
-              try {
-                expect(failedEventCalled).to.be.false;
-                done();
-              } catch (e) {
-                done(e);
-              }
-
-            });
-          }).catch((err) => {
-            done('Error submitting job: ' + err);
+            job.on('JobSucceeded', succeededListener);
+            job.on('JobFailed', failedListener);
+            jobId = job.jobId;
+            return job.wait();
+          })
+          .catch(() => {
+            return Promise.all([
+              assert(failedListener.calledOnceWith({jobId: jobId, success: false})),
+              assert(succeededListener.notCalled)
+            ]);
           });
       });
     });
 
-    describe('\'Failed\' event', function() {
-      it('fires when job fails', function(done) {
-        let succeededEventCalled = false;
-        const task = new Task(server.service(testTasks.sleepTask.service),
-          testTasks.sleepTaskFail.name);
-        task.submit({parameters: testTasks.sleepTaskFail.parameters})
-          .then((job) => {
-            job.once('Succeeded', function(data) {
-              succeededEventCalled = true;
-            });
-            job.once('Failed', function(data) {
-              try {
-                expect(data).to.exist;
-                expect(data).to.be.an('object');
-                expect(succeededEventCalled).to.be.false;
-                done();
-              } catch (e) {
-                done(e);
-              }
-
-            });
-          }).catch((err) => {
-            done('Error submitting job: ' + err);
-          });
-      });
-    });
-
-    describe('\'Progress\' event', function() {
-      it('fires when job emits progress', function(done) {
+    describe('\'JobProgress\' event', function() {
+      it('fires when job emits progress', function() {
         this.timeout(config.testTimeout2);
 
-        let nProgressEvents = 0;
-        let testData = testTasks;
+        let jobId = null;
+        const testData = Object.assign({}, testTasks);
         const nProgress = 5;
         const progressMessage = 'Message';
         testData.sleepTask.parameters.N_PROGRESS = nProgress;
         testData.sleepTask.parameters.PROGRESS_MESSAGE = progressMessage;
 
-        const task = new Task(server.service(testTasks.sleepTask.service),
-          testTasks.sleepTask.name);
-        task.submit({parameters: testTasks.sleepTask.parameters})
-          .then((job2) => {
-            job2.on('Progress', function(data) {
-              try {
-                nProgressEvents++;
-                expect(data.progress).to.exist;
-                expect(data.progress).to.be.a('number');
-                expect(data.progress).to.be.above(-1);
-                expect(data.progress).to.be.below(100);
-                expect(data.message).to.exist;
-                expect(data.message).to.equal(progressMessage);
-              } catch (e) {
-                done(e);
-              }
+        const progressListener = sinon.spy();
+        const completedListener = sinon.spy();
 
-            });
-            job2.once('Succeeded', function(data) {
-              try {
-                expect(nProgressEvents).to.equal(nProgress);
-                done();
-              } catch (e) {
-                done(e);
-              }
+        return client
+          .service(testTasks.sleepTask.service)
+          .task(testTasks.sleepTask.name)
+          .submit({inputParameters: testData.sleepTask.parameters})
+          .then((job) => {
+            jobId = job.jobId;
+            job.on('JobProgress', progressListener);
+            job.on('JobCompleted', completedListener);
+            return job.wait();
+          })
+          .then((results) => {
+            expect(progressListener.callCount).to.equal(nProgress);
+            assert(completedListener.calledOnce);
+            const args = progressListener.args.map((arg) => (arg[0]));
+            const progress = args.map((arg) => (arg.progress));
 
-            });
-            job2.once('Failed', function(data) {
-              done('Failed');
-            });
-
-          }).catch((err) => {
-            done('Error submitting job: ' + err);
+            (args).should.all.have.property('message', progressMessage);
+            (args).should.all.have.property('jobId', jobId);
+            (progress).should.all.have.be.above(-1);
+            (progress).should.all.have.be.below(100);
           });
       });
     });

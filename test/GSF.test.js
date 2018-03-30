@@ -12,8 +12,8 @@ import GSF from '../src/GSF';
 describe('Testing GSF', function() {
   it('is a valid object', function(done) {
     expect(GSF).to.be.an('object');
-    expect(GSF.server).to.exist;
-    expect(GSF.server).to.be.a('function');
+    expect(GSF.client).to.exist;
+    expect(GSF.client).to.be.a('function');
     done();
   });
 });
