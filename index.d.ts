@@ -7,6 +7,7 @@ declare namespace GSF {
         export interface ClientOptions {
             address: string;
             port?: string;
+            headers?: object;
             APIRoot?: string;
             protocol?: string;
         }
@@ -15,6 +16,7 @@ declare namespace GSF {
             URL: string;
             address: string;
             port: number;
+            headers?: object;
             protocol: string;
             rootURL: string;
             service(serviceName: string): Service;
