@@ -131,21 +131,21 @@ class Job extends EventEmitter {
    * @property {NodeInfo} [nodeInfo] - Provides information about the node on which the job ran.
    */
 
-   /**
-    * Provides information about the node on which the job ran.
-    * @typedef {Object} NodeInfo
-    * @property {string} nodeAddress - This is the address of the machine that ran job.
-    * @property {number} nodePort - The port of the server that ran the job.
-    * @property {number} workerID - The ID of the worker that ran the job.
-    */
+  /**
+   * Provides information about the node on which the job ran.
+   * @typedef {Object} NodeInfo
+   * @property {string} nodeAddress - This is the address of the machine that ran job.
+   * @property {number} nodePort - The port of the server that ran the job.
+   * @property {number} workerID - The ID of the worker that ran the job.
+   */
 
-    /**
-     * The job output results.
-     * @typedef {Object} JobResults
-     * @property {*} <parameterName>.best - Result from the first parameter mapper which
-     * was able to reverse translate the output value.
-     * @property {*} <parameterName>.raw - The raw output value returned by the task.
-     */
+  /**
+   * The job output results.
+   * @typedef {Object} JobResults
+   * @property {*} <parameterName>.best - Result from the first parameter mapper which
+   * was able to reverse translate the output value.
+   * @property {*} <parameterName>.raw - The raw output value returned by the task.
+   */
 
   /**
    * Retrieves the job information.

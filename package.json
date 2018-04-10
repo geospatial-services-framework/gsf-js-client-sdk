@@ -71,7 +71,7 @@
     "sinon": "^4.4.6",
     "sse-channel": "^2.0.5",
     "superagent": "^3.3.2",
-    "superagent-no-cache": "github:johntron/superagent-no-cache",
+    "superagent-no-cache": "github:johntron/superagent-no-cache#efab70e6fa5f5702883c990b69929aaaaa3b7029",
     "webpack": "^3.5.1",
     "webpack-merge": "^4.1.0"
   }
