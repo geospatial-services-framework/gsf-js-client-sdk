@@ -2,7 +2,7 @@
   "name": "gsf-js-client-sdk",
   "version": "3.0.0",
   "description": "GSF JavaScript Client SDK",
-  "author": "Exelis Visual Information Solutions, Inc., a subsidiary of Harris Corporation.",
+  "author": "Harris Geospatial Solutions, Inc.",
   "license": "MIT",
   "main": "dist/GSF.min.js",
   "types": "./index.d.ts",
