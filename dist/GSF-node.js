@@ -5015,13 +5015,19 @@ var Client = function (_EventEmitter) {
 
     // Attach to server sent events and re broadcast.
     // Include headers as query strings.
-    var queryString = (0, _keys2.default)(_this.headers).map(function (key) {
-      return encodeURIComponent(key) + '=' + encodeURIComponent(_this.headers[key]);
-    }).join('&');
+    var queryString = void 0;
+    if (_this.headers) {
+      queryString = (0, _keys2.default)(_this.headers).map(function (key) {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(_this.headers[key]);
+      }).join('&');
+    }
+
     var url = [_this.URL, _this.APIRoot, SERVER_API.EVENTS_PATH].filter(function (v) {
       return v !== '';
     }).join('/');
-    _this._events = new Eventsource(url + '?' + queryString);
+    url = queryString ? url + '?' + queryString : url;
+
+    _this._events = new Eventsource(url);
 
     // Emit succeeded and failed events.
     _this.on(_EVENTS2.default.completed, function (data) {
