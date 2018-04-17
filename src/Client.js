@@ -97,7 +97,7 @@ class Client extends EventEmitter {
 
     // Attach to server sent events and re broadcast.
     // Include headers as query strings.
-    let queryString = '';
+    let queryString;
     if (this.headers) {
       queryString = Object.keys(this.headers).map((key) => {
         return encodeURIComponent(key) + '=' +
@@ -107,7 +107,7 @@ class Client extends EventEmitter {
 
     let url = [this.URL, this.APIRoot,
       SERVER_API.EVENTS_PATH].filter((v) => (v !== '')).join('/');
-    url = (queryString !== '') ? (url + '?' + queryString) : (url);
+    url = (queryString) ? (url + '?' + queryString) : (url);
 
     this._events = new Eventsource(url);
 
