@@ -3029,7 +3029,14 @@ var Client = function (_EventEmitter) {
     }
 
     // Attach to server sent events and re broadcast.
-    _this._events = new Eventsource([_this.URL, SERVER_API.EVENTS_PATH].join('/'));
+    // Include headers as query strings.
+    var queryString = (0, _keys2.default)(_this.headers).map(function (key) {
+      return encodeURIComponent(key) + '=' + encodeURIComponent(_this.headers[key]);
+    }).join('&');
+    var url = [_this.URL, _this.APIRoot, SERVER_API.EVENTS_PATH].filter(function (v) {
+      return v !== '';
+    }).join('/');
+    _this._events = new Eventsource(url + '?' + queryString);
 
     // Emit succeeded and failed events.
     _this.on(_EVENTS2.default.completed, function (data) {
