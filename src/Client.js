@@ -97,13 +97,19 @@ class Client extends EventEmitter {
 
     // Attach to server sent events and re broadcast.
     // Include headers as query strings.
-    const queryString = Object.keys(this.headers).map((key) => {
-      return encodeURIComponent(key) + '=' +
-        encodeURIComponent(this.headers[key]);
-    }).join('&');
-    const url = [this.URL, this.APIRoot,
+    let queryString = '';
+    if (this.headers) {
+      queryString = Object.keys(this.headers).map((key) => {
+        return encodeURIComponent(key) + '=' +
+          encodeURIComponent(this.headers[key]);
+      }).join('&');
+    }
+
+    let url = [this.URL, this.APIRoot,
       SERVER_API.EVENTS_PATH].filter((v) => (v !== '')).join('/');
-    this._events = new Eventsource(url + '?' + queryString);
+    url = (queryString !== '') ? (url + '?' + queryString) : (url);
+
+    this._events = new Eventsource(url);
 
     // Emit succeeded and failed events.
     this.on(EVENTS.completed, (data) => {
