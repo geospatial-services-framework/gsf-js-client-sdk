@@ -1,7 +1,27 @@
 {
   "source": "./src",
   "destination": "./help",
+  "index": "./doc/index.md",
   "plugins": [
+    {
+      "name": "esdoc-standard-plugin",
+      "brand": {
+        "title": "GSF JavaScript Client SDK",
+        "repository": "https://github.com/geospatial-services-framework",
+        "logo": "./doc/asset/gsf-large.png"
+      },
+      "manual": {
+        "globalIndex": true,
+        "asset": "./doc/asset",
+        "files": [
+          "./doc/manual/installation.md",
+          "./doc/manual/tutorial/migration-guide.md",
+          "./doc/manual/tutorial/getting-started.md",
+          "./doc/manual/tutorial/examples.md",
+          "./CHANGELOG.md"
+        ]
+      }
+    },
     {
       "name": "esdoc-importpath-plugin",
       "option": {
@@ -10,19 +30,5 @@
         ]
       }
     }
-  ],
-  "title": "GSF JavaScript Client SDK",
-  "styles": ["./doc/styles/main.css"],
-  "includeSource": true,
-  "index": "./doc/index.md",
-  "manual": {
-    "asset": "./doc/asset",
-    "installation": ["./doc/manual/installation.md"],
-    "tutorial": [
-      "./doc/manual/tutorial/migration-guide.md",
-      "./doc/manual/tutorial/getting-started.md",
-      "./doc/manual/tutorial/examples.md"
-    ],
-    "changelog": ["./CHANGELOG.md"]
-  }
+  ]
 }

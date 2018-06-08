@@ -1,4 +1,7 @@
-<h1 class="gsf-title"><img src="./manual/asset/gsf-large.png">GSF JavaScript Client SDK</h1>
+
+<h1 class="gsf-title">
+GSF JavaScript Client SDK
+</h1>
 
 The GSF JavaScript Client SDK provides a client-side JavaScript library for interacting with GSF.
 
