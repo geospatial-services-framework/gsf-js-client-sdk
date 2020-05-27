@@ -79,12 +79,12 @@ describe('Testing Service class', function() {
       return service
         .taskInfoList()
         .then((taskInfoList) => {
-          expect(taskInfoList).to.be.an.array;
+          expect(taskInfoList).to.be.an('array');
           expect(taskInfoList.length).to.be.above(2);
           taskInfoList.forEach((info) => {
             verifyProperties(info, interfaces.taskInfo);
-            expect(info.inputParameters).to.be.an.array;
-            expect(info.outputParameters).to.be.an.array;
+            expect(info.inputParameters).to.be.an('array');
+            expect(info.outputParameters).to.be.an('array');
             [...info.inputParameters,
               ...info.outputParameters].forEach((param) => {
               verifyProperties(param, interfaces.taskParameters);
@@ -112,7 +112,7 @@ describe('Testing Service class', function() {
       return service
         .tasks()
         .then((tasks) => {
-          expect(tasks).to.be.an.array;
+          expect(tasks).to.be.an('array');
           expect(tasks.length).to.be.above(2);
           expect(tasks[0]).to.be.an('object');
           expect(tasks[0].name).to.be.an('string');

@@ -56,8 +56,8 @@ describe('Testing Task class', function() {
         .info()
         .then((info) => {
           verifyProperties(info, interfaces.taskInfo);
-          expect(info.inputParameters).to.be.an.array;
-          expect(info.outputParameters).to.be.an.array;
+          expect(info.inputParameters).to.be.an('array');
+          expect(info.outputParameters).to.be.an('array');
           [...info.inputParameters,
             ...info.outputParameters].forEach((param) => {
             verifyProperties(param, interfaces.taskParameters);
