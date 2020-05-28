@@ -1,14 +1,14 @@
-import * as request from 'superagent';
+import superagent from 'superagent';
 import saNoCache from 'superagent-no-cache';
 import EventEmitter from 'events';
 
-import * as sdkUtils from './utils/utils.js';
+import utils from './utils/utils.js';
 import Service from './Service';
 import Job from './Job';
-import * as SERVER_API from './utils/GSF_API';
+import GSF_API from './utils/GSF_API';
 import EVENTS from './utils/EVENTS';
 
-const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
+const nocache = utils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 
 /**
  * The Client class is used to connect to the server and retrieve information
@@ -63,7 +63,7 @@ class Client extends EventEmitter {
      * The API root endpoint.  If none, set to empty string.
      * @type {string}
      */
-    this.APIRoot = clientOptions.APIRoot || SERVER_API.ROOT_PATH;
+    this.APIRoot = clientOptions.APIRoot || GSF_API.ROOT_PATH;
 
     /**
      * The protocol to use.
@@ -106,7 +106,7 @@ class Client extends EventEmitter {
     }
 
     let url = [this.URL, this.APIRoot,
-      SERVER_API.EVENTS_PATH].filter((v) => (v !== '')).join('/');
+      GSF_API.EVENTS_PATH].filter((v) => (v !== '')).join('/');
     url = (queryString) ? (url + '?' + queryString) : (url);
 
     this._events = new Eventsource(url);
@@ -144,10 +144,10 @@ class Client extends EventEmitter {
   services() {
     return new Promise((resolve, reject) => {
       // Service url.
-      const url = [this.rootURL, SERVER_API.SERVICES_PATH].join('/');
+      const url = [this.rootURL, GSF_API.SERVICES_PATH].join('/');
 
       // Get service list.
-      request
+      superagent
         .get(url)
         .use(nocache) // Prevents caching of *only* this request
         .set(this.headers)
@@ -205,7 +205,7 @@ class Client extends EventEmitter {
   jobInfoList(jobListOptions) {
     return new Promise((resolve, reject) => {
       // Service url.
-      let url = [this.rootURL, SERVER_API.JOBS_PATH].join('/');
+      let url = [this.rootURL, GSF_API.JOBS_PATH].join('/');
 
       // Handle arguments.
       if (jobListOptions) {
@@ -227,7 +227,7 @@ class Client extends EventEmitter {
       }
 
       // Get job info list.
-      request
+      superagent
         .get(url)
         .use(nocache) // Prevents caching of *only* this request
         .set(this.headers)

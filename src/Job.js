@@ -1,12 +1,12 @@
-import * as request from 'superagent';
+import superagent from 'superagent';
 import saNoCache from 'superagent-no-cache';
 import EventEmitter from 'events';
 
-import * as sdkUtils from './utils/utils.js';
-import * as SERVER_API from './utils/GSF_API';
+import utils from './utils/utils.js';
+import GSF_API from './utils/GSF_API';
 import EVENTS from './utils/EVENTS';
 
-const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
+const nocache = utils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 
 /**
  * The Job class is used for job operations.
@@ -41,7 +41,7 @@ class Job extends EventEmitter {
     this._client = client;
 
     // Job endpoint.
-    this._jobURL = [this._client.rootURL, SERVER_API.JOBS_PATH,
+    this._jobURL = [this._client.rootURL, GSF_API.JOBS_PATH,
       this.jobId].join('/');
 
     // Allow infinite listeners.
@@ -156,7 +156,7 @@ class Job extends EventEmitter {
       const jobStatusURL = this._jobURL;
 
       // Get job status.
-      request
+      superagent
         .get(jobStatusURL)
         .use(nocache) // Prevents caching of *only* this request
         .set(this._client.headers)
@@ -193,7 +193,7 @@ class Job extends EventEmitter {
       // Cancel force flag.
       const requestStatus = force ? 'KillRequested' : 'CancelRequested';
       // Cancel job.
-      request
+      superagent
         .put(url)
         .set('Content-Type', 'application/json')
         .send(JSON.stringify({'jobStatus': requestStatus}))

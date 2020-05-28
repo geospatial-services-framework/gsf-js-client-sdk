@@ -1,11 +1,11 @@
-import * as request from 'superagent';
+import superagent from 'superagent';
 import saNoCache from 'superagent-no-cache';
 
-import * as sdkUtils from './utils/utils.js';
+import utils from './utils/utils.js';
 import Job from './Job';
-import * as SERVER_API from './utils/GSF_API';
+import GSF_API from './utils/GSF_API';
 
-const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
+const nocache = utils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 
 /**
  * The Task class is used to submit and inspect tasks.
@@ -39,11 +39,11 @@ class Task {
   info() {
     return new Promise((resolve, reject) => {
       // Task info url.
-      const taskURL = [this._client.rootURL, SERVER_API.SERVICES_PATH,
-        this.service.name, SERVER_API.TASKS_PATH, this.name].join('/');
+      const taskURL = [this._client.rootURL, GSF_API.SERVICES_PATH,
+        this.service.name, GSF_API.TASKS_PATH, this.name].join('/');
 
       // Get task info.
-      request
+      superagent
         .get(taskURL)
         .use(nocache) // Prevents caching of *only* this request
         .set(this._client.headers)
@@ -74,13 +74,13 @@ class Task {
     return new Promise((resolve, reject) => {
 
       // Build task submit url.
-      const url = [this._client.rootURL, SERVER_API.JOBS_PATH].join('/');
+      const url = [this._client.rootURL, GSF_API.JOBS_PATH].join('/');
       const options = JSON.parse(JSON.stringify(submitOptions));
       options.taskName = this.name;
       options.serviceName = this.service.name;
 
       // Submit task as a job.
-      request
+      superagent
         .post(url)
         .set('Content-Type', 'application/json')
         .send(JSON.stringify(options))

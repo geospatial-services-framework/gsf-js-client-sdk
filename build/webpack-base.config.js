@@ -26,6 +26,7 @@ module.exports = function (target, entryPoints, addSuffix, minify) {
     target: target,
     entry: entries,
     devtool: 'source-map',
+    mode: 'production',
     output: {
       path: DIST_DIR,
       filename: '[name].js',
@@ -37,17 +38,17 @@ module.exports = function (target, entryPoints, addSuffix, minify) {
       rules: [
         // Pre-loader: ESLint
         {
-          test: /(\.js)$/,
-          use: ['eslint-loader'],
           enforce: 'pre',
-          exclude: /(node_modules|bower_components)/
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'eslint-loader',
         },
         // Loader: Babel
         {
-          test: /(\.js)$/,
-          use: ['babel-loader'],
-          exclude: /(node_modules|bower_components)/
-        }
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+        },
       ]
     },
     resolve: {
@@ -57,19 +58,22 @@ module.exports = function (target, entryPoints, addSuffix, minify) {
         'node_modules'
       ]
     },
+    optimization: {
+      minimize: true
+    },
     plugins: [
-      // https://github.com/visionmedia/superagent/wiki/SuperAgent-for-Webpack
+      // https://github.com/visionmedia/superagent/wiki/SuperAgent-for-Webpack // todo
       new webpack.DefinePlugin({'global.GENTLY': false }),
       // NODE global constant
       new webpack.DefinePlugin({
         NODE: JSON.stringify(target === 'node')
       }),
       // UglifyJS
-      new webpack.optimize.UglifyJsPlugin({
-        minimize: true,
-        sourceMap: true,
-        include: /\.min\.js$/
-      })
+      // new webpack.optimize.UglifyJsPlugin({
+      //   minimize: true,
+      //   sourceMap: true,
+      //   include: /\.min\.js$/
+      // })
     ]
   };
   
