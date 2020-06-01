@@ -10,7 +10,7 @@ should();
 const expect = chai.expect;
 const assert = chai.assert;
 
-import { verifyProperties } from './utils/testUtils.js';
+import testUtils from './utils/testUtils.js';
 import interfaces from './utils/interfaces.js';
 import testTasks from './utils/testTasks.js';
 import config from './config/config.js';
@@ -48,7 +48,7 @@ describe('Testing Service class', function() {
         .info()
         .then((info) => {
           expect(info).to.be.an('object');
-          verifyProperties(info, interfaces.serviceInfo);
+          testUtils.verifyProperties(info, interfaces.serviceInfo);
           expect(info.name).to.equal(testTasks.ENVIService);
         });
     });
@@ -82,12 +82,12 @@ describe('Testing Service class', function() {
           expect(taskInfoList).to.be.an('array');
           expect(taskInfoList.length).to.be.above(2);
           taskInfoList.forEach((info) => {
-            verifyProperties(info, interfaces.taskInfo);
+            testUtils.verifyProperties(info, interfaces.taskInfo);
             expect(info.inputParameters).to.be.an('array');
             expect(info.outputParameters).to.be.an('array');
             [...info.inputParameters,
               ...info.outputParameters].forEach((param) => {
-              verifyProperties(param, interfaces.taskParameters);
+              testUtils.verifyProperties(param, interfaces.taskParameters);
             });
           });
         });

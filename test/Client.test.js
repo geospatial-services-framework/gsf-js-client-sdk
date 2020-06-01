@@ -9,11 +9,11 @@ chai.use(chaiAsPromised);
 should();
 const expect = chai.expect;
 const assert = chai.assert;
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 
-import { verifyProperties } from './utils/testUtils.js';
+import testUtils from './utils/testUtils.js';
 import interfaces from './utils/interfaces.js';
-import * as testTasks from './utils/testTasks.js';
+import testTasks from './utils/testTasks.js';
 import config from './config/config.js';
 
 import GSF from '../src/GSF';
@@ -232,7 +232,7 @@ describe('Testing Client class', function() {
         .then((jobList) => {
           expect(jobList).to.be.an('array');
           expect(jobList.length).to.be.above(1);
-          verifyProperties(jobList[0], interfaces.jobInfo);
+          testUtils.verifyProperties(jobList[0], interfaces.jobInfo);
         });
     });
     // Note: This test could fail the first time

@@ -9,14 +9,14 @@ chai.use(chaiAsPromised);
 should();
 const expect = chai.expect;
 const assert = chai.assert;
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 
-import { verifyProperties } from './utils/testUtils.js';
+import testUtils from './utils/testUtils.js';
 import Task from '../src/Task';
 import Service from '../src/Service';
 import GSF from '../src/GSF';
 
-import * as testTasks from './utils/testTasks.js';
+import testTasks from './utils/testTasks.js';
 import interfaces from './utils/interfaces.js';
 import config from './config/config.js';
 
@@ -52,15 +52,16 @@ describe('Testing Task class', function() {
 
   describe('.info()', function() {
     it('retrieves the task information', function() {
+      this.timeout(config.testTimeout1);
       return task
         .info()
         .then((info) => {
-          verifyProperties(info, interfaces.taskInfo);
+          testUtils.verifyProperties(info, interfaces.taskInfo);
           expect(info.inputParameters).to.be.an('array');
           expect(info.outputParameters).to.be.an('array');
           [...info.inputParameters,
             ...info.outputParameters].forEach((param) => {
-            verifyProperties(param, interfaces.taskParameters);
+            testUtils.verifyProperties(param, interfaces.taskParameters);
           });
         });
     });
@@ -80,6 +81,7 @@ describe('Testing Task class', function() {
 
   describe('.submit()', function() {
     it('submits a job', function() {
+      this.timeout(config.testTimeout1);
       const submitJob = task.submit({inputParameters: testTasks.sleepTask.parameters});
       return Promise.all([
         expect(submitJob).to.eventually.be.fulfilled,
@@ -138,6 +140,7 @@ describe('Testing Task class', function() {
 
   describe('.submitAndWait()', function() {
     it('submits a job and waits for results', function() {
+      this.timeout(config.testTimeout1);
       const submitAndWait = task.submitAndWait(
         {
           inputParameters: testTasks.sleepTask.parameters
@@ -147,6 +150,7 @@ describe('Testing Task class', function() {
     });
 
     it('submits a job and waits for results with progress and started callbacks', function() {
+      this.timeout(config.testTimeout1);
       const nProgress = 5;
       const progressMessage = 'Message';
       const params = Object.assign({}, testTasks.sleepTask.parameters);
@@ -183,12 +187,14 @@ describe('Testing Task class', function() {
     });
 
     it('rejects promise if job fails', function() {
+      this.timeout(config.testTimeout1);
       const failJob = task.submitAndWait({inputParameters: testTasks.sleepTaskFail.parameters});
       return assert.isRejected(failJob,
         new RegExp(testTasks.sleepTaskFail.parameters.ERROR_MESSAGE));
     });
 
     it('submits multiple jobs with varying processing times', function() {
+      this.timeout(config.testTimeout1);
       const nProgress1 = 3;
       const nProgress2 = 12;
 

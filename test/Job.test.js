@@ -9,10 +9,10 @@ chai.use(chaiAsPromised);
 should();
 const expect = chai.expect;
 const assert = chai.assert;
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 
-import { verifyProperties } from './utils/testUtils.js';
-import * as testTasks from './utils/testTasks.js';
+import testUtils from './utils/testUtils.js';
+import testTasks from './utils/testTasks.js';
 import interfaces from './utils/interfaces.js';
 import config from './config/config.js';
 
@@ -68,7 +68,7 @@ describe('Testing Job class', function() {
             .then((jobInfo) => {
               expect(jobInfo).to.be.an('object');
               expect(jobInfo.jobResults).to.be.an.an('object');
-              verifyProperties(jobInfo, interfaces.jobInfo);
+              testUtils.verifyProperties(jobInfo, interfaces.jobInfo);
               expect(jobInfo.jobStatus).to.equal('Succeeded');
               expect(jobInfo.jobResults).to.deep
                 .equal(testTasks.sleepTask.results);
@@ -121,20 +121,22 @@ describe('Testing Job class', function() {
       this.timeout(config.testTimeout2);
 
       let params = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
-      params.SLEEP_TIME = 150;
+      params.inputParameters.SLEEP_TIME = 500;
       const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
       task.submit(params)
         .then((job) => {
           const force = false;
-          job.once('JobCompleted', function(data) {
-            expect(data.success).to.be.false;
-            done();
+          job.once('JobCompleted', (data) => {
+            let err;
+            try {
+              expect(data.success).to.be.false;
+            } catch (error) {
+              err = error;
+            }
+            done(err);
           });
-          job.cancel(force)
-            .then((bool) => {
-              expect(bool).to.be.true;
-            })
-            .catch(done);
+          job.cancel(force);
+
         }).catch(done);
     });
 
@@ -144,18 +146,20 @@ describe('Testing Job class', function() {
       const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
       const params = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
-      params.SLEEP_TIME = 350;
+      params.inputParameters.SLEEP_TIME = 500;
       task.submit(params)
         .then((job) => {
           const force = true;
-          job.cancel(force)
-            .then(() => {
-              job.once('JobCompleted', function(data) {
-                expect(data.success).to.be.false;
-                done();
-              });
-            })
-            .catch(done);
+          job.on('JobCompleted', (data) => {
+            let err;
+            try {
+              expect(data.success).to.be.false;
+            } catch (error) {
+              err = error;
+            }
+            done(err);
+          });
+          job.cancel(force);
         })
         .catch(done);
     });
@@ -175,6 +179,7 @@ describe('Testing Job class', function() {
   describe('.on()', function() {
     describe('\'JobStarted\' event', function() {
       it('fires when job starts', function() {
+        this.timeout(config.testTimeout2);
 
         const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
 
@@ -207,6 +212,7 @@ describe('Testing Job class', function() {
 
     describe('\'JobCompleted\' event', function() {
       it('fires when job completes', function() {
+        this.timeout(config.testTimeout1);
         let jobId = null;
 
         const completedListener = sinon.spy();
@@ -228,6 +234,7 @@ describe('Testing Job class', function() {
 
     describe('\'JobSucceeded\' event', function() {
       it('fires when job succeeds', function() {
+        this.timeout(config.testTimeout1);
 
         const succeededListener = sinon.spy();
         const failedListener = sinon.spy();
@@ -251,6 +258,7 @@ describe('Testing Job class', function() {
 
     describe('\'JobFailed\' event', function() {
       it('fires when job fails', function() {
+        this.timeout(config.testTimeout1);
         const succeededListener = sinon.spy();
         const failedListener = sinon.spy();
         let jobId;
