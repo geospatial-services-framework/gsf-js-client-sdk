@@ -62,7 +62,8 @@ module.exports = function (target, entryPoints, addSuffix, minify) {
     optimization: {
       minimizer: [
         new TerserPlugin({
-          sourceMap: true
+          sourceMap: true,
+          extractComments: false
         }),
       ],
     },
