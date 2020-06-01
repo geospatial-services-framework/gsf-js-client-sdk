@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const LIB_NAME = 'GSF';
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -59,21 +60,19 @@ module.exports = function (target, entryPoints, addSuffix, minify) {
       ]
     },
     optimization: {
-      minimize: true
+      minimizer: [
+        new TerserPlugin({
+          sourceMap: true
+        }),
+      ],
     },
     plugins: [
-      // https://github.com/visionmedia/superagent/wiki/SuperAgent-for-Webpack // todo
+      // https://github.com/visionmedia/superagent/wiki/SuperAgent-for-Webpack
       new webpack.DefinePlugin({'global.GENTLY': false }),
       // NODE global constant
       new webpack.DefinePlugin({
         NODE: JSON.stringify(target === 'node')
-      }),
-      // UglifyJS
-      // new webpack.optimize.UglifyJsPlugin({
-      //   minimize: true,
-      //   sourceMap: true,
-      //   include: /\.min\.js$/
-      // })
+      })
     ]
   };
   
