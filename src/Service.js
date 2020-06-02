@@ -1,11 +1,11 @@
-import * as request from 'superagent';
+import superagent from 'superagent';
 import saNoCache from 'superagent-no-cache';
 
-import * as sdkUtils from './utils/utils.js';
+import utils from './utils/utils.js';
 import Task from './Task';
-import * as SERVER_API from './utils/GSF_API';
+import GSF_API from './utils/GSF_API';
 
-const nocache = sdkUtils.isIE() ? saNoCache.withQueryStrings : saNoCache;
+const nocache = utils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 
 /**
  * The Service class is used to inspect and create tasks for a service.
@@ -41,10 +41,10 @@ class Service {
   info() {
     return new Promise((resolve, reject) => {
       // Build service info url.
-      const url = [this._client.rootURL, SERVER_API.SERVICES_PATH, this.name].join('/');
+      const url = [this._client.rootURL, GSF_API.SERVICES_PATH, this.name].join('/');
 
       // Get service info so we can pull off the tasks array.
-      request
+      superagent
         .get(url)
         .use(nocache) // Prevents caching of *only* this request
         .set(this._client.headers)
@@ -78,11 +78,11 @@ class Service {
   taskInfoList() {
     return new Promise((resolve, reject) => {
       // Build service info url.
-      const url = [this._client.rootURL, SERVER_API.SERVICES_PATH,
-        this.name, SERVER_API.TASKS_PATH].join('/');
+      const url = [this._client.rootURL, GSF_API.SERVICES_PATH,
+        this.name, GSF_API.TASKS_PATH].join('/');
 
       // Get service info so we can pull off the tasks array.
-      request
+      superagent
         .get(url)
         .query({ taskInfo: true })
         .use(nocache) // Prevents caching of *only* this request

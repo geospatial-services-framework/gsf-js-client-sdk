@@ -121,7 +121,6 @@ function jobManager() {
 
         job.jobProgress = 100;
         job.jobStatus = 'Succeeded';
-        let results = [];
         job.jobResults = data;
 
         // If there was an error, add an error field and change status;

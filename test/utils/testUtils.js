@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-const verifyProperties = function(properties, interfaces) {
+const verifyProperties = (properties, interfaces) => {
   Object.keys(interfaces).forEach(function(propName) {
     if (properties[propName] || interfaces[propName].required) {
       expect(typeof properties[propName],
@@ -11,5 +11,5 @@ const verifyProperties = function(properties, interfaces) {
 };
 
 export default {
-  verifyProperties: verifyProperties
+  verifyProperties
 };

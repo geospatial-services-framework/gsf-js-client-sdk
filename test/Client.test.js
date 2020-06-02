@@ -9,11 +9,11 @@ chai.use(chaiAsPromised);
 should();
 const expect = chai.expect;
 const assert = chai.assert;
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 
-import { verifyProperties } from './utils/testUtils.js';
+import testUtils from './utils/testUtils.js';
 import interfaces from './utils/interfaces.js';
-import * as testTasks from './utils/testTasks.js';
+import testTasks from './utils/testTasks.js';
 import config from './config/config.js';
 
 import GSF from '../src/GSF';
@@ -75,7 +75,7 @@ describe('Testing Client class', function() {
       return client
         .services()
         .then((serviceList) => {
-          expect(serviceList).to.be.an.array;
+          expect(serviceList).to.be.an('array');
           expect(serviceList.length).to.be.above(1);
           expect(serviceList[0]).to.be.an('object');
           expect(serviceList.length).to.be.greaterThan(0);
@@ -107,7 +107,7 @@ describe('Testing Client class', function() {
       return client
         .jobs()
         .then((jobList) => {
-          expect(jobList).to.be.an.array;
+          expect(jobList).to.be.an('array');
           expect(jobList.length).to.be.above(1);
           expect(jobList[0]).to.be.an('object');
           expect(jobList[0].jobId).to.exist;
@@ -126,7 +126,7 @@ describe('Testing Client class', function() {
         .then((jobList1) => {
           client.jobs({offset: offset})
             .then((jobList2) => {
-              expect(jobList2).to.be.an.array;
+              expect(jobList2).to.be.an('array');
               expect(jobList2[0].jobId).to.equal(jobList1[0].jobId + offset);
               done();
             }).catch((err) => {
@@ -176,7 +176,7 @@ describe('Testing Client class', function() {
         .then((jobList1) => {
           client.jobs(filter2)
             .then((jobList2) => {
-              expect(jobList2).to.be.an.array;
+              expect(jobList2).to.be.an('array');
               expect(jobList1).to.not.equal(jobList2);
               expect(jobList1[0].jobId).to.be.below(jobList2[0].jobId);
               done();
@@ -201,7 +201,7 @@ describe('Testing Client class', function() {
       return client
         .jobs(filter)
         .then((jobList) => {
-          expect(jobList).to.be.an.array;
+          expect(jobList).to.be.an('array');
           expect(jobList.length).to.be.above(1);
           expect(jobList.length).to.be.below(11);
           expect(jobList[0]).to.be.an('object');
@@ -230,9 +230,9 @@ describe('Testing Client class', function() {
       return client
         .jobInfoList()
         .then((jobList) => {
-          expect(jobList).to.be.an.array;
+          expect(jobList).to.be.an('array');
           expect(jobList.length).to.be.above(1);
-          verifyProperties(jobList[0], interfaces.jobInfo);
+          testUtils.verifyProperties(jobList[0], interfaces.jobInfo);
         });
     });
     // Note: This test could fail the first time
@@ -248,7 +248,7 @@ describe('Testing Client class', function() {
           return client
             .jobInfoList({offset: offset})
             .then((jobList2) => {
-              expect(jobList2).to.be.an.array;
+              expect(jobList2).to.be.an('array');
               expect(jobList2[0].jobId).to.equal(jobList1[0].jobId + offset);
             });
         });
@@ -263,7 +263,7 @@ describe('Testing Client class', function() {
       return client
         .jobInfoList({status: status})
         .then((jobList) => {
-          expect(jobList).to.be.an.array;
+          expect(jobList).to.be.an('array');
           expect(jobList.length).to.be.above(1);
         });
     });
@@ -290,7 +290,7 @@ describe('Testing Client class', function() {
           return client
             .jobInfoList(filter2)
             .then((jobList2) => {
-              expect(jobList2).to.be.an.array;
+              expect(jobList2).to.be.an('array');
               expect(jobList1).to.not.equal(jobList2);
               expect(jobList1[0].jobId).to.be.below(jobList2[0].jobId);
             });
@@ -310,7 +310,7 @@ describe('Testing Client class', function() {
       return client
         .jobInfoList(filter)
         .then((jobList) => {
-          expect(jobList).to.be.an.array;
+          expect(jobList).to.be.an('array');
           expect(jobList.length).to.be.above(1);
           expect(jobList.length).to.be.below(11);
           expect(jobList[0]).to.be.an('object');
