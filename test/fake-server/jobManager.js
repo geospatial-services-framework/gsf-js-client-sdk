@@ -35,7 +35,7 @@ function jobManager() {
   this.addToQueue = function(name, service, params, jobOptions, user, callback) {
 
     // Assign a job id.
-    let id = jobs.length;
+    let id = `${jobs.length}`;
 
     // Create a job object.
     let job = {
@@ -124,7 +124,7 @@ function jobManager() {
         job.jobResults = data;
 
         // If there was an error, add an error field and change status;
-        if (parseInt(cancelJobId, 10) === job.jobId) {
+        if (cancelJobId === job.jobId) {
           err = 'job cancelled';
         }
 

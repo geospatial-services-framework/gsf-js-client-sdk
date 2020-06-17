@@ -21,7 +21,7 @@ declare namespace GSF {
             rootURL: string;
             service(serviceName: string): Service;
             services(): Promise<Array<Service>>;
-            job(jobId: number,
+            job(jobId: string,
                 progressCallback?: ProgressCallback,
                 startedCallback?: StartedCallback): Job;
             jobs(jobListOptions: JobListOptions): Promise<Array<Job>>
@@ -45,7 +45,7 @@ declare namespace GSF {
                 startedCallback?: StartedCallback): Promise<any>;
         }
         export interface Job {
-            jobId: number;
+            jobId: string;
             cancel(force: boolean): Promise<boolean>;
             info(): Promise<JobInfo>;
             wait(): Promise<JobResults>;
@@ -65,7 +65,7 @@ declare namespace GSF {
             (info: JobProgressInfo) : void;
         }
         export interface JobProgressInfo {
-            jobId: number;
+            jobId: string;
             progress: number;
             message?: string;
         }
@@ -73,7 +73,7 @@ declare namespace GSF {
             (info: JobStartedInfo) : void;
         }
         export interface JobStartedInfo {
-            jobId: number;
+            jobId: string;
         }
         export interface JobListOptions {
             offset?: number;
@@ -86,7 +86,7 @@ declare namespace GSF {
             taskName: string;
             jobOptions?: JobOptions;
             inputParameters: Object;
-            jobId?: number;
+            jobId?: string;
             jobProgress?: number;
             jobMessage?: string;
             jobStatus: string;

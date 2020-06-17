@@ -8,7 +8,7 @@ export default {
     taskName: {type: 'string', required: true},
     jobOptions: {type: 'object', required: false},
     inputParameters: {type: 'object', required: false},
-    jobId: {type: 'number', required: true},
+    jobId: {type: 'string', required: true},
     jobProgress: {type: 'number', required: false},
     jobMessage: {type: 'string', required: false},
     jobStatus: {type: 'string', required: true},

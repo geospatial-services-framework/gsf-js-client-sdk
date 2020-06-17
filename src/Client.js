@@ -255,7 +255,7 @@ class Client extends EventEmitter {
 
   /**
    * Retrieves job object based on the job ID.
-   * @param {number} jobId - The id of the job from which to retrieve the job object.
+   * @param {string} jobId - The id of the job from which to retrieve the job object.
    * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
    * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
    *  For more reliable job started information, listen to the GSF JobStarted
@@ -274,7 +274,7 @@ export default Client;
 /**
  * Emitted when a job completes.
  * @typedef {Object} JobCompleted
- * @property {number} jobId - The job id.
+ * @property {string} jobId - The job id.
  * @property {boolean} success - A boolean set to true if the job succeeds,
  *  false if it fails.
  */
@@ -282,19 +282,19 @@ export default Client;
 /**
  * Emitted when a job succeeds.
  * @typedef {Object} JobSucceeded
- * @property {number} jobId - The job id.
+ * @property {string} jobId - The job id.
  */
 
 /**
  * Emitted when a job fails.
  * @typedef {Object} JobFailed
- * @property {number} jobId - The job id.
+ * @property {string} jobId - The job id.
  */
 
 /**
  * Emitted when job progress is updated.
  * @typedef {Object} JobProgress
- * @property {number} jobId - The job id.
+ * @property {string} jobId - The job id.
  * @property {number} progress - The job progress percent.
  * @property {string} [message] - The job progress message, if any.
  */
@@ -302,11 +302,11 @@ export default Client;
 /**
  * Emitted when a job starts.
  * @typedef {Object} JobStarted
- * @property {number} jobId - The job id.
+ * @property {string} jobId - The job id.
  */
 
 /**
  * Emitted when a job is accepted.
  * @typedef {Object} JobAccepted
- * @property {number} jobId - The job id.
+ * @property {string} jobId - The job id.
  */

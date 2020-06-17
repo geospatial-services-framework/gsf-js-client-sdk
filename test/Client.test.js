@@ -111,7 +111,7 @@ describe('Testing Client class', function() {
           expect(jobList.length).to.be.above(1);
           expect(jobList[0]).to.be.an('object');
           expect(jobList[0].jobId).to.exist;
-          expect(jobList[0].jobId).to.be.a('number');
+          expect(jobList[0].jobId).to.be.a('string');
         });
     });
     // Note: This test could fail the first time
@@ -127,7 +127,7 @@ describe('Testing Client class', function() {
           client.jobs({offset: offset})
             .then((jobList2) => {
               expect(jobList2).to.be.an('array');
-              expect(jobList2[0].jobId).to.equal(jobList1[0].jobId + offset);
+              expect(parseInt(jobList2[0].jobId, 10)).to.equal(parseInt(jobList1[0].jobId, 10) + offset);
               done();
             }).catch((err) => {
               done(err);
@@ -178,7 +178,7 @@ describe('Testing Client class', function() {
             .then((jobList2) => {
               expect(jobList2).to.be.an('array');
               expect(jobList1).to.not.equal(jobList2);
-              expect(jobList1[0].jobId).to.be.below(jobList2[0].jobId);
+              expect(parseInt(jobList1[0].jobId, 10)).to.be.below(parseInt(jobList2[0].jobId, 10));
               done();
             }).catch((err) => {
               done(err);
@@ -206,7 +206,7 @@ describe('Testing Client class', function() {
           expect(jobList.length).to.be.below(11);
           expect(jobList[0]).to.be.an('object');
           expect(jobList[0].jobId).to.exist;
-          expect(jobList[0].jobId).to.be.a('number');
+          expect(jobList[0].jobId).to.be.a('string');
         });
     });
 
@@ -249,7 +249,7 @@ describe('Testing Client class', function() {
             .jobInfoList({offset: offset})
             .then((jobList2) => {
               expect(jobList2).to.be.an('array');
-              expect(jobList2[0].jobId).to.equal(jobList1[0].jobId + offset);
+              expect(parseInt(jobList2[0].jobId, 10)).to.equal(parseInt(jobList1[0].jobId, 10) + offset);
             });
         });
     });
@@ -292,7 +292,7 @@ describe('Testing Client class', function() {
             .then((jobList2) => {
               expect(jobList2).to.be.an('array');
               expect(jobList1).to.not.equal(jobList2);
-              expect(jobList1[0].jobId).to.be.below(jobList2[0].jobId);
+              expect(parseInt(jobList1[0].jobId, 10)).to.be.below(parseInt(jobList2[0].jobId, 10));
             });
         });
     });
@@ -315,7 +315,7 @@ describe('Testing Client class', function() {
           expect(jobList.length).to.be.below(11);
           expect(jobList[0]).to.be.an('object');
           expect(jobList[0].jobId).to.exist;
-          expect(jobList[0].jobId).to.be.a('number');
+          expect(jobList[0].jobId).to.be.a('string');
         });
     });
 

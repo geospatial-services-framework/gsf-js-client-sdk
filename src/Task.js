@@ -180,7 +180,7 @@ export default Task;
 /**
  * Information about job progress.
  * @typedef {Object} JobProgressInfo
- * @property {number} jobId - The job id.
+ * @property {string} jobId - The job id.
  * @property {number} progress - The job progress percent.
  * @property {string} [message] - The job progress message, if any.
  */
@@ -191,5 +191,5 @@ export default Task;
  * events as this callback may not always get called.
  * In some cases the job can start before the callback is registered.
  * @typedef {Object} JobStartedInfo
- * @property {number} jobId - The job id.
+ * @property {string} jobId - The job id.
  */
