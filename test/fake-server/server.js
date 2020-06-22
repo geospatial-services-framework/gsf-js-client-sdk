@@ -47,7 +47,7 @@ app.post(jobsEndPoint,
   requestHandler.submitJob);
 
 // Job List
-app.get(jobsEndPoint, requestHandler.listJobs);
+app.post('/searchJobs', requestHandler.listJobs);
 
 // Job Status
 app.get(jobsEndPoint + '/:id', requestHandler.jobStatus);

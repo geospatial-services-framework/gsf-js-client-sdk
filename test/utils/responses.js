@@ -1,15 +1,15 @@
 module.exports = {
   listServices: {
-      services: [
-        {
-          name: 'IDL',
-          description: 'IDL processing routines'
-        },
-        {
-          name: 'ENVI',
-          description: 'ENVI processing routines'
-        }
-      ]
+    services: [
+      {
+        name: 'IDL',
+        description: 'IDL processing routines'
+      },
+      {
+        name: 'ENVI',
+        description: 'ENVI processing routines'
+      }
+    ]
   },
   jobStatus: {
     response: {

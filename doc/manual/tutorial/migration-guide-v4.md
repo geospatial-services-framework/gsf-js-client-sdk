@@ -12,7 +12,7 @@ GSF 3.0 has added a powerful API for querying the job database.  The SDK now lev
 More flexible sorting is now available for job lists.  Please see [**JobListOptions**] documentation for more details
 
 #### New 'totals' option
-A new option called 'totals' has been introduced to the JobInfoListOptions object.  This can be used to retrieve total job counts by job status, as well as a grand total.  Please see the [**JobListOptions**] documentation for more details.
+A new option called 'totals' has been introduced to the JobListOptions object.  This can be used to retrieve total job counts by job status, as well as a grand total.  Please see the [**JobListOptions**] documentation for more details.
 
 #### JobInfoList response has changed
 Instead of just returning the array of JobInfo objects, the Client.JobInfoList() function now returns an object containing the count of filtered jobs, the total number of jobs in the database, and totals for each job status.  For more information see the [**JobInfoList**] documentation.

@@ -170,14 +170,23 @@ class Client extends EventEmitter {
   /**
    * Filtering options for listing jobs.
    * @typedef {Object} JobListOptions
+   * @property {Object} query - Filter jobs by specifying one or more comparison operators per property.
+   *   Comparison operators must be prefixed with '$' and only the following are supported: $eq, $ne,
+   *  $gt, $gte, $lt, $lte.  Queries may contain multiple properties and each property may
+   *  contain multiple comparison operators.
+   * @property {Array} sort - The sort array.  This array contains an array for each sort which
+   *  consists of the property to sort by and the direction. To sort in ascending order use 1 and
+   *  to sort in descending order use -1.  For example, to sort by jobSubmitted date in ascending
+   *  order: [ [ 'jobSubmitted', 1 ] ]
    * @property {number} offset - The number of jobs to skip; useful for pagination.
    * @property {number} limit - Limit the number of jobs returned. Set to -1 to
    *  return all jobs. Note: -1 is not recommended, as it may take a long time
    *  to retrieve all jobs.
-   * @property {boolean} reverse - Reverse the order of the jobs being returned.
-   *   This will take effect before offest and limit are applied.
-   * @property {string} status - Filter job list by status.  Possible statuses
-   *  include Succeeded, Failed, Accepted, and Started.
+   * @property {string} totals - Types of total job counts to include in the response.
+   *  Must be one of: 'all', 'none', or 'default'.  The default is 'default'.
+   *   Set to 'none' to exclude totals.  Set to 'default' to include total count of all filtered jobs.
+   *   Set to 'all' to include total count of all filtered jobs and the total counts of filtered jobs
+   *  in each job status.  Totals will only be visible when used with the jobInfoList() function.
    */
 
   /**
@@ -191,55 +200,53 @@ class Client extends EventEmitter {
     return this
       .jobInfoList(jobListOptions)
       .then((jobInfoList) => (
-        jobInfoList.map((jobInfo) => (new Job(this, jobInfo.jobId)))
+        jobInfoList.jobs.map((jobInfo) => (new Job(this, jobInfo.jobId)))
       ));
   }
+
+  /**
+   * A list of JobInfo objects with count and total information.
+   * @typedef {Object} JobInfoList
+   * @property {JobInfo[]} jobs - An array of JobInfo objects that match the search criteria.
+   * @property {string} count - The number of filtered jobs in the jobs array.
+   * @property {string} [total] - The total number of jobs.  Enabled by default.
+   *   To disable, set 'totals' to 'none' in the JobListOptions.
+   * @property {string} [accepted] - The total number of accepted jobs.
+   *   This can be enabled by setting 'totals' to 'all' in the JobListOptions.
+   * @property {string} [started] - The total number of started jobs.
+   *   This can be enabled by setting 'totals' to 'all' in the JobListOptions.
+   * @property {string} [succeeded] - The total number of succeeded jobs.
+   *   This can be enabled by setting 'totals' to 'all' in the JobListOptions.
+   * @property {string} [failed] - The total number of failed jobs.
+   *   This can be enabled by setting 'totals' to 'all' in the JobListOptions.
+   */
 
   /**
    * Retrieves an array of job info objects.
    * @param {JobListOptions} jobListOptions - Object containing options for
    *  filtering job list.
-   * @return {Promise<JobInfo[], error>} Returns a Promise to an array of
-   *  jobs that exist on the server.
+   * @return {Promise<JobInfoList, error>} Returns a Promise to a JobInfoList object.
    */
   jobInfoList(jobListOptions) {
     return new Promise((resolve, reject) => {
       // Service url.
-      let url = [this.rootURL, GSF_API.JOBS_PATH].join('/');
+      let url = [this.rootURL, GSF_API.JOB_SEARCH_PATH].join('/');
 
-      // Handle arguments.
-      if (jobListOptions) {
-        let params = [];
-        if (jobListOptions.offset) {
-          params.push('offset=' + jobListOptions.offset);
-        }
-        if (jobListOptions.limit) {
-          params.push('limit=' + jobListOptions.limit);
-        }
-        if (jobListOptions.reverse) {
-          params.push('reverse=' + jobListOptions.reverse);
-        }
-        if (jobListOptions.status) {
-          params.push('status=' + jobListOptions.status);
-        }
-        params = params.join('&');
-        if (params) url += '?' + params;
-      }
 
       // Get job info list.
       superagent
-        .get(url)
+        .post(url)
         .use(nocache) // Prevents caching of *only* this request
         .set(this.headers)
-        .end((err, res) => {
-          if (res && res.ok) {
-            resolve(res.body.jobs);
-          } else {
-            const status = ((err && err.status) ? ': ' + err.status : '');
-            const text = ((err && err.response && err.response.text) ? ': ' +
-             err.response.text : '');
-            reject('Error requesting jobs' + status + text);
-          }
+        .send(jobListOptions || {})
+        .then((res) => {
+          resolve(res.body);
+        })
+        .catch((err) => {
+          const status = ((err && err.status) ? ': ' + err.status : '');
+          const text = ((err && err.response && err.response.text) ? ': ' +
+           err.response.text : '');
+          reject('Error requesting jobs' + status + text);
         });
     });
   }
