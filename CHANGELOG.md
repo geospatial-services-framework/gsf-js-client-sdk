@@ -1,6 +1,22 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 4.0.0 / 2020-06-22
+
+### New Features
+- Support for GSF 3.0:
+    - Add 'query' option to JobListOptions for more advanced querying of the job database.
+    - Add 'sort' option to the JobListOptions for flexible sorting of the job list.
+    - Add 'totals' option to JobListOptions for totals broken down by job status.
+
+### Breaking Changes
+- Changes related to GSF 3.0:
+    - Change jobId type from number to string to support the new 'uniqueJobIds' configuration option in GSF.
+    - Remove 'reverse' and 'status' options from JobListOptions in favor or more powerful 'sort' and 'query' options.
+    - The JobInfoList is now an object containing the jobs array, job count, and totals.
+
+For a detailed summary of the changes, see the V4 Migration Guide and examples in the documentation.
+
 ## 3.0.0 / 2018-03-21
 
 ### New Features
