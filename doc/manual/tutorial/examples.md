@@ -22,6 +22,108 @@ client.services().then((services) => {
 });
 ```
 
+## List Jobs
+The GSF [**Client**] object provides the ability to query and sort the job list.
+
+### The 'query' option
+The [**JobListOptions**] object supports an option called 'query'.  This can be used to form advanced queries of the job database.  The primary building block of a query is the comparison operator, which may be used to select jobs matching the desired criteria. The job search API supports the following comparison operators:
+- $eq
+- $gt
+- $gte
+- $lt
+- $lte
+- $ne
+
+A simple query for any job that is not 'Succeeded':
+```javascript
+// GSF Client
+const client = GSF.client({
+    address: 'MyServer',
+    port: '9191'
+  });
+
+const jobListOptions = {
+  query: {
+	  jobStatus: {
+		  '$ne': 'Succeeded'
+  	}
+  },
+};
+
+// List jobs.
+client.jobInfoList(jobListOptions).then((jobInfoList) => {
+  // Print job list.
+  console.log(jobInfoList);
+}).catch((err) => {
+  // There was an error.
+});
+```
+### The 'sort' option
+In addition to providing a query object, the [**JobListOptions**] also allows flexible sorting of the job list.  This field should be an array of sort arrays.  Multiple sort arrays may also be provided as the sorting will be evaluated from left to right.  Each field may be sorted in either ascending (1) or descending (-1) order.
+
+Sort jobs by 'jobSubmitted' date in ascending order.
+```javascript
+// GSF Client
+const client = GSF.client({
+    address: 'MyServer',
+    port: '9191'
+  });
+
+const jobListOptions = {
+  sort: [ [ 'jobSubmitted', 1 ] ]
+};
+
+// List jobs.
+client.jobInfoList(jobListOptions).then((jobInfoList) => {
+  // Print job list.
+  console.log(jobInfoList);
+}).catch((err) => {
+  // There was an error.
+});
+```
+
+### Advanced query
+This example shows all of the features of the job search API used together.  The job search below would return the 10 most recent failed Spectral Index jobs in the database.  For more information please see the [**JobListOptions**] object and the GSF Job Search API Tutorial.
+
+```javascript
+// GSF Client
+const client = GSF.client({
+    address: 'MyServer',
+    port: '9191'
+  });
+
+const jobListOptions = {
+  query: {
+	  taskName: {
+		  '$eq': 'SpectralIndex'
+	  },
+	  jobStatus: {
+		  '$eq': 'Failed'
+  	}
+  },
+  sort: [ [ 'jobSubmitted', -1 ] ],
+  offset: 0,
+  limit: 10,
+  totals: 'all'
+};
+
+// List jobs.  This will result in an array of Job objects.
+client.jobs(jobListOptions).then((jobList) => {
+  // Print job list.
+  console.log(jobList);
+}).catch((err) => {
+  // There was an error.
+});
+
+// List jobs.  This will result in a list of JobInfo object along with a count and totals.
+client.jobInfoList(jobListOptions).then((jobInfoList) => {
+  // Print job list.
+  console.log(jobInfoList);
+}).catch((err) => {
+  // There was an error.
+});
+```
+
 ## List Available Tasks
 The [**Service**] object provides the ability to list the available tasks on the service.  The example below lists all tasks associated with the ENVI service.
 
@@ -321,6 +423,7 @@ The examples throughout this documentation explain various concepts within the S
 [**submit()**]:../class/src/Task.js~Task.html#instance-method-submit
 
 [**Client**]:../class/src/Client.js~Client.html
+[**JobListOptions**]:../typedef/index.html#static-typedef-JobListOptions
 [**Service**]:../class/src/Service.js~Service.html
 [**Task**]:../class/src/Task.js~Task.html
 [**Job**]:../class/src/Job.js~Job.html
