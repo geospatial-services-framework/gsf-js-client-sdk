@@ -1,19 +1,19 @@
 module.exports = {
   listServices: {
-      services: [
-        {
-          name: 'IDL',
-          description: 'IDL processing routines'
-        },
-        {
-          name: 'ENVI',
-          description: 'ENVI processing routines'
-        }
-      ]
+    services: [
+      {
+        name: 'IDL',
+        description: 'IDL processing routines'
+      },
+      {
+        name: 'ENVI',
+        description: 'ENVI processing routines'
+      }
+    ]
   },
   jobStatus: {
     response: {
-      jobId: 1
+      jobId: '1'
     }
   },
   taskInfo: {
@@ -142,7 +142,7 @@ module.exports = {
   ],
   jobList: [
     {
-      jobId: 1,
+      jobId: '1',
       jobStatus: 'Failed',
       jobError: 'job failed',
       jobInfo: {},
@@ -150,14 +150,14 @@ module.exports = {
       serviceName: 'service1'
     },
     {
-      jobId: 2,
+      jobId: '2',
       jobStatus: 'Succeeded',
       jobInfo: {},
       taskName: 'task1',
       serviceName: 'service1'
     },
     {
-      jobId: 3,
+      jobId: '3',
       jobStatus: 'Succeeded',
       jobInfo: {},
       taskName: 'task1',

@@ -36,35 +36,54 @@ const listServices = function(req, res) {
 };
 
 // Called by jobs endpoint.
-const listJobs = function(req, res) {
-
+const searchJobs = function(req, res) {
   // Send requested task list to client
   // Get a fake list of jobs.
   let outJobList = JSON.parse(JSON.stringify(responses.jobList));
 
   // Add offset to job numbers if specified.
-  if (req.query.offset) {
+  if (req.body.offset) {
     outJobList = responses.jobList.map((job) => {
       return {jobId: parseInt(job.jobId, 10) +
-         parseInt(req.query.offset, 10)};
+         parseInt(req.body.offset, 10)};
     });
   }
 
-  // Reverse list if specified.
-  if (req.query.reverse) {
+  // Reverse list if specified.  Only support simple use case for sort.
+  let reverse = req.body.reverse;
+  if (req.body.sort) {
+    reverse = (req.body.sort[0][0] === 'jobSubmitted' && req.body.sort[0][1] === -1);
+  }
+
+  if (reverse) {
     outJobList = outJobList.reverse();
   }
 
   // Query by status if specified.
-  if (req.query.status) {
+  if (req.body.status) {
     outJobList = outJobList.filter((job) => {
-      return (job.jobStatus === req.query.status);
+      return (job.jobStatus === req.body.status);
     });
+  }
+
+  const jobListMeta = {
+    count: outJobList.length,
+    total: outJobList.length
+  };
+
+  let jobListTotals = {};
+  if (req.body.totals === 'all') {
+    jobListTotals = {
+      accepted: 0,
+      started: 0,
+      succeeded: 0,
+      failed: 0
+    };
   }
 
   // Send response.
   res.setHeader('Content-Type', contentType.json);
-  res.send(JSON.stringify({jobs: outJobList}));
+  res.send(JSON.stringify({jobs: outJobList, ...jobListMeta, ...jobListTotals}));
 
 };
 
@@ -128,7 +147,7 @@ module.exports = {
   init: init,
   serviceInfo: serviceInfo,
   listTasks: listTasks,
-  listJobs: listJobs,
+  listJobs: searchJobs,
   taskInfo: taskInfo,
   submitJob: submitJob,
   cancelJob: cancelJob,

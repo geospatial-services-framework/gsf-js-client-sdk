@@ -111,7 +111,7 @@ describe('Testing Client class', function() {
           expect(jobList.length).to.be.above(1);
           expect(jobList[0]).to.be.an('object');
           expect(jobList[0].jobId).to.exist;
-          expect(jobList[0].jobId).to.be.a('number');
+          expect(jobList[0].jobId).to.be.a('string');
         });
     });
     // Note: This test could fail the first time
@@ -127,7 +127,7 @@ describe('Testing Client class', function() {
           client.jobs({offset: offset})
             .then((jobList2) => {
               expect(jobList2).to.be.an('array');
-              expect(jobList2[0].jobId).to.equal(jobList1[0].jobId + offset);
+              expect(parseInt(jobList2[0].jobId, 10)).to.equal(parseInt(jobList1[0].jobId, 10) + offset);
               done();
             }).catch((err) => {
               done(err);
@@ -137,16 +137,23 @@ describe('Testing Client class', function() {
           done(err);
         });
     });
+    
     // Note: This test could fail the first time
     // if running against
     // a brand new GSF client or one with a recently
     // flushed job database.
-    it('retrieves a list of jobs with status=Succeeded', function() {
+    it('retrieves a list of jobs with status=Succeeded using query object', function() {
       this.timeout(config.testTimeout1);
 
-      const status = 'Succeeded';
+      const searchOpts = {
+        query: {
+          jobStatus: {
+            '$eq': 'Succeeded'
+          }
+        }
+      };
 
-      const jobList = client.jobs({status: status});
+      const jobList = client.jobs(searchOpts);
 
       return Promise.all([
         expect(jobList).to.eventually.be.fulfilled,
@@ -155,21 +162,22 @@ describe('Testing Client class', function() {
       ]);
 
     });
+    
     // Note: This test could fail the first time
     // if running against
     // a brand new GSF client or one with a recently
     // flushed job database.
-    it('retrieves a list of jobs with reverse=true', function(done) {
+    it('retrieves a sorted list of jobs', function(done) {
       this.timeout(config.testTimeout1);
 
       const filter1 = {
         limit: 10,
-        reverse: false
+        sort: [['jobSubmitted', 1]]
       };
 
       const filter2 = {
         limit: 10,
-        reverse: true
+        sort: [['jobSubmitted', -1]]
       };
 
       client.jobs(filter1)
@@ -178,7 +186,7 @@ describe('Testing Client class', function() {
             .then((jobList2) => {
               expect(jobList2).to.be.an('array');
               expect(jobList1).to.not.equal(jobList2);
-              expect(jobList1[0].jobId).to.be.below(jobList2[0].jobId);
+              expect(parseInt(jobList1[0].jobId, 10)).to.be.below(parseInt(jobList2[0].jobId, 10));
               done();
             }).catch((err) => {
               done(err);
@@ -206,7 +214,7 @@ describe('Testing Client class', function() {
           expect(jobList.length).to.be.below(11);
           expect(jobList[0]).to.be.an('object');
           expect(jobList[0].jobId).to.exist;
-          expect(jobList[0].jobId).to.be.a('number');
+          expect(jobList[0].jobId).to.be.a('string');
         });
     });
 
@@ -230,11 +238,15 @@ describe('Testing Client class', function() {
       return client
         .jobInfoList()
         .then((jobList) => {
-          expect(jobList).to.be.an('array');
-          expect(jobList.length).to.be.above(1);
-          testUtils.verifyProperties(jobList[0], interfaces.jobInfo);
+          const { jobs } = jobList;
+          expect(jobList.total).to.be.a('number');
+          expect(jobList.count).to.be.a('number');
+          expect(jobs).to.be.an('array');
+          expect(jobs.length).to.be.above(1);
+          testUtils.verifyProperties(jobs[0], interfaces.jobInfo);
         });
     });
+
     // Note: This test could fail the first time
     // if running against
     // a brand new GSF server or one with a recently
@@ -245,57 +257,17 @@ describe('Testing Client class', function() {
       return client
         .jobInfoList()
         .then((jobList1) => {
+          const { jobs: jobs1 } = jobList1;
           return client
             .jobInfoList({offset: offset})
             .then((jobList2) => {
-              expect(jobList2).to.be.an('array');
-              expect(jobList2[0].jobId).to.equal(jobList1[0].jobId + offset);
+              const { jobs: jobs2 } = jobList2;
+              expect(jobs2).to.be.an('array');
+              expect(parseInt(jobs2[0].jobId, 10)).to.equal(parseInt(jobs1[0].jobId, 10) + offset);
             });
         });
     });
-    // Note: This test could fail the first time
-    // if running against
-    // a brand new GSF server or one with a recently
-    // flushed job database.
-    it('retrieves a list of jobs with status=Succeeded', function() {
-      this.timeout(config.testTimeout1);
-      const status = 'Succeeded';
-      return client
-        .jobInfoList({status: status})
-        .then((jobList) => {
-          expect(jobList).to.be.an('array');
-          expect(jobList.length).to.be.above(1);
-        });
-    });
-    // Note: This test could fail the first time
-    // if running against
-    // a brand new GSF server or one with a recently
-    // flushed job database.
-    it('retrieves a list of jobs with reverse=true', function() {
-      this.timeout(config.testTimeout1);
 
-      const filter1 = {
-        limit: 10,
-        reverse: false
-      };
-
-      const filter2 = {
-        limit: 10,
-        reverse: true
-      };
-
-      return client
-        .jobInfoList(filter1)
-        .then((jobList1) => {
-          return client
-            .jobInfoList(filter2)
-            .then((jobList2) => {
-              expect(jobList2).to.be.an('array');
-              expect(jobList1).to.not.equal(jobList2);
-              expect(jobList1[0].jobId).to.be.below(jobList2[0].jobId);
-            });
-        });
-    });
     // Note: This test could fail the first time
     // if running against
     // a brand new GSF server or one with a recently
@@ -310,12 +282,40 @@ describe('Testing Client class', function() {
       return client
         .jobInfoList(filter)
         .then((jobList) => {
-          expect(jobList).to.be.an('array');
-          expect(jobList.length).to.be.above(1);
-          expect(jobList.length).to.be.below(11);
-          expect(jobList[0]).to.be.an('object');
-          expect(jobList[0].jobId).to.exist;
-          expect(jobList[0].jobId).to.be.a('number');
+          const { jobs } = jobList;
+          expect(jobs).to.be.an('array');
+          expect(jobs.length).to.be.above(1);
+          expect(jobs.length).to.be.below(11);
+          expect(jobs[0]).to.be.an('object');
+          expect(jobs[0].jobId).to.exist;
+          expect(jobs[0].jobId).to.be.a('string');
+        });
+    });
+
+    // Note: This test could fail the first time
+    // if running against
+    // a brand new GSF server or one with a recently
+    // flushed job database.
+    it('retrieves a list of jobs with totals for each status', function() {
+      this.timeout(config.testTimeout2);
+
+      const limit = 3;
+      const searchOpts = {
+        limit,
+        totals: 'all'
+      };
+
+      return client
+        .jobInfoList(searchOpts)
+        .then((jobList) => {
+          console.log(jobList.jobs);
+          expect(jobList.total).to.be.a('number');
+          expect(jobList.count).to.equal(limit);
+          expect(jobList.accepted).to.be.a('number');
+          expect(jobList.started).to.be.a('number');
+          expect(jobList.succeeded).to.be.a('number');
+          expect(jobList.failed).to.be.a('number');
+          expect(jobList.jobs).to.be.an('array');
         });
     });
 

@@ -14,7 +14,7 @@ const nocache = utils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 class Job extends EventEmitter {
   /**
    * @param {Client} client - The GSF Client object.
-   * @param {number} jobId - The jobId.
+   * @param {string} jobId - The jobId.
    * @param {function(info: JobProgressInfo)} [progressCallback] - The callback to handle job progress.
    * @param {function(info: JobStartedInfo)} [startedCallback] - The callback that is called when the job starts.
    *  For more reliable job started information, listen to the GSF JobStarted
