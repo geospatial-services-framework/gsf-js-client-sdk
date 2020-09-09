@@ -109,16 +109,16 @@ const submitJob = function(req, res) {
   const service = req.body.serviceName;
 
   // Add job to queue.
-  jobManager.addToQueue(taskName, service, params, jobOptions, null, function(err, jobID) {
+  jobManager.addToQueue(taskName, service, params, jobOptions, null, function(err, jobId) {
     if (err) {
       res.status(err.code).send(err.message);
       return;
     }
     // Set the Location header
-    res.setHeader('Location', '/jobs/' + jobID);
+    res.setHeader('Location', '/jobs/' + jobId);
 
     // Send the new job information to the client
-    res.status(201).send(JSON.stringify({message: 'Added to job queue', jobID: jobID}));
+    res.status(201).send(JSON.stringify({message: 'Added to job queue', jobId}));
   });
 };
 
