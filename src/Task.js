@@ -89,7 +89,7 @@ class Task {
         .end((err, res) => {
           if (res && res.ok) {
             // Return new job object using ID.
-            resolve(new Job(this._client, res.body.jobID, progressCallback,
+            resolve(new Job(this._client, res.body.jobId, progressCallback,
               startedCallback));
           } else {
             const status = ((err && err.status) ? ': ' + err.status : '');

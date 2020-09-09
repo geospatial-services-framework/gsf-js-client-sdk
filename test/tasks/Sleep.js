@@ -18,9 +18,7 @@ function Sleep(API, inputs, scratch, jobResults) {
     } else {
       jobResults.done(null,
         {
-          OUTPUT: {
-            best: inputs.INPUT_INTEGER
-          }
+          OUTPUT: inputs.INPUT_INTEGER
         });
     }
   }, inputs.SLEEP_TIME);

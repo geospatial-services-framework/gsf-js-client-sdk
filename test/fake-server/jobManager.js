@@ -121,7 +121,15 @@ function jobManager() {
 
         job.jobProgress = 100;
         job.jobStatus = 'Succeeded';
-        job.jobResults = data;
+        const jobResults = {};
+        if (data) {
+          Object.keys(data).forEach((key) => {
+            jobResults[key] = {
+              best: data[key]
+            }
+          });
+        }
+        job.jobResults = jobResults;
 
         // If there was an error, add an error field and change status;
         if (cancelJobId === job.jobId) {
