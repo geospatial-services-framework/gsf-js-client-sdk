@@ -222,6 +222,28 @@ task.submitAndWait(taskParameters).then((results) => {
     // Display error.
   });
 ```
+## List and Retrieve Workspace Files
+The GSF [**Job**] object provides the ability to fetch a list of workspace files.  It is required that the 'enableNodeInfo' configuration is set to true on the server for job workspace access.
+
+The task below, CustomTask, is a fictional task that writes a text file to the job workspace.  This also provides an example of using async/await instead of promises.
+```javascript
+const task = GSF.client({address:'MyServer',port:'9191'}).service('ENVI').task('CustomTask');
+
+// Submit job.
+const job = await task.submit({});
+
+// Wait for job to complete.
+await job.wait();
+
+// Get the list of workspace files.
+const workspaceFiles = await job.workspace();
+
+// Retrieve the contents of a text file.
+const fileBuffer = await job.file(workspaceFiles[0].path);
+const textDecoder = new TextDecoder('utf-8');
+const fileContents = textDecoder.decode(fileBuffer);
+console.log(fileContents);
+```
 
 ### Using Server Events
 The [**Client**] and [**Job**] objects give you access to all job related events emitted by the server.  These classes inheret from Node's [**EventEmitter**] and support methods such as .on(), .once(), .removeAllListeners(), etc. The following example shows how to listen for job events on the [**Client**].
