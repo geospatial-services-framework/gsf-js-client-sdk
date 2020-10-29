@@ -1,7 +1,6 @@
 import superagent from 'superagent';
 import saNoCache from 'superagent-no-cache';
 import EventEmitter from 'events';
-
 import utils from './utils/utils.js';
 import GSF_API from './utils/GSF_API';
 import EVENTS from './utils/EVENTS';
@@ -81,18 +80,7 @@ class Job extends EventEmitter {
    */
   wait() {
     if (!this._waiting) {
-
       this._waiting = new Promise((resolve, reject) => {
-        // Check to make sure it hasn't already completed.
-        this.info().then((info) => {
-          if (info.jobStatus === EVENTS.succeeded) {
-            resolve(info.jobResults);
-          } else if (info.jobStatus === EVENTS.failed) {
-            reject(info.jobError);
-          }
-        }).catch((err) => {
-          reject(err);
-        });
 
         // Listen to job events.
         this.once(EVENTS.succeeded, (data) => {
@@ -104,6 +92,17 @@ class Job extends EventEmitter {
           this.info().then((info) => {
             reject(info.jobError);
           });
+        });
+
+        // Check to make sure it hasn't already completed.
+        this.info().then((info) => {
+          if (info.jobStatus === EVENTS.succeeded) {
+            resolve(info.jobResults);
+          } else if (info.jobStatus === EVENTS.failed) {
+            reject(info.jobError);
+          }
+        }).catch((err) => {
+          reject(err);
         });
       });
     }
@@ -171,7 +170,7 @@ class Job extends EventEmitter {
           }
         });
     });
-
+    
   }
 
   /**
@@ -208,6 +207,52 @@ class Job extends EventEmitter {
              err.response.text : '');
             reject('Error cancelling job' + status + text);
           }
+        });
+    });
+  }
+
+  /**
+   * Retrieves a list of the workspace files.
+   * @return {Promise<Object[], error>} Returns a promise to an array of fs.stat objects.
+   */
+  workspace() {
+    return new Promise((resolve, reject) => {
+      const jobStatusURL = this._jobURL;
+      // List workspace files.
+      superagent
+        .get(`${jobStatusURL}/workspace`)
+        .use(nocache) // Prevents caching of *only* this request
+        .set(this._client.headers)
+        .end((err, res) => {
+          if (res && res.ok) {
+            resolve(res.body.workspace);
+          } else {
+            const status = ((err && err.status) ? ': ' + err.status : '');
+            const text = ((err && err.response && err.response.text) ? ': ' +
+             err.response.text : '');
+            reject('Error requesting job workspace' + status + text);
+          }
+        });
+    });
+  }
+
+  /**
+   * Retrieves a workspace file.
+   * @return {Promise<arraybuffer, error>} Returns a promise to an ArrayBuffer of the file contents.
+   */
+  file(fileName) {
+    return new Promise((resolve, reject) => {
+      const jobStatusURL = this._jobURL;
+      // Get file as arraybuffer.
+      superagent
+        .get(`${jobStatusURL}/workspace/${fileName}`)
+        .parse(superagent.parse['application/octet-stream'])
+        .responseType('arraybuffer')
+        .then((res) => {
+          resolve(res.body);
+        }).catch((err) => {
+          const status = ((err && err.status) ? ': ' + err.status : '');
+          reject('Error requesting file' + status);
         });
     });
   }

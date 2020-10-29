@@ -1,0 +1,17 @@
+{
+  "taskName": "WriteFiles",
+  "displayName": "Write File",
+  "description": "Writes out text and binary files.",
+  "inputParameters": {
+    "TEXT": {
+      "type": "STRING",
+      "required": false
+    },
+    "BYTE_LENGTH": {
+      "type": "NUMBER",
+      "required": false
+    }
+  },
+  "outputParameters": {
+  }
+}

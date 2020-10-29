@@ -1,10 +1,12 @@
 // This module accepts requests from the client and assigns
 // functions to those requests.
+const fs = require('fs');
+const path = require('path');
 const responses = require('../utils/responses');
-var jobManager;
+let jobManager;
 
 // Initialize Job Manager
-const init = function(jm) {
+const init = (jm) => {
   jobManager = jm;
 };
 
@@ -15,7 +17,7 @@ const contentType = {
 };
 
 // Called by service info endpoint.
-const serviceInfo = function(req, res) {
+const serviceInfo = (req, res) => {
   res.setHeader('Content-Type', contentType.json);
   const serviceDescription = responses.listServices.services
     .find((element) => {
@@ -24,19 +26,19 @@ const serviceInfo = function(req, res) {
   res.send(JSON.stringify(serviceDescription));
 };
 
-const listTasks = function(req, res) {
+const listTasks = (req, res) => {
   res.setHeader('Content-Type', contentType.json);
   res.send(JSON.stringify({tasks: responses.taskList}));
 };
 
 
-const listServices = function(req, res) {
+const listServices = (req, res) => {
   res.setHeader('Content-Type', contentType.json);
   res.send(JSON.stringify(responses.listServices));
 };
 
 // Called by jobs endpoint.
-const searchJobs = function(req, res) {
+const listJobs = (req, res) => {
   // Send requested task list to client
   // Get a fake list of jobs.
   let outJobList = JSON.parse(JSON.stringify(responses.jobList));
@@ -88,14 +90,14 @@ const searchJobs = function(req, res) {
 };
 
 // Called by task info endpoint.
-const taskInfo = function(req, res) {
+const taskInfo = (req, res) => {
   // Send response using prebaked info.
   res.setHeader('Content-Type', contentType.json);
   res.send(JSON.stringify(responses.taskInfo));
 };
 
 // Called by submit job endpoint.
-const submitJob = function(req, res) {
+const submitJob = (req, res) => {
   res.setHeader('Content-Type', 'application/json');
 
   const taskName = req.body.taskName;
@@ -109,7 +111,7 @@ const submitJob = function(req, res) {
   const service = req.body.serviceName;
 
   // Add job to queue.
-  jobManager.addToQueue(taskName, service, params, jobOptions, null, function(err, jobId) {
+  jobManager.addToQueue(taskName, service, params, jobOptions, null, (err, jobId) => {
     if (err) {
       res.status(err.code).send(err.message);
       return;
@@ -123,15 +125,15 @@ const submitJob = function(req, res) {
 };
 
 // Called by cancel endpoint.
-const cancelJob = function(req, res) {
+const cancelJob = (req, res) => {
   jobManager.cancel(req.params.id, req.query.kill === 'true');
   res.send(JSON.stringify({message: 'Job was Canceled'}, null, 4));
 };
 
 // Called by job status endpoint.
-const jobStatus = function (req, res) {
+const jobStatus = (req, res) => {
   // Get job info from jm.
-  jobManager.jobInfo(req.params.id, function (err, info) {
+  jobManager.jobInfo(req.params.id, (err, info) => {
     if (err) {
       res.status(err.code).send(err.message);
       return;
@@ -143,14 +145,41 @@ const jobStatus = function (req, res) {
   });
 };
 
+const getFile = (req, res) => {
+  try {
+    const filePath = path.resolve(__dirname, 'workspace', req.params.id, req.params.fileName);
+    const stream = fs.createReadStream(filePath);
+    res.setHeader('Content-Type', 'application/octet-stream');
+    stream.on('error', () => {
+      res.status(404).send();
+    });
+    stream.pipe(res);
+  } catch (error) {
+    res.status(404).send();
+  }
+}
+
+const listWorkspace = (req, res) => {
+  try {
+    const workspaceDir = path.resolve(__dirname, 'workspace', req.params.id);
+    const workspace = fs.readdirSync(workspaceDir).map((file) => ({...fs.statSync(path.resolve(workspaceDir, file)), path: file})); 
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({ workspace }));
+  } catch (error) {
+    res.status(404).send('Error requesting job workspace');
+  }
+}
+
 module.exports = {
-  init: init,
-  serviceInfo: serviceInfo,
-  listTasks: listTasks,
-  listJobs: searchJobs,
-  taskInfo: taskInfo,
-  submitJob: submitJob,
-  cancelJob: cancelJob,
-  jobStatus: jobStatus,
-  listServices: listServices
+  init,
+  serviceInfo,
+  listTasks,
+  listJobs,
+  taskInfo,
+  submitJob,
+  cancelJob,
+  jobStatus,
+  listServices,
+  getFile,
+  listWorkspace
 };

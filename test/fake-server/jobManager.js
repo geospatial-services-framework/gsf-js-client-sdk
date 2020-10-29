@@ -92,7 +92,7 @@ function jobManager() {
         });
 
         // Execute job.
-        engine.execute(null, job.taskName, job.inputParameters, null, createCallback(job));
+        engine.execute({ currentID: job.jobId }, job.taskName, job.inputParameters, null, createCallback(job));
       }
     }
   };
