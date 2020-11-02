@@ -237,12 +237,37 @@ await job.wait();
 
 // Get the list of workspace files.
 const workspaceFiles = await job.workspace();
+console.log(workspaceFiles);
+// prints:
+// [
+//   {
+//     dev: 66311,
+//     mode: 33204,
+//     nlink: 1,
+//     uid: 1000,
+//     gid: 1000,
+//     rdev: 0,
+//     blksize: 4096,
+//     ino: 11768910,
+//     size: 18,
+//     blocks: 8,
+//     atimeMs: 1604352379848.0715,
+//     mtimeMs: 1604352379848.0715,
+//     ctimeMs: 1604352379848.0715,
+//     birthtimeMs: 1604352379848.0715,
+//     atime: "2020-11-02T21:26:19.848Z",
+//     mtime: "2020-11-02T21:26:19.848Z",
+//     ctime: "2020-11-02T21:26:19.848Z",
+//     birthtime: "2020-11-02T21:26:19.848Z",
+//     path: "file.txt"
+//   }
+// ]
 
 // Retrieve the contents of a text file.
 const fileBuffer = await job.file(workspaceFiles[0].path);
 const textDecoder = new TextDecoder('utf-8');
 const fileContents = textDecoder.decode(fileBuffer);
-console.log(fileContents);
+console.log(fileContents); // prints: Text file contents.
 ```
 
 ### Using Server Events
