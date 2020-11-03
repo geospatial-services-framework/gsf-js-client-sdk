@@ -1,0 +1,9 @@
+{
+  "taskName": "Clean",
+  "displayName": "Clean",
+  "description": "Deletes the test workspace.",
+  "inputParameters": {
+  },
+  "outputParameters": {
+  }
+}

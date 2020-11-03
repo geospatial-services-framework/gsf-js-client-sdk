@@ -50,5 +50,17 @@ export default {
       },
       INDEX: 'fake index'
     }
+  },
+  writeFilesTask: {
+    service: 'javascript',
+    name: 'WriteFiles',
+    parameters: {},
+    results: {}
+  },
+  cleanTask: {
+    service: 'javascript',
+    name: 'Clean',
+    parameters: {},
+    results: {}
   }
 };

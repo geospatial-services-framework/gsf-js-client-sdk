@@ -55,6 +55,12 @@ app.get(jobsEndPoint + '/:id', requestHandler.jobStatus);
 // Cancel
 app.put(jobsEndPoint + '/:id', requestHandler.cancelJob);
 
+// Get workspace
+app.get(jobsEndPoint + '/:id/workspace', requestHandler.listWorkspace);
+
+// Get file
+app.get(jobsEndPoint + '/:id/workspace/:fileName', requestHandler.getFile);
+
 let SseChannel = require('sse-channel');
 let SSE;
 

@@ -50,7 +50,7 @@ describe('Testing Job class', function() {
     });
   });
 
-  describe('.jobInfo()', function() {
+  describe('.info()', function() {
     it('retrieves the job information', function() {
       const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
@@ -84,6 +84,106 @@ describe('Testing Job class', function() {
         /Error requesting job info/);
     });
 
+  });
+
+  describe('.workspace()', function() {
+    it('retrieves the job workspace', function() {
+      this.timeout(config.testTimeout1);
+      const { service, name, parameters } = testTasks.writeFilesTask;
+      const task = new Task(client.service(service), name);
+      const TEXT = 'testing text files';
+      let job;
+      return task
+        .submit({inputParameters: {...parameters, TEXT}})
+        .then((j) => {
+          job = j;
+          return job.wait();
+        })
+        .then(() => {
+          return job
+            .workspace()
+            .then((workspace) => {
+              expect(workspace).to.be.an('array');
+              expect(workspace[0]).to.be.an('object');
+              expect(workspace[0].path).to.be.a('string');
+            });
+        });
+    });
+
+    it('rejects promise if job does not exist', function() {
+      const job = new Job(client, 'fakeId');
+      return assert.isRejected(job.workspace(),
+        /Error requesting job workspace/);
+    });
+  });
+
+  describe('.file()', function() {
+    afterEach(function() {
+      // Cleanup
+      const { service, name, parameters } = testTasks.cleanTask;
+      const task = new Task(client.service(service), name);
+      return task.submitAndWait({inputParameters: {...parameters}});
+    });
+    
+    it('retrieves a binary file', function() {
+      const { service, name, parameters } = testTasks.writeFilesTask;
+      const task = new Task(client.service(service), name);
+      const BYTE_LENGTH = 8;
+      let job;
+      return task
+        .submit({inputParameters: {...parameters, BYTE_LENGTH}})
+        .then((j) => {
+          job = j;
+          return job.wait();
+        })
+        .then(() => {
+          return job
+            .file('file.bin')
+            .then((buffer) => {
+              expect(buffer.byteLength).to.equal(BYTE_LENGTH);
+            });
+        });
+    });
+
+    it('retrieves a text file', function() {
+      const { service, name, parameters } = testTasks.writeFilesTask;
+      const task = new Task(client.service(service), name);
+      const TEXT = 'testing text files';
+      let job;
+      return task
+        .submit({inputParameters: {...parameters, TEXT}})
+        .then((j) => {
+          job = j;
+          return job.wait();
+        })
+        .then(() => {
+          return job
+            .file('file.txt')
+            .then((buffer) => {
+              const enc = new TextDecoder('utf-8');
+              const fileContents = enc.decode(buffer);
+              expect(fileContents).to.be.a('string');
+              expect(fileContents).to.equal(TEXT);
+            });
+        });
+    });
+
+    it('rejects promise if file does not exist', function() {
+      const { service, name, parameters } = testTasks.writeFilesTask;
+      const task = new Task(client.service(service), name);
+      const TEXT = 'testing text files';
+      let job;
+      return task
+        .submit({inputParameters: {...parameters, TEXT}})
+        .then((j) => {
+          job = j;
+          return job.wait();
+        })
+        .then(() => {
+          return assert.isRejected(job.file('thisDoesNotExist.txt'),
+            /Error requesting file/);
+        });
+    });
   });
 
   describe('.wait()', function() {
