@@ -107,11 +107,11 @@ describe('Testing Task class', function() {
       // Submit a two jobs so we have one that gets queued.
       // That will ensure that there is a started event.
       // Workers needs to be set to 1 in the server config for this to pass.
-      return task.submit({inputParameters: params}).then((job) => {
+      return task.submit({inputParameters: params}).then(function(job) {
 
         // At this point, we are sure that the first job has been accepted
         // Submit the second job and verify we get the right callbacks
-        task
+        return task
           .submit({inputParameters: sleepParams}, progress, started)
           .then(job => job.wait())
           .then((result) => {
