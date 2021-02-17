@@ -111,7 +111,7 @@ describe('Testing Task class', function() {
 
         // At this point, we are sure that the first job has been accepted
         // Submit the second job and verify we get the right callbacks
-        return task
+        task
           .submit({inputParameters: sleepParams}, progress, started)
           .then(job => job.wait())
           .then((result) => {
@@ -139,14 +139,15 @@ describe('Testing Task class', function() {
   });
 
   describe('.submitAndWait()', function() {
-    it('submits a job and waits for results', function() {
+    it('submits a job and waits for results', function(done) {
       this.timeout(config.testTimeout1);
       const submitAndWait = task.submitAndWait(
         {
           inputParameters: testTasks.sleepTask.parameters
         }
       );
-      return expect(submitAndWait).to.eventually.deep.equal(testTasks.sleepTask.results);
+      expect(submitAndWait).to.eventually.deep.equal(testTasks.sleepTask.results);
+      done();
     });
 
     it('submits a job and waits for results with progress and started callbacks', function() {
@@ -171,9 +172,9 @@ describe('Testing Task class', function() {
 
         // At this point, we are sure that the first job has been accepted
         // Submit the second job and verify we get the right callbacks
-        return task
+        task
           .submitAndWait({inputParameters: sleepParams}, progressCallback, startedCallback)
-          .then((result) => {
+          .finally((result) => {
             expect(startedCallback.calledOnce).to.be.true;
             expect(progressCallback.callCount).to.equal(nProgress);
             const args = progressCallback.args.map((arg) => (arg[0]));
@@ -186,11 +187,12 @@ describe('Testing Task class', function() {
       });
     });
 
-    it('rejects promise if job fails', function() {
+    it('rejects promise if job fails', function(done) {
       this.timeout(config.testTimeout1);
       const failJob = task.submitAndWait({inputParameters: testTasks.sleepTaskFail.parameters});
-      return assert.isRejected(failJob,
+      assert.isRejected(failJob,
         new RegExp(testTasks.sleepTaskFail.parameters.ERROR_MESSAGE));
+      done();
     });
 
     it('submits multiple jobs with varying processing times', function() {
@@ -213,8 +215,8 @@ describe('Testing Task class', function() {
       const runJob1 = task.submitAndWait({inputParameters: parameters1}, progressCallback1);
       const runJob2 = task.submitAndWait({inputParameters: parameters2}, progressCallback2);
 
-      return Promise.all([runJob1, runJob2])
-        .then((output) => {
+      Promise.all([runJob1, runJob2])
+        .then(function(output) {
           const results1 = output[0];
           const results2 = output[1];
           expect(results1).to.be.an('object');
@@ -228,6 +230,7 @@ describe('Testing Task class', function() {
           (args).should.all.have.property('jobId');
           (args).should.all.have.property('progress');
         });
+      return;
     });
 
   });
