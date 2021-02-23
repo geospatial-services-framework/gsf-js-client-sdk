@@ -1,4 +1,4 @@
-import Client from './Client';
+import {Client} from './Client';
 
 /**
  * The GSF object provides an entry point to the SDK.
@@ -8,8 +8,12 @@ import Client from './Client';
  * @typedef {Object} GSF
  * @property {function(clientOptions: ClientOptions): Client} client - The function for creating a new Client object.
  */
-export default {
-  client(clientOptions) {
-    return new Client(clientOptions);
-  }
+// export default {
+//   client(clientOptions) {
+//     return new Client(clientOptions);
+//   }
+// };
+
+export function client(clientOptions) {
+  return new Client(clientOptions);
 };

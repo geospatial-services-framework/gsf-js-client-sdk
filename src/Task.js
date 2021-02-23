@@ -2,7 +2,7 @@ import superagent from 'superagent';
 import saNoCache from 'superagent-no-cache';
 
 import utils from './utils/utils.js';
-import Job from './Job';
+import {Job} from './Job';
 import GSF_API from './utils/GSF_API';
 
 const nocache = utils.isIE() ? saNoCache.withQueryStrings : saNoCache;
@@ -10,7 +10,7 @@ const nocache = utils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 /**
  * The Task class is used to submit and inspect tasks.
  */
-class Task {
+export class Task {
   /**
    * @param {Service} service - The service object.
    * @param {string} taskName - The name of the task.
@@ -118,7 +118,7 @@ class Task {
   }
 }
 
-export default Task;
+// export default Task;
 
 /**
  * The Submit Options object contains the information needed to run

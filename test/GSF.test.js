@@ -2,7 +2,7 @@
  * Tests for the GSF object.
  */
 import { expect } from 'chai';
-import GSF from '../src/GSF';
+import * as GSF from '../src/GSF';
 
 /**
  * Begin tests

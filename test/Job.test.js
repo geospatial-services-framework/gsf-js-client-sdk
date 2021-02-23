@@ -16,9 +16,9 @@ import testTasks from './utils/testTasks.js';
 import interfaces from './utils/interfaces.js';
 import config from './config/config.js';
 
-import GSF from '../src/GSF';
-import Task from '../src/Task';
-import Job from '../src/Job';
+import * as GSF from '../src/GSF';
+import {Task} from '../src/Task';
+import {Job} from '../src/Job';
 
 let client;
 
