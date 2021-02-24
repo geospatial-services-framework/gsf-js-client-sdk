@@ -93,7 +93,7 @@ describe('Testing Task class', function() {
     it('submits a job with progress and started callbacks', function() {
       this.timeout(config.testTimeout2);
       const nProgress = 5;
-      const params = Object.assign({}, testTasks.sleepTask.parameters);
+      const params = JSON.parse(JSON.stringify(testTasks.sleepTask.parameters));
       params.N_PROGRESS = nProgress;
       params.SLEEP_TIME = 400;
       params.PROGRESS_MESSAGE = 'Message';
@@ -154,7 +154,7 @@ describe('Testing Task class', function() {
       this.timeout(config.testTimeout1);
       const nProgress = 5;
       const progressMessage = 'Message';
-      const params = Object.assign({}, testTasks.sleepTask.parameters);
+      const params = JSON.parse(JSON.stringify(testTasks.sleepTask.parameters));
       params.N_PROGRESS = nProgress;
       params.SLEEP_TIME = 500;
       params.PROGRESS_MESSAGE = progressMessage;
@@ -203,8 +203,8 @@ describe('Testing Task class', function() {
       const progressCallback1 = sinon.spy();
       const progressCallback2 = sinon.spy();
 
-      const parameters1 = testTasks.sleepTask.parameters;
-      const parameters2 = Object.assign({}, parameters1);
+      const parameters1 = JSON.parse(JSON.stringify(testTasks.sleepTask.parameters));
+      const parameters2 = JSON.parse(JSON.stringify(parameters1));
       parameters1.INPUT_INTEGER = 1;
       parameters1.N_PROGRESS = nProgress1;
       parameters1.SLEEP_TIME = 50;

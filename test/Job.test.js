@@ -120,12 +120,14 @@ describe('Testing Job class', function() {
   describe('.file()', function() {
     afterEach(function() {
       // Cleanup
-      const { service, name, parameters } = testTasks.cleanTask;
-      const task = new Task(client.service(service), name);
-      return task.submitAndWait({inputParameters: {...parameters}});
+      // TODO
+      // const { service, name, parameters } = testTasks.cleanTask;
+      // const task = new Task(client.service(service), name);
+      // return task.submitAndWait({inputParameters: {...parameters}});
     });
     
     it('retrieves a binary file', function() {
+      this.timeout(6000);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const BYTE_LENGTH = 8;
@@ -146,6 +148,7 @@ describe('Testing Job class', function() {
     });
 
     it('retrieves a text file', function() {
+      this.timeout(6000);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const TEXT = 'testing text files';
@@ -169,6 +172,7 @@ describe('Testing Job class', function() {
     });
 
     it('rejects promise if file does not exist', function() {
+      this.timeout(6000);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const TEXT = 'testing text files';
@@ -218,10 +222,10 @@ describe('Testing Job class', function() {
 
   describe('.cancel()', function() {
     it('cancels a job with kill=false', function(done) {
-      this.timeout(config.testTimeout2);
+      this.timeout(6000);
 
       let params = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
-      params.inputParameters.SLEEP_TIME = 500;
+      params.inputParameters.SLEEP_TIME = 800;
       const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
       task.submit(params)
         .then((job) => {
@@ -241,12 +245,12 @@ describe('Testing Job class', function() {
     });
 
     it('cancels job with kill=true', function(done) {
-      this.timeout(config.testTimeout2);
+      this.timeout(6000);
 
       const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
       const params = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
-      params.inputParameters.SLEEP_TIME = 500;
+      params.inputParameters.SLEEP_TIME = 800;
       task.submit(params)
         .then((job) => {
           const force = true;
@@ -386,7 +390,7 @@ describe('Testing Job class', function() {
         this.timeout(config.testTimeout2);
 
         let jobId = null;
-        const testData = Object.assign({}, testTasks);
+        const testData = JSON.parse(JSON.stringify(testTasks));
         const nProgress = 5;
         const progressMessage = 'Message';
         testData.sleepTask.parameters.N_PROGRESS = nProgress;
