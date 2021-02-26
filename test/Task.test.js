@@ -98,7 +98,7 @@ describe('Testing Task class', function() {
       params.SLEEP_TIME = 400;
       params.PROGRESS_MESSAGE = 'Message';
 
-      const sleepParams = Object.assign({}, params);
+      let sleepParams = JSON.parse(JSON.stringify(params));
       sleepParams.SLEEP_TIME = 100;
 
       const progress = sinon.spy();
@@ -159,7 +159,7 @@ describe('Testing Task class', function() {
       params.SLEEP_TIME = 500;
       params.PROGRESS_MESSAGE = progressMessage;
 
-      const sleepParams = Object.assign({}, params);
+      let sleepParams = JSON.parse(JSON.stringify(params));
       sleepParams.SLEEP_TIME = 100;
 
       const startedCallback = sinon.spy();

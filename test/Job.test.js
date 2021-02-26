@@ -52,6 +52,7 @@ describe('Testing Job class', function() {
 
   describe('.info()', function() {
     it('retrieves the job information', function() {
+      this.timeout(config.testTimeout2);
       const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
 
@@ -118,16 +119,19 @@ describe('Testing Job class', function() {
   });
 
   describe('.file()', function() {
-    afterEach(function() {
+    afterEach(function(done) {
       // Cleanup
-      // TODO
-      // const { service, name, parameters } = testTasks.cleanTask;
-      // const task = new Task(client.service(service), name);
-      // return task.submitAndWait({inputParameters: {...parameters}});
+      const { service, name, parameters } = testTasks.cleanTask;
+      const task = new Task(client.service(service), name);
+      task
+        .submitAndWait({inputParameters: {...parameters}})
+        .then(done()).catch((err) => {
+          done(err);
+        });
     });
     
     it('retrieves a binary file', function() {
-      this.timeout(6000);
+      this.timeout(8000);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const BYTE_LENGTH = 8;
@@ -147,13 +151,13 @@ describe('Testing Job class', function() {
         });
     });
 
-    it('retrieves a text file', function() {
+    it('retrieves a text file', function(done) {
       this.timeout(6000);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const TEXT = 'testing text files';
       let job;
-      return task
+      task
         .submit({inputParameters: {...parameters, TEXT}})
         .then((j) => {
           job = j;
@@ -167,7 +171,10 @@ describe('Testing Job class', function() {
               const fileContents = enc.decode(buffer);
               expect(fileContents).to.be.a('string');
               expect(fileContents).to.equal(TEXT);
+              done();
             });
+        }).catch((err) => {
+          done(err);
         });
     });
 
@@ -222,10 +229,10 @@ describe('Testing Job class', function() {
 
   describe('.cancel()', function() {
     it('cancels a job with kill=false', function(done) {
-      this.timeout(6000);
+      this.timeout(8000);
 
-      let params = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
-      params.inputParameters.SLEEP_TIME = 800;
+      let params = {inputParameters: JSON.parse(JSON.stringify(testTasks.sleepTask.parameters))};
+      params.inputParameters.SLEEP_TIME = 3000;
       const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
       task.submit(params)
         .then((job) => {
@@ -245,12 +252,12 @@ describe('Testing Job class', function() {
     });
 
     it('cancels job with kill=true', function(done) {
-      this.timeout(6000);
+      this.timeout(8000);
 
       const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
-      const params = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
-      params.inputParameters.SLEEP_TIME = 800;
+      let params = {inputParameters: JSON.parse(JSON.stringify(testTasks.sleepTask.parameters))};
+      params.inputParameters.SLEEP_TIME = 3000;
       task.submit(params)
         .then((job) => {
           const force = true;
@@ -287,10 +294,10 @@ describe('Testing Job class', function() {
 
         const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
 
-        const params1 = Object.assign({}, testTasks.sleepTask.parameters);
+        let params1 = JSON.parse(JSON.stringify(testTasks.sleepTask.parameters));
         params1.SLEEP_TIME = 800;
 
-        const params2 = Object.assign({}, params1);
+        let params2 = JSON.parse(JSON.stringify(testTasks.sleepTask.parameters));
         params2.SLEEP_TIME = 0;
 
         const startedListener = sinon.spy();
@@ -338,7 +345,7 @@ describe('Testing Job class', function() {
 
     describe('\'JobSucceeded\' event', function() {
       it('fires when job succeeds', function() {
-        this.timeout(config.testTimeout1);
+        this.timeout(config.testTimeout2);
 
         const succeededListener = sinon.spy();
         const failedListener = sinon.spy();

@@ -308,7 +308,6 @@ describe('Testing Client class', function() {
       return client
         .jobInfoList(searchOpts)
         .then((jobList) => {
-          console.log(jobList.jobs);
           expect(jobList.total).to.be.a('number');
           expect(jobList.count).to.equal(limit);
           expect(jobList.accepted).to.be.a('number');
