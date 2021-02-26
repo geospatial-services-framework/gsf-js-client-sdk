@@ -174,7 +174,7 @@ describe('Testing Task class', function() {
         // Submit the second job and verify we get the right callbacks
         task
           .submitAndWait({inputParameters: sleepParams}, progressCallback, startedCallback)
-          .finally((result) => {
+          .then((result) => {
             expect(startedCallback.calledOnce).to.be.true;
             expect(progressCallback.callCount).to.equal(nProgress);
             const args = progressCallback.args.map((arg) => (arg[0]));
