@@ -276,8 +276,6 @@ export class Client extends EventEmitter {
 
 }
 
-// export default Client;
-
 /**
  * Emitted when a job completes.
  * @typedef {Object} JobCompleted

@@ -118,8 +118,6 @@ export class Task {
   }
 }
 
-// export default Task;
-
 /**
  * The Submit Options object contains the information needed to run
  * a job.

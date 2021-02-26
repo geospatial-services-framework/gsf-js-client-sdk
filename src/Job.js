@@ -257,5 +257,3 @@ export class Job extends EventEmitter {
     });
   }
 }
-
-// export default Job;
