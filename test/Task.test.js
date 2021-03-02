@@ -12,9 +12,9 @@ const assert = chai.assert;
 import sinon from 'sinon';
 
 import testUtils from './utils/testUtils.js';
-import {Task} from '../src/Task';
-import {Service} from '../src/Service';
-import * as GSF from '../src/GSF';
+import Task from '../src/Task';
+import Service from '../src/Service';
+import GSF from '../src/GSF';
 
 import testTasks from './utils/testTasks.js';
 import interfaces from './utils/interfaces.js';

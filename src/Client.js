@@ -3,8 +3,8 @@ import saNoCache from 'superagent-no-cache';
 import EventEmitter from 'events';
 
 import utils from './utils/utils.js';
-import {Service} from './Service';
-import {Job} from './Job';
+import Service from './Service';
+import Job from './Job';
 import GSF_API from './utils/GSF_API';
 import EVENTS from './utils/EVENTS';
 
@@ -17,7 +17,7 @@ const nocache = utils.isIE() ? saNoCache.withQueryStrings : saNoCache;
  * // Obtain Client object from GSF.
  * const Client = GSF.client({address:'MyServer',port:9191});
  */
-export class Client extends EventEmitter {
+class Client extends EventEmitter {
   /**
    * The ClientOptions object contains information about the server.
    * @typedef {Object} ClientOptions
@@ -275,6 +275,8 @@ export class Client extends EventEmitter {
   }
 
 }
+
+export default Client;
 
 /**
  * Emitted when a job completes.

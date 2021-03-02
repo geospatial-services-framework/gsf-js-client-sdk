@@ -16,7 +16,7 @@ import interfaces from './utils/interfaces.js';
 import testTasks from './utils/testTasks.js';
 import config from './config/config.js';
 
-import * as GSF from '../src/GSF';
+import GSF from '../src/GSF';
 
 let client;
 

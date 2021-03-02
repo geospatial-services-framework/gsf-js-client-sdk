@@ -10,7 +10,7 @@ const nocache = utils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 /**
  * The Job class is used for job operations.
  */
-export class Job extends EventEmitter {
+class Job extends EventEmitter {
   /**
    * @param {Client} client - The GSF Client object.
    * @param {string} jobId - The jobId.
@@ -257,3 +257,5 @@ export class Job extends EventEmitter {
     });
   }
 }
+
+export default Job;

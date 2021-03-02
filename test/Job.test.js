@@ -16,9 +16,9 @@ import testTasks from './utils/testTasks.js';
 import interfaces from './utils/interfaces.js';
 import config from './config/config.js';
 
-import * as GSF from '../src/GSF';
-import {Task} from '../src/Task';
-import {Job} from '../src/Job';
+import GSF from '../src/GSF';
+import Task from '../src/Task';
+import Job from '../src/Job';
 
 let client;
 
@@ -131,7 +131,7 @@ describe('Testing Job class', function() {
     });
     
     it('retrieves a binary file', function() {
-      this.timeout(8000);
+      this.timeout(config.testTimeout2);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const BYTE_LENGTH = 8;
@@ -229,7 +229,7 @@ describe('Testing Job class', function() {
 
   describe('.cancel()', function() {
     it('cancels a job with kill=false', function(done) {
-      this.timeout(8000);
+      this.timeout(config.testTimeout2);
 
       let params = {inputParameters: JSON.parse(JSON.stringify(testTasks.sleepTask.parameters))};
       params.inputParameters.SLEEP_TIME = 3000;
@@ -252,7 +252,7 @@ describe('Testing Job class', function() {
     });
 
     it('cancels job with kill=true', function(done) {
-      this.timeout(8000);
+      this.timeout(config.testTimeout2);
 
       const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);

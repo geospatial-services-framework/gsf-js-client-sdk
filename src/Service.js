@@ -2,7 +2,7 @@ import superagent from 'superagent';
 import saNoCache from 'superagent-no-cache';
 
 import utils from './utils/utils.js';
-import {Task} from './Task';
+import Task from './Task';
 import GSF_API from './utils/GSF_API';
 
 const nocache = utils.isIE() ? saNoCache.withQueryStrings : saNoCache;
@@ -10,7 +10,7 @@ const nocache = utils.isIE() ? saNoCache.withQueryStrings : saNoCache;
 /**
  * The Service class is used to inspect and create tasks for a service.
  */
-export class Service {
+class Service {
   /**
    * @param {Client} client - The GSF client object.
    * @param {string} serviceName - The name of the service.
@@ -112,3 +112,5 @@ export class Service {
       );
   }
 }
+
+export default Service;

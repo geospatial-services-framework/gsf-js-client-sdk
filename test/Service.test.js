@@ -15,8 +15,8 @@ import interfaces from './utils/interfaces.js';
 import testTasks from './utils/testTasks.js';
 import config from './config/config.js';
 
-import {Service} from '../src/Service';
-import * as GSF from '../src/GSF';
+import Service from '../src/Service';
+import GSF from '../src/GSF';
 
 let service;
 
