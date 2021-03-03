@@ -92,14 +92,14 @@ describe('Testing Task class', function() {
 
     it('submits a job with progress and started callbacks', function() {
       this.timeout(config.testTimeout2);
-      const nProgress = 5;
-      const params = JSON.parse(JSON.stringify(testTasks.sleepTask.parameters));
-      params.N_PROGRESS = nProgress;
-      params.SLEEP_TIME = 400;
-      params.PROGRESS_MESSAGE = 'Message';
+      const params = {
+        ...testTasks.sleepTask.parameters,
+        N_PROGRESS: 5,
+        SLEEP_TIME: 400,
+        PROGRESS_MESSAGE: 'Message'
+      };
 
-      let sleepParams = JSON.parse(JSON.stringify(params));
-      sleepParams.SLEEP_TIME = 100;
+      let sleepParams = {...params, SLEEP_TIME: 100};
 
       const progress = sinon.spy();
       const started = sinon.spy();
@@ -115,7 +115,7 @@ describe('Testing Task class', function() {
           .submit({inputParameters: sleepParams}, progress, started)
           .then(job => job.wait())
           .then((result) => {
-            expect(progress.callCount).to.equal(nProgress);
+            expect(progress.callCount).to.equal(params.N_PROGRESS);
             assert(started.calledOnce);
             const args = progress.args.map((arg) => (arg[0]));
             (args).should.all.have.property('message');
@@ -152,15 +152,14 @@ describe('Testing Task class', function() {
 
     it('submits a job and waits for results with progress and started callbacks', function() {
       this.timeout(config.testTimeout1);
-      const nProgress = 5;
-      const progressMessage = 'Message';
-      const params = JSON.parse(JSON.stringify(testTasks.sleepTask.parameters));
-      params.N_PROGRESS = nProgress;
-      params.SLEEP_TIME = 500;
-      params.PROGRESS_MESSAGE = progressMessage;
+      const params = {
+        ...testTasks.sleepTask.parameters,
+        N_PROGRESS: 5,
+        SLEEP_TIME: 500,
+        PROGRESS_MESSAGE: 'Message'
+      };
 
-      let sleepParams = JSON.parse(JSON.stringify(params));
-      sleepParams.SLEEP_TIME = 100;
+      let sleepParams = {...params, SLEEP_TIME: 100};
 
       const startedCallback = sinon.spy();
       const progressCallback = sinon.spy();
@@ -176,11 +175,10 @@ describe('Testing Task class', function() {
           .submitAndWait({inputParameters: sleepParams}, progressCallback, startedCallback)
           .then((result) => {
             expect(startedCallback.calledOnce).to.be.true;
-            expect(progressCallback.callCount).to.equal(nProgress);
+            expect(progressCallback.callCount).to.equal(params.N_PROGRESS);
             const args = progressCallback.args.map((arg) => (arg[0]));
             const progress = args.map((arg) => (arg.progress));
-
-            (args).should.all.have.property('message', progressMessage);
+            (args).should.all.have.property('message', params.PROGRESS_MESSAGE);
             (progress).should.all.have.be.above(-1);
             (progress).should.all.have.be.below(100);
           });
@@ -197,20 +195,12 @@ describe('Testing Task class', function() {
 
     it('submits multiple jobs with varying processing times', function() {
       this.timeout(config.testTimeout1);
-      const nProgress1 = 3;
-      const nProgress2 = 12;
 
       const progressCallback1 = sinon.spy();
       const progressCallback2 = sinon.spy();
 
-      const parameters1 = JSON.parse(JSON.stringify(testTasks.sleepTask.parameters));
-      const parameters2 = JSON.parse(JSON.stringify(parameters1));
-      parameters1.INPUT_INTEGER = 1;
-      parameters1.N_PROGRESS = nProgress1;
-      parameters1.SLEEP_TIME = 50;
-      parameters2.INPUT_INTEGER = 2;
-      parameters2.N_PROGRESS = nProgress2;
-      parameters2.SLEEP_TIME = 350;
+      const parameters1 = {...testTasks.sleepTask.parameters, N_PROGRESS: 3, INPUT_INTEGER: 1, SLEEP_TIME: 50};
+      const parameters2 = {...parameters1, INPUT_INTEGER: 2, N_PROGRESS: 12, SLEEP_TIME: 350};
 
       const runJob1 = task.submitAndWait({inputParameters: parameters1}, progressCallback1);
       const runJob2 = task.submitAndWait({inputParameters: parameters2}, progressCallback2);
@@ -223,8 +213,8 @@ describe('Testing Task class', function() {
           expect(results1).to.deep.equal({OUTPUT: {best: 1}});
           expect(results2).to.be.an('object');
           expect(results2).to.deep.equal({OUTPUT: {best: 2}});
-          expect(progressCallback1.callCount).to.equal(nProgress1);
-          expect(progressCallback2.callCount).to.equal(nProgress2);
+          expect(progressCallback1.callCount).to.equal(parameters1.N_PROGRESS);
+          expect(progressCallback2.callCount).to.equal(parameters2.N_PROGRESS);
           const args = progressCallback1.args.map((arg) => (arg[0]));
           (args).should.all.have.property('message');
           (args).should.all.have.property('jobId');

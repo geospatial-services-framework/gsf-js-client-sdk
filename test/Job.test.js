@@ -231,8 +231,9 @@ describe('Testing Job class', function() {
     it('cancels a job with kill=false', function(done) {
       this.timeout(config.testTimeout2);
 
-      let params = {inputParameters: JSON.parse(JSON.stringify(testTasks.sleepTask.parameters))};
-      params.inputParameters.SLEEP_TIME = 3000;
+      const params = {
+        inputParameters: {...testTasks.sleepTask.parameters, SLEEP_TIME: 3000}
+      };
       const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
       task.submit(params)
         .then((job) => {
@@ -256,8 +257,9 @@ describe('Testing Job class', function() {
 
       const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
-      let params = {inputParameters: JSON.parse(JSON.stringify(testTasks.sleepTask.parameters))};
-      params.inputParameters.SLEEP_TIME = 3000;
+      const params = {
+        inputParameters: {...testTasks.sleepTask.parameters, SLEEP_TIME: 3000}
+      };
       task.submit(params)
         .then((job) => {
           const force = true;
@@ -294,11 +296,13 @@ describe('Testing Job class', function() {
 
         const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
 
-        let params1 = JSON.parse(JSON.stringify(testTasks.sleepTask.parameters));
-        params1.SLEEP_TIME = 800;
+        const params1 = {
+          inputParameters: {...testTasks.sleepTask.parameters, SLEEP_TIME: 800}
+        };
 
-        let params2 = JSON.parse(JSON.stringify(testTasks.sleepTask.parameters));
-        params2.SLEEP_TIME = 0;
+        const params2 = {
+          inputParameters: {...testTasks.sleepTask.parameters, SLEEP_TIME: 3000}
+        };;
 
         const startedListener = sinon.spy();
 
@@ -397,7 +401,7 @@ describe('Testing Job class', function() {
         this.timeout(config.testTimeout2);
 
         let jobId = null;
-        const testData = JSON.parse(JSON.stringify(testTasks));
+        const testData = {...testTasks};
         const nProgress = 5;
         const progressMessage = 'Message';
         testData.sleepTask.parameters.N_PROGRESS = nProgress;

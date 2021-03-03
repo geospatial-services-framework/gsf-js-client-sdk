@@ -489,7 +489,7 @@ describe('Testing Client class', function() {
         this.timeout(config.testTimeout2);
 
         let jobId = null;
-        const testData = JSON.parse(JSON.stringify(testTasks));
+        const testData = {...testTasks};
         const nProgress = 5;
         const progressMessage = 'Message';
         testData.sleepTask.parameters.N_PROGRESS = nProgress;
