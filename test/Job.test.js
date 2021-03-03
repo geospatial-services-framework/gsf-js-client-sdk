@@ -152,7 +152,7 @@ describe('Testing Job class', function() {
     });
 
     it('retrieves a text file', function(done) {
-      this.timeout(6000);
+      this.timeout(config.testTimeout2);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const TEXT = 'testing text files';
@@ -179,7 +179,7 @@ describe('Testing Job class', function() {
     });
 
     it('rejects promise if file does not exist', function() {
-      this.timeout(6000);
+      this.timeout(config.testTimeout2);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const TEXT = 'testing text files';
