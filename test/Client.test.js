@@ -489,11 +489,15 @@ describe('Testing Client class', function() {
         this.timeout(config.testTimeout2);
 
         let jobId = null;
-        const testData = {...testTasks};
-        const nProgress = 5;
-        const progressMessage = 'Message';
-        testData.sleepTask.parameters.N_PROGRESS = nProgress;
-        testData.sleepTask.parameters.PROGRESS_MESSAGE = progressMessage;
+
+        const testData = {...testTasks,
+          sleepTask: {
+            parameters: {
+              N_PROGRESS: 5,
+              PROGRESS_MESSAGE: 'Message'
+            }
+          }
+        };
 
         const progressListener = sinon.spy();
         client.on('JobProgress', progressListener);
@@ -511,12 +515,12 @@ describe('Testing Client class', function() {
               return job.wait();
             })
             .then((results) => {
-              expect(progressListener.callCount).to.equal(nProgress);
+              expect(progressListener.callCount).to.equal(testData.sleepTask.parameters.N_PROGRESS);
               assert(completedListener.calledOnce);
               const args = progressListener.args.map((arg) => (arg[0]));
               const progress = args.map((arg) => (arg.progress));
 
-              (args).should.all.have.property('message', progressMessage);
+              (args).should.all.have.property('message', testData.sleepTask.parameters.PROGRESS_MESSAGE);
               (args).should.all.have.property('jobId', jobId);
               (progress).should.all.have.be.above(-1);
               (progress).should.all.have.be.below(100);
