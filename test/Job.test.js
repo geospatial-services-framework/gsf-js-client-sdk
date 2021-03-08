@@ -52,6 +52,7 @@ describe('Testing Job class', function() {
 
   describe('.info()', function() {
     it('retrieves the job information', function() {
+      this.timeout(config.testTimeout2);
       const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
 
@@ -118,14 +119,19 @@ describe('Testing Job class', function() {
   });
 
   describe('.file()', function() {
-    afterEach(function() {
+    afterEach(function(done) {
       // Cleanup
       const { service, name, parameters } = testTasks.cleanTask;
       const task = new Task(client.service(service), name);
-      return task.submitAndWait({inputParameters: {...parameters}});
+      task
+        .submitAndWait({inputParameters: {...parameters}})
+        .then(done()).catch((err) => {
+          done(err);
+        });
     });
     
     it('retrieves a binary file', function() {
+      this.timeout(config.testTimeout2);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const BYTE_LENGTH = 8;
@@ -145,12 +151,13 @@ describe('Testing Job class', function() {
         });
     });
 
-    it('retrieves a text file', function() {
+    it('retrieves a text file', function(done) {
+      this.timeout(config.testTimeout2);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const TEXT = 'testing text files';
       let job;
-      return task
+      task
         .submit({inputParameters: {...parameters, TEXT}})
         .then((j) => {
           job = j;
@@ -164,11 +171,15 @@ describe('Testing Job class', function() {
               const fileContents = enc.decode(buffer);
               expect(fileContents).to.be.a('string');
               expect(fileContents).to.equal(TEXT);
+              done();
             });
+        }).catch((err) => {
+          done(err);
         });
     });
 
     it('rejects promise if file does not exist', function() {
+      this.timeout(config.testTimeout2);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const TEXT = 'testing text files';
@@ -220,8 +231,9 @@ describe('Testing Job class', function() {
     it('cancels a job with kill=false', function(done) {
       this.timeout(config.testTimeout2);
 
-      let params = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
-      params.inputParameters.SLEEP_TIME = 500;
+      const params = {
+        inputParameters: {...testTasks.sleepTask.parameters, SLEEP_TIME: 3000}
+      };
       const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
       task.submit(params)
         .then((job) => {
@@ -245,8 +257,9 @@ describe('Testing Job class', function() {
 
       const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
-      const params = Object.assign({}, {inputParameters: testTasks.sleepTask.parameters});
-      params.inputParameters.SLEEP_TIME = 500;
+      const params = {
+        inputParameters: {...testTasks.sleepTask.parameters, SLEEP_TIME: 3000}
+      };
       task.submit(params)
         .then((job) => {
           const force = true;
@@ -283,11 +296,13 @@ describe('Testing Job class', function() {
 
         const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
 
-        const params1 = Object.assign({}, testTasks.sleepTask.parameters);
-        params1.SLEEP_TIME = 800;
+        const params1 = {
+          inputParameters: {...testTasks.sleepTask.parameters, SLEEP_TIME: 800}
+        };
 
-        const params2 = Object.assign({}, params1);
-        params2.SLEEP_TIME = 0;
+        const params2 = {
+          inputParameters: {...testTasks.sleepTask.parameters, SLEEP_TIME: 3000}
+        };;
 
         const startedListener = sinon.spy();
 
@@ -334,7 +349,7 @@ describe('Testing Job class', function() {
 
     describe('\'JobSucceeded\' event', function() {
       it('fires when job succeeds', function() {
-        this.timeout(config.testTimeout1);
+        this.timeout(config.testTimeout2);
 
         const succeededListener = sinon.spy();
         const failedListener = sinon.spy();
@@ -386,11 +401,14 @@ describe('Testing Job class', function() {
         this.timeout(config.testTimeout2);
 
         let jobId = null;
-        const testData = Object.assign({}, testTasks);
-        const nProgress = 5;
-        const progressMessage = 'Message';
-        testData.sleepTask.parameters.N_PROGRESS = nProgress;
-        testData.sleepTask.parameters.PROGRESS_MESSAGE = progressMessage;
+        const testData = {...testTasks,
+          sleepTask: {
+            parameters: {
+              N_PROGRESS: 5,
+              PROGRESS_MESSAGE: 'Message'
+            }
+          }
+        };
 
         const progressListener = sinon.spy();
         const completedListener = sinon.spy();
@@ -406,12 +424,12 @@ describe('Testing Job class', function() {
             return job.wait();
           })
           .then((results) => {
-            expect(progressListener.callCount).to.equal(nProgress);
+            expect(progressListener.callCount).to.equal(testData.sleepTask.parameters.N_PROGRESS);
             assert(completedListener.calledOnce);
             const args = progressListener.args.map((arg) => (arg[0]));
             const progress = args.map((arg) => (arg.progress));
 
-            (args).should.all.have.property('message', progressMessage);
+            (args).should.all.have.property('message', testData.sleepTask.parameters.PROGRESS_MESSAGE);
             (args).should.all.have.property('jobId', jobId);
             (progress).should.all.have.be.above(-1);
             (progress).should.all.have.be.below(100);

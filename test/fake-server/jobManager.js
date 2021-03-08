@@ -117,7 +117,6 @@ function jobManager() {
       // Done callback.
       done: function(err, data) {
         processing = false;
-        processNextJobIfReady();
 
         job.jobProgress = 100;
         job.jobStatus = 'Succeeded';
@@ -135,6 +134,7 @@ function jobManager() {
         if (cancelJobId === job.jobId) {
           err = 'job cancelled';
         }
+        cancelJobId = '';
 
         if (err) {
           job.jobError = err;
@@ -165,6 +165,7 @@ function jobManager() {
             success: !err
           }
         });
+        processNextJobIfReady();
       }
     };
   };

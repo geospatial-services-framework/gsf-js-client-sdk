@@ -8,6 +8,7 @@ import Client from './Client';
  * @typedef {Object} GSF
  * @property {function(clientOptions: ClientOptions): Client} client - The function for creating a new Client object.
  */
+
 export default {
   client(clientOptions) {
     return new Client(clientOptions);

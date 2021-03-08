@@ -33,7 +33,8 @@ module.exports = function (target, entryPoints, addSuffix, minify) {
       filename: '[name].js',
       library: LIB_NAME,
       libraryTarget: 'umd',
-      umdNamedDefine: true // AMD module name
+      umdNamedDefine: true, // AMD module name
+      libraryExport: 'default'
     },
     module: {
       rules: [
