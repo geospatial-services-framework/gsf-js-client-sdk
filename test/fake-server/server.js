@@ -55,6 +55,9 @@ app.get(jobsEndPoint + '/:id', requestHandler.jobStatus);
 // Cancel
 app.put(jobsEndPoint + '/:id', requestHandler.cancelJob);
 
+// Delete
+app.delete(jobsEndPoint + '/:id');
+
 // Get workspace
 app.get(jobsEndPoint + '/:id/workspace', requestHandler.listWorkspace);
 

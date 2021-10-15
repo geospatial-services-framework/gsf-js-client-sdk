@@ -1,7 +1,7 @@
 /**
  * Tests for the Job class.
  */
-import chai, {should} from 'chai';
+import chai, { should } from 'chai';
 import chaiThings from 'chai-things';
 import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiThings);
@@ -29,20 +29,20 @@ const TEST_JOB_ID = 1;
  */
 // Avoid using arrow functions with mocha:
 //  http://mochajs.org/#arrow-functions
-describe('Testing Job class', function() {
-  before(function(done) {
+describe('Testing Job class', function () {
+  before(function (done) {
     client = GSF.client(config.localHTTPServer);
     done();
   });
 
-  afterEach(function(done) {
+  afterEach(function (done) {
     client.removeAllListeners('JobProgress');
     done();
   });
 
   // ==========================================================
-  describe('Job() constructor', function() {
-    it('returns a valid job object', function(done) {
+  describe('Job() constructor', function () {
+    it('returns a valid job object', function (done) {
       const job = new Job(client, TEST_JOB_ID);
       expect(job).to.be.an('object');
       expect(job.jobId).to.equal(TEST_JOB_ID);
@@ -50,15 +50,15 @@ describe('Testing Job class', function() {
     });
   });
 
-  describe('.info()', function() {
-    it('retrieves the job information', function() {
+  describe('.info()', function () {
+    it('retrieves the job information', function () {
       this.timeout(config.testTimeout2);
       const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
 
       let job = null;
       return task
-        .submit({inputParameters: testTasks.sleepTask.parameters})
+        .submit({ inputParameters: testTasks.sleepTask.parameters })
         .then((jobObj) => {
           job = jobObj;
           return job.wait();
@@ -77,7 +77,7 @@ describe('Testing Job class', function() {
         });
     });
 
-    it('rejects promise if error from request', function() {
+    it('rejects promise if error from request', function () {
       this.timeout(config.testTimeout2);
 
       const job = GSF.client(config.fakeServer).job(TEST_JOB_ID);
@@ -87,15 +87,15 @@ describe('Testing Job class', function() {
 
   });
 
-  describe('.workspace()', function() {
-    it('retrieves the job workspace', function() {
+  describe('.workspace()', function () {
+    it('retrieves the job workspace', function () {
       this.timeout(config.testTimeout1);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const TEXT = 'testing text files';
       let job;
       return task
-        .submit({inputParameters: {...parameters, TEXT}})
+        .submit({ inputParameters: { ...parameters, TEXT } })
         .then((j) => {
           job = j;
           return job.wait();
@@ -111,33 +111,33 @@ describe('Testing Job class', function() {
         });
     });
 
-    it('rejects promise if job does not exist', function() {
+    it('rejects promise if job does not exist', function () {
       const job = new Job(client, 'fakeId');
       return assert.isRejected(job.workspace(),
         /Error requesting job workspace/);
     });
   });
 
-  describe('.file()', function() {
-    afterEach(function(done) {
+  describe('.file()', function () {
+    afterEach(function (done) {
       // Cleanup
       const { service, name, parameters } = testTasks.cleanTask;
       const task = new Task(client.service(service), name);
       task
-        .submitAndWait({inputParameters: {...parameters}})
+        .submitAndWait({ inputParameters: { ...parameters } })
         .then(done()).catch((err) => {
           done(err);
         });
     });
-    
-    it('retrieves a binary file', function() {
+
+    it('retrieves a binary file', function () {
       this.timeout(config.testTimeout2);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const BYTE_LENGTH = 8;
       let job;
       return task
-        .submit({inputParameters: {...parameters, BYTE_LENGTH}})
+        .submit({ inputParameters: { ...parameters, BYTE_LENGTH } })
         .then((j) => {
           job = j;
           return job.wait();
@@ -151,14 +151,14 @@ describe('Testing Job class', function() {
         });
     });
 
-    it('retrieves a text file', function(done) {
+    it('retrieves a text file', function (done) {
       this.timeout(config.testTimeout2);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const TEXT = 'testing text files';
       let job;
       task
-        .submit({inputParameters: {...parameters, TEXT}})
+        .submit({ inputParameters: { ...parameters, TEXT } })
         .then((j) => {
           job = j;
           return job.wait();
@@ -178,14 +178,14 @@ describe('Testing Job class', function() {
         });
     });
 
-    it('rejects promise if file does not exist', function() {
+    it('rejects promise if file does not exist', function () {
       this.timeout(config.testTimeout2);
       const { service, name, parameters } = testTasks.writeFilesTask;
       const task = new Task(client.service(service), name);
       const TEXT = 'testing text files';
       let job;
       return task
-        .submit({inputParameters: {...parameters, TEXT}})
+        .submit({ inputParameters: { ...parameters, TEXT } })
         .then((j) => {
           job = j;
           return job.wait();
@@ -197,14 +197,14 @@ describe('Testing Job class', function() {
     });
   });
 
-  describe('.wait()', function() {
-    it('waits for job completion', function() {
+  describe('.wait()', function () {
+    it('waits for job completion', function () {
       this.timeout(config.testTimeout2);
 
       const wait = client
         .service(testTasks.sleepTask.service)
         .task(testTasks.sleepTask.name)
-        .submit({inputParameters: testTasks.sleepTask.parameters})
+        .submit({ inputParameters: testTasks.sleepTask.parameters })
         .then(job => job.wait());
       return Promise.all([
         expect(wait).to.eventually.be.fulfilled,
@@ -213,13 +213,13 @@ describe('Testing Job class', function() {
       ]);
     });
 
-    it('rejects promise if job fails', function() {
+    it('rejects promise if job fails', function () {
       this.timeout(config.testTimeout2);
 
       const wait = client
         .service(testTasks.sleepTaskFail.service)
         .task(testTasks.sleepTaskFail.name)
-        .submit({inputParameters: testTasks.sleepTaskFail.parameters})
+        .submit({ inputParameters: testTasks.sleepTaskFail.parameters })
         .then(job => job.wait());
 
       return assert.isRejected(wait, /Task Failed/);
@@ -227,12 +227,12 @@ describe('Testing Job class', function() {
 
   });
 
-  describe('.cancel()', function() {
-    it('cancels a job with kill=false', function(done) {
+  describe('.cancel()', function () {
+    it('cancels a job with kill=false', function (done) {
       this.timeout(config.testTimeout2);
 
       const params = {
-        inputParameters: {...testTasks.sleepTask.parameters, SLEEP_TIME: 3000}
+        inputParameters: { ...testTasks.sleepTask.parameters, SLEEP_TIME: 3000 }
       };
       const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
       task.submit(params)
@@ -252,13 +252,13 @@ describe('Testing Job class', function() {
         }).catch(done);
     });
 
-    it('cancels job with kill=true', function(done) {
+    it('cancels job with kill=true', function (done) {
       this.timeout(config.testTimeout2);
 
       const task = new Task(client.service(testTasks.sleepTask.service),
         testTasks.sleepTask.name);
       const params = {
-        inputParameters: {...testTasks.sleepTask.parameters, SLEEP_TIME: 3000}
+        inputParameters: { ...testTasks.sleepTask.parameters, SLEEP_TIME: 3000 }
       };
       task.submit(params)
         .then((job) => {
@@ -277,7 +277,7 @@ describe('Testing Job class', function() {
         .catch(done);
     });
 
-    it('rejects promise if error from request', function() {
+    it('rejects promise if error from request', function () {
       this.timeout(config.testTimeout2);
 
       const badCancel = GSF
@@ -289,44 +289,87 @@ describe('Testing Job class', function() {
     });
   });
 
-  describe('.on()', function() {
-    describe('\'JobStarted\' event', function() {
-      it('fires when job starts', function() {
+  describe('.delete()', function () {
+
+    it('deletes job', function (done) {
+      this.timeout(config.testTimeout2);
+
+      const task = new Task(client.service(testTasks.sleepTask.service),
+        testTasks.sleepTask.name);
+      const params = {
+        inputParameters: { ...testTasks.sleepTask.parameters, SLEEP_TIME: 3000 }
+      };
+      task.submit(params)
+        .then((job) => {
+
+          let err;
+          job.on('JobCompleted', (data) => {
+            try {
+              expect(data.success).to.be.true;
+            } catch (error) {
+              err = error;
+            }
+          });
+          job.delete().then((delResp) => {
+            expect(delResp).property('code').to.equal(204);
+          }).catch((er) => {
+            err = er;
+          });
+          done(err);
+        })
+        .catch(done);
+    });
+
+    it('rejects promise if error from request', function () {
+      this.timeout(config.testTimeout2);
+
+      const badDelete = GSF
+        .client(config.fakeServer)
+        .job(1)
+        .delete();
+
+      return assert.isRejected(badDelete, /Error deleting job/);
+    });
+  });
+
+  describe('.on()', function () {
+    describe('\'JobStarted\' event', function () {
+      it('fires when job starts', function () {
         this.timeout(config.testTimeout2);
 
         const task = new Task(client.service(testTasks.sleepTask.service), testTasks.sleepTask.name);
 
         const params1 = {
-          inputParameters: {...testTasks.sleepTask.parameters, SLEEP_TIME: 800}
+          inputParameters: { ...testTasks.sleepTask.parameters, SLEEP_TIME: 800 }
         };
 
         const params2 = {
-          inputParameters: {...testTasks.sleepTask.parameters, SLEEP_TIME: 3000}
+          inputParameters: { ...testTasks.sleepTask.parameters, SLEEP_TIME: 3000 }
         };;
 
         const startedListener = sinon.spy();
 
-        return task.submit({inputParameters: params1}).then((job1) => {
+        return task.submit({ inputParameters: params1 }).then((job1) => {
 
           // At this point, we are sure that the first job has been accepted
           // Submit the second job and verify we get the right callback
           let job2;
           return task
-            .submit({inputParameters: params2})
+            .submit({ inputParameters: params2 })
             .then((jobObj) => {
               job2 = jobObj;
               job2.on('JobStarted', startedListener);
               return jobObj.wait();
             })
             .then((results) => {
-              assert(startedListener.calledOnceWith({jobId: job2.jobId}));
+              assert(startedListener.calledOnceWith({ jobId: job2.jobId }));
             });
         });
       });
     });
 
-    describe('\'JobCompleted\' event', function() {
-      it('fires when job completes', function() {
+    describe('\'JobCompleted\' event', function () {
+      it('fires when job completes', function () {
         this.timeout(config.testTimeout1);
         let jobId = null;
 
@@ -335,20 +378,20 @@ describe('Testing Job class', function() {
         return client
           .service(testTasks.sleepTask.service)
           .task(testTasks.sleepTask.name)
-          .submit({inputParameters: testTasks.sleepTask.parameters})
+          .submit({ inputParameters: testTasks.sleepTask.parameters })
           .then((job) => {
             job.on('JobCompleted', completedListener);
             jobId = job.jobId;
             return job.wait();
           })
           .then((results) => {
-            assert(completedListener.calledOnceWith({jobId: jobId, success: true}));
+            assert(completedListener.calledOnceWith({ jobId: jobId, success: true }));
           });
       });
     });
 
-    describe('\'JobSucceeded\' event', function() {
-      it('fires when job succeeds', function() {
+    describe('\'JobSucceeded\' event', function () {
+      it('fires when job succeeds', function () {
         this.timeout(config.testTimeout2);
 
         const succeededListener = sinon.spy();
@@ -357,7 +400,7 @@ describe('Testing Job class', function() {
         return client
           .service(testTasks.sleepTask.service)
           .task(testTasks.sleepTask.name)
-          .submit({inputParameters: testTasks.sleepTask.parameters})
+          .submit({ inputParameters: testTasks.sleepTask.parameters })
           .then((job) => {
             jobId = job.jobId;
             job.on('JobSucceeded', succeededListener);
@@ -365,14 +408,14 @@ describe('Testing Job class', function() {
             return job.wait();
           })
           .then((results) => {
-            assert(succeededListener.calledOnceWith({jobId: jobId, success: true}));
+            assert(succeededListener.calledOnceWith({ jobId: jobId, success: true }));
             assert(failedListener.notCalled);
           });
       });
     });
 
-    describe('\'JobFailed\' event', function() {
-      it('fires when job fails', function() {
+    describe('\'JobFailed\' event', function () {
+      it('fires when job fails', function () {
         this.timeout(config.testTimeout1);
         const succeededListener = sinon.spy();
         const failedListener = sinon.spy();
@@ -380,7 +423,7 @@ describe('Testing Job class', function() {
         return client
           .service(testTasks.sleepTask.service)
           .task(testTasks.sleepTask.name)
-          .submit({inputParameters: testTasks.sleepTaskFail.parameters})
+          .submit({ inputParameters: testTasks.sleepTaskFail.parameters })
           .then((job) => {
             job.on('JobSucceeded', succeededListener);
             job.on('JobFailed', failedListener);
@@ -389,19 +432,20 @@ describe('Testing Job class', function() {
           })
           .catch(() => {
             return Promise.all([
-              assert(failedListener.calledOnceWith({jobId: jobId, success: false})),
+              assert(failedListener.calledOnceWith({ jobId: jobId, success: false })),
               assert(succeededListener.notCalled)
             ]);
           });
       });
     });
 
-    describe('\'JobProgress\' event', function() {
-      it('fires when job emits progress', function() {
+    describe('\'JobProgress\' event', function () {
+      it('fires when job emits progress', function () {
         this.timeout(config.testTimeout2);
 
         let jobId = null;
-        const testData = {...testTasks,
+        const testData = {
+          ...testTasks,
           sleepTask: {
             parameters: {
               N_PROGRESS: 5,
@@ -416,7 +460,7 @@ describe('Testing Job class', function() {
         return client
           .service(testTasks.sleepTask.service)
           .task(testTasks.sleepTask.name)
-          .submit({inputParameters: testData.sleepTask.parameters})
+          .submit({ inputParameters: testData.sleepTask.parameters })
           .then((job) => {
             jobId = job.jobId;
             job.on('JobProgress', progressListener);

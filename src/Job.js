@@ -212,6 +212,40 @@ class Job extends EventEmitter {
   }
 
   /**
+ * Deletes the job.
+ * @return {Promise<true, error>} Returns a promise when delete is submitted.  If request
+ *  is successfully submitted, the promise will be resolved with a value of true.
+ *  If the request fails, the promise will be resolved with an error message.
+ *  Note that this only represents the success of the request made to the server,
+ *  not the deletion itself.  Use the Job.Info() function (or Job events)
+ *  to retrieve the status of the job and to learn when it is actually deleted.
+ */
+  delete() {
+    // Job url.
+    const url = this._jobURL;
+    return new Promise((resolve, reject) => {
+      // Delete job.
+      superagent
+        .delete(url)
+        .set('Content-Type', 'application/json')
+        .use(nocache) // Prevents caching of *only* this request
+        .set(this._client.headers)
+        .end((err, res) => {
+          if (res && res.ok) {
+            resolve(true);
+          } else {
+            const status = err && err.status ? ': ' + err.status : '';
+            const text =
+              err && err.response && err.response.text ?
+                ': ' + err.response.text :
+                '';
+            reject('Error deleting job' + status + text);
+          }
+        });
+    });
+  }
+
+  /**
    * Retrieves a list of the workspace files.
    * @return {Promise<Object[], error>} Returns a promise to an array of fs.stat objects.
    */
