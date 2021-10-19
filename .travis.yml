@@ -8,3 +8,16 @@ sudo: required
 addons:
   chrome: stable # have Travis install Chrome stable.
 script: npm test && npm run test-node
+
+# Build and deploy Help pages to github.io page
+deploy:
+  provider: pages
+  skip_cleanup: true 
+  github_token: $travis-token-docs  # Set in the settings page of your repository, as a secure variable
+  keep_history: true
+  local_dir: help
+  script: npm help
+  github_url: "https://geospatial-services-framework.github.io/sdk-docs/"
+  verbose: true 
+  on:
+    branch: main
