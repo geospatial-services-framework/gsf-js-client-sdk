@@ -22,7 +22,7 @@ jobs:
       - name: Build Help Pages (SDK Documentation)
         run: echo "Building Help Pages..." & npm help
       - name: Deploy Help pages to github.io repository
-        run: echo "Build Help Pages"
+        # run: echo "Build Help Pages"
         id: push_directory
         uses: HGS-jamescalderon/action-SDK-copy-docs@main
         env:
