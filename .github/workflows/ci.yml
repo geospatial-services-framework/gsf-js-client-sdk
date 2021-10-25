@@ -7,10 +7,12 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [feature/deployHelpIOPage]
 # feature/deployHelpIOPage is a testing branch on SOURCE repo
   pull_request:
     branches: [feature/deployHelpIOPage]
+  # push:
+  #   branches: [feature/deployHelpIOPage]
 
 jobs:
   build:
