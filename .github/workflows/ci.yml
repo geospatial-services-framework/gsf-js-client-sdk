@@ -1,0 +1,40 @@
+# GitHub action to (replaces previous Travis CI tasks):
+# * Run tests
+# * Generate & copy documentation to github.io page.
+
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+# feature/deployHelpIOPage is a testing branch on SOURCE repo
+  pull_request:
+    branches: [feature/deployHelpIOPage]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # container: pandoc/latex
+    steps:
+      - name: Run Tests
+        run: echo "Running Tests..." & npm test && npm run test-node
+      - name: Build Help Pages (SDK Documentation)
+        run: echo "Building Help Pages..." & npm help
+      - name: Deploy Help pages to github.io repository
+        run: echo "Build Help Pages"
+        id: push_directory
+        uses: HGS-jamescalderon/action-SDK-copy-docs@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_DOCS }}
+        with:
+          source-directory: "help"
+          # destination-github-username: 'HGS-jamescalderon'
+          destination-repository-name: "geospatial-services-framework.github.io/sdk-docs/"
+          # user-email: carles3@pina.cat
+          commit-message: See ORIGIN_COMMIT from $GITHUB_REF
+          # target-branch: main
+          # docs_test is a testing branch on DESTINATION repo
+          target-branch: docs_test
+      - name: Test get variable exported by push-to-another-repository
+        run: echo $DESTINATION_CLONED_DIRECTORY
