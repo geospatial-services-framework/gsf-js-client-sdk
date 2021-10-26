@@ -22,8 +22,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: Run Tests
-        run: npm test && npm run test-node
+      # - name: Run Tests
+      #   run: npm test && npm run test-node
       - name: Build Help Pages (SDK Documentation)
         run: npm help
       - name: Deploy Help pages to github.io repository
