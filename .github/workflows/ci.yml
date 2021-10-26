@@ -17,7 +17,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # container: pandoc/latex
+    container: pandoc/latex
     steps:
       - name: Run Tests
         run: echo "Running Tests..." & npm test && npm run test-node
