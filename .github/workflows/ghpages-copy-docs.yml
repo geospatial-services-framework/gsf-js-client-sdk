@@ -32,9 +32,9 @@ jobs:
         cache: 'npm'
     # - run: npm ci
       # - name: Run Tests
-    - run: npm run test
-    - run: npm run test-node
-    - run: npm run help    
+    - run: npm run test && npm run test-node && npm run help
+    # - run: npm run test-node
+    # - run: npm run help    
     # - name: Build Help Pages (SDK Documentation)
       # run: npm help   
 
