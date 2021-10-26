@@ -2,13 +2,12 @@
 # * Run tests
 # * Generate & copy documentation to github.io page.
 
-
 name: CI
 
 on:
   push:
     branches: [feature/deployHelpIOPage]
-# feature/deployHelpIOPage is a testing branch on SOURCE repo
+  # feature/deployHelpIOPage is a testing branch on SOURCE repo
   pull_request:
     branches: [feature/deployHelpIOPage]
   # push:
@@ -20,20 +19,19 @@ jobs:
     container: pandoc/latex
     steps:
       - name: Run Tests
-        run: echo "Running Tests..." & npm test && npm run test-node
+        run: npm test && npm run test-node
       - name: Build Help Pages (SDK Documentation)
-        run: echo "Building Help Pages..." & npm help
+        run: npm help
       - name: Deploy Help pages to github.io repository
-        # run: echo "Build Help Pages"
         id: push_directory
         uses: HGS-jamescalderon/action-SDK-copy-docs@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_DOCS }}
         with:
           source-directory: "help"
-          # destination-github-username: 'HGS-jamescalderon'
+          destination-github-username: "HGS-jamescalderon"
           destination-repository-name: "geospatial-services-framework.github.io/sdk-docs/"
-          # user-email: carles3@pina.cat
+          user-email: james.calderon@l3harris.com
           commit-message: See ORIGIN_COMMIT from $GITHUB_REF
           # target-branch: main
           # docs_test is a testing branch on DESTINATION repo
