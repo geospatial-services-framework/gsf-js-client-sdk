@@ -1,6 +1,6 @@
 # GitHub action to (replaces previous Travis CI tasks):
 # * Run tests
-# * Generate & copy documentation to github.io page.
+# * Generate & copy documentation to ghpages repo.
 
 name: CI
 
@@ -18,6 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     container: pandoc/latex
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
       - name: Run Tests
         run: npm test && npm run test-node
       - name: Build Help Pages (SDK Documentation)
