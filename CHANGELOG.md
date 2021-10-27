@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 4.2.0 / 2021-10-26
+
+### New Features
+- Support for GSF 3.0:
+    - Add job delete functionality, matching job deletion functionality in GSF.
+
 ## 4.0.0 / 2020-06-22
 
 ### New Features
