@@ -1,0 +1,30 @@
+# https://github.com/marketplace/actions/deploy-to-github-pages
+name: Build and Deploy
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+
+      - name: Build SDK Docs # This is built using npm and outputs the result to the 'help' folder. 
+        # run: |
+        #   npm ci
+        #   npm run help
+        run: |          
+          npm run help
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.8
+        with:
+          # token: $travis-token-docs
+          token: $API_TOKEN_DOCS          
+          # Deploy From (GitHub Actions environment):
+          folder: help # GSF SDK folder docs put into
+          # Deploy To:
+          repository-name: https://github.com/geospatial-services-framework/geospatial-services-framework.github.io
+          # repository-name: geospatial-services-framework/geospatial-services-framework.github.io
+          # branch: master # The branch the action should deploy to.
+          branch: test # The branch the action should deploy to.          
+          target-folder: sdk-docs # The folder the action should deploy to.
