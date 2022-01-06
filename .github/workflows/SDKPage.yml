@@ -1,6 +1,10 @@
 # https://github.com/marketplace/actions/deploy-to-github-pages
 name: Build and Deploy
-on: [push]
+# on: [push]
+on:
+  push:
+    branches:
+      - test/docsSDK
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
