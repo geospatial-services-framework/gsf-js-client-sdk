@@ -27,8 +27,7 @@ jobs:
           # Deploy From (GitHub Actions environment):
           folder: help # GSF SDK folder docs put into
           # Deploy To:
-          # repository-name: https://github.com/geospatial-services-framework/geospatial-services-framework.github.io
-          repository-name: geospatial-services-framework/geospatial-services-framework.github.io.git
+          repository-name: geospatial-services-framework/geospatial-services-framework.github.io
           # branch: master # The branch the action should deploy to.
           branch: test # The branch the action should deploy to.          
           target-folder: sdk-docs # The folder the action should deploy to.
