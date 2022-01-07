@@ -19,10 +19,10 @@ jobs:
           npm run help
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.8
+        # uses: JamesIves/github-pages-deploy-action@4.1.8
+        uses: JamesIves/github-pages-deploy-action@4.2.0        
         with:
-          # token: $travis-token-docs
-          repo-token: ${{ secrets.API_TOKEN_DOCS }}
+          token: ${{ secrets.API_TOKEN_DOCS }}
 
           # Deploy From (GitHub Actions environment):
           folder: help # GSF SDK folder docs put into
