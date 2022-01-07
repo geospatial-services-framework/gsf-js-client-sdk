@@ -21,7 +21,8 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@4.1.8
         with:
           # token: $travis-token-docs
-          token: $API_TOKEN_DOCS          
+          token: ${{ secrets.API_TOKEN_DOCS }}
+
           # Deploy From (GitHub Actions environment):
           folder: help # GSF SDK folder docs put into
           # Deploy To:
@@ -30,4 +31,4 @@ jobs:
           # branch: master # The branch the action should deploy to.
           branch: test # The branch the action should deploy to.          
           target-folder: sdk-docs # The folder the action should deploy to.
-          commit-message: "Testing Action 3"
+          commit-message: "Test 4"
