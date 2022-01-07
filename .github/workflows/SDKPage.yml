@@ -32,4 +32,4 @@ jobs:
           branch: test # The branch the action should deploy to.          
           target-folder: sdk-docs # The folder the action should deploy to.
           clean: false # Whether to clean the folder before deploying.
-          commit-message: "Test"
+          commit-message: "Testing"
