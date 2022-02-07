@@ -28,7 +28,7 @@ jobs:
         with:
           
           # token: ${{ secrets.API_TOKEN_DOCS }}          
-          github-token: ${{ HGS-jamescalderon.action-token-docs-full }}
+          github-token: ${{ secrets.action-token-docs-full }}
 
           # Deploy From (GitHub Actions environment):
           folder: help # GSF SDK folder docs put into
