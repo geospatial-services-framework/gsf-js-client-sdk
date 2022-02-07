@@ -34,3 +34,5 @@ jobs:
           target-folder: sdk-docs # The folder the action should deploy to.
           clean: false # Whether to clean the folder before deploying.
           commit-message: "Testing"
+
+          #force test/docsSDK
