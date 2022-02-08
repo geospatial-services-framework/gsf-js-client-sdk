@@ -7,7 +7,7 @@ on:
       - test/docsSDK
 permissions:
       id-token: write
-      contents: read    # This is required for actions/checkout@v2 
+      contents: write    # This is required for actions/checkout@v2 
       actions: write     
 jobs:
   build-and-deploy:
@@ -37,7 +37,7 @@ jobs:
           # branch: master # The branch the action should deploy to.
           branch: testing # The branch the action should deploy to.          
           target-folder: sdk-docs # The folder the action should deploy to.
-          clean: false # Whether to clean the folder before deploying.
+          # clean: false # Whether to clean the folder before deploying.
           commit-message: "Testing"
 
           #force test/docsSDK
