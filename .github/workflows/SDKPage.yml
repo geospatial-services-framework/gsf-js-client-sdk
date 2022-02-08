@@ -16,6 +16,8 @@ jobs:
       - name: Checkout
         # uses: actions/checkout@v2.3.1
         uses: actions/checkout@v2.4.0
+        with:
+          fetch-depth: 0 # This is required for actions/checkout@v2.x for deep clone
 
       - name: Build SDK Docs # This is built using npm and outputs the result to the 'help' folder. 
         run: |
@@ -28,7 +30,7 @@ jobs:
         with:
           
           # token: ${{ secrets.API_TOKEN_DOCS }}          
-          github-token: ${{ secrets.action-token-docs-full }}
+          token: ${{ secrets.action-token-docs-full }}
 
           # Deploy From (GitHub Actions environment):
           folder: help # GSF SDK folder docs put into
