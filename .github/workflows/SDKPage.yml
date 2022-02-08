@@ -28,16 +28,17 @@ jobs:
         # uses: JamesIves/github-pages-deploy-action@4.1.8
         uses: JamesIves/github-pages-deploy-action@4.2.0        
         with:
+          branch: testing # The branch the action should deploy to.          
+          folder: help # GSF SDK folder docs put into
+          ssh-key: ${{ secrets.DEPLOY_KEY }} # The repository-name (see below) SSH key to use for deployment.
           
           # token: ${{ secrets.API_TOKEN_DOCS }}          
-          token: ${{ secrets.action-token-docs-full }}
+          # github-token: ${{ secrets.action-token-docs-full }}
 
           # Deploy From (GitHub Actions environment):
-          folder: help # GSF SDK folder docs put into
           # Deploy To:
           repository-name: geospatial-services-framework/geospatial-services-framework.github.io
           # branch: master # The branch the action should deploy to.
-          branch: testing # The branch the action should deploy to.          
           target-folder: sdk-docs # The folder the action should deploy to.
           # clean: false # Whether to clean the folder before deploying.
           commit-message: "Testing"
