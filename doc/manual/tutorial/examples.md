@@ -33,6 +33,12 @@ The [**JobListOptions**] object supports an option called 'query'.  This can be 
 - $lt
 - $lte
 - $ne
+- $or
+- $and
+- $not
+- $nor
+- $exists
+- $type
 
 A simple query for any job that is not 'Succeeded':
 ```javascript
@@ -50,6 +56,64 @@ const jobListOptions = {
   },
 };
 
+// List jobs.
+client.jobInfoList(jobListOptions).then((jobInfoList) => {
+  // Print job list.
+  console.log(jobInfoList);
+}).catch((err) => {
+  // There was an error.
+});
+```
+### Using the Logical Query Operators 
+The logical query operators include $and, $not, $nor, and $or. 
+
+A query for any job that has 'Failed' or the taskName is 'SpectralIndex':
+```javascript
+// GSF Client
+const client = GSF.client({
+    address: 'MyServer',
+    port: '9191'
+  });
+
+const jobListOptions = {
+  query: {
+    '$or': [
+            {
+              'jobStatus': { '$eq': 'Failed' }
+            },
+            {
+              'taskName': { '$eq': 'SpectralIndex'}
+            }
+          ]
+    },
+};
+// List jobs.
+client.jobInfoList(jobListOptions).then((jobInfoList) => {
+  // Print job list.
+  console.log(jobInfoList);
+}).catch((err) => {
+  // There was an error.
+});
+```
+
+### Using the Element Query Operators
+The element query operators include $type and $exists
+
+A query for any job that whose jobMessage does not exist:
+```javascript
+// GSF Client
+const client = GSF.client({
+    address: 'MyServer',
+    port: '9191'
+  });
+
+const jobListOptions = {
+  query: {
+    jobMessage: {
+      '$exists': false
+    }
+  },
+};
 // List jobs.
 client.jobInfoList(jobListOptions).then((jobInfoList) => {
   // Print job list.

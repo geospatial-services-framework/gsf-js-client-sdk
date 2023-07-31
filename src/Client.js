@@ -172,7 +172,7 @@ class Client extends EventEmitter {
    * @typedef {Object} JobListOptions
    * @property {Object} query - Filter jobs by specifying one or more comparison operators per property.
    *   Comparison operators must be prefixed with '$' and only the following are supported: $eq, $ne,
-   *  $gt, $gte, $lt, $lte.  Queries may contain multiple properties and each property may
+   *  $gt, $gte, $lt, $lte, $or, $nor, $and,$not, $type, $exists .Queries may contain multiple properties and each property may
    *  contain multiple comparison operators.
    * @property {Array} sort - The sort array.  This array contains an array for each sort which
    *  consists of the property to sort by and the direction. To sort in ascending order use 1 and
