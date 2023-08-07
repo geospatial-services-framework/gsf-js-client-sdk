@@ -26,17 +26,23 @@ client.services().then((services) => {
 The GSF [**Client**] object provides the ability to query and sort the job list.
 
 ### The 'query' option
-The [**JobListOptions**] object supports an option called 'query'.  This can be used to form advanced queries of the job database.  The primary building block of a query is the comparison operator, which may be used to select jobs matching the desired criteria. The job search API supports the following comparison operators:
+The [**JobListOptions**] object supports an option called 'query'.  This can be used to form advanced queries of the job database.  The primary building block of a query is the comparison operator, which may be used to select jobs matching the desired criteria. To further refine the matching criteria for jobs, it is possible to use logical operators and element operators.
+
+The job search API supports the following comparison operators:
 - $eq
 - $gt
 - $gte
 - $lt
 - $lte
+
+Additionally, the API offers the following logical operators, further enhancing the ability to pinpoint jobs:
 - $ne
 - $or
 - $and
 - $not
 - $nor
+
+Furthermore, the API offers the following element operators to refine searches even further:
 - $exists
 - $type
 
